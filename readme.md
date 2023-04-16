@@ -13,6 +13,7 @@ We have five kinds of nodes: **author, paper, bioentity, dataset, method**, and 
 
 
 ## Raw Data Descriptor
+We have not provided the data.
 
 1. **"breast_cancaer_papers_PKG23.csv"** all papers about breast cancer in PKG, including the following fields: PMID, PubYear, ArticleTitle, Abstract.
 
