@@ -15,26 +15,26 @@ We have five kinds of nodes: **author, paper, bioentity, dataset, method**, and 
 We have not provided the data.
 
 1. **"breast_cancaer_papers_PKG23.csv"** all papers about breast cancer in PKG, including the following fields: PMID, PubYear, ArticleTitle, Abstract.
-    25,3891 entries
+    - 25,3891 entries
 
 2. **"OBI_Extraction.csv"** includes the following fields: PMID, Mention(PKG), ShowName(OBI), OBI_id, Type, and Confidence.
-    64,047 entries
-    unique paper: 47,819
-    unique dataset: 313
+    - 64,047 entries
+    - unique paper: 47,819
+    - unique dataset: 313
 
 3. **"Dateset_Extraction_20230411.csv"** includes the following fields: PMID, Mention(PKG), ShowName(NAR/NIH/EBI),DBid, Confidence.
-    8,447 entries
-    unique paper: 7,451
-    unique dataset: 259
+    - 8,447 entries
+    - unique paper: 7,451
+    - unique dataset: 259
 
 4. **"paper_bioentity.csv"**
-    5,298,578 entries
-    unique bioentity: 505,901
-    unique paper: 290,455
+    - 5,298,578 entries
+    - unique bioentity: 505,901
+    - unique paper: 290,455
 
 5. **"paper_author.csv"**
-    1,690,409 entries
-    unique author: 556,952
-    unique paper: 303,911
+    - 1,690,409 entries
+    - unique author: 556,952
+    - unique paper: 303,911
 
 ## Notes
