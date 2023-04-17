@@ -38,3 +38,6 @@ We have not provided the data.
     - unique paper: 303,911
 
 ## Notes
+
+In the original HetGNN paper, a paper has some direct author neighbors and a venue neighbor.
+Here in our situation, the paper may not have methods or datasets.
