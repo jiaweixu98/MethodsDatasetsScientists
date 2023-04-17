@@ -1,37 +1,27 @@
-import six.moves.cPickle as pickle
 import numpy as np
-import string
 import re
 import random
-import math
 from collections import Counter
 from itertools import *
-from tqdm import tqdm
 
-# 我们的测试中，三类节点topk的数值是10,10,10；重启的随机采样为34,33,33
-
-# 这块不用再重复，和 input data process是一致的
 class input_data(object):
 	def __init__(self, args):
 		self.args = args
-# 这里，把对应的参数改为我们的数据
 		a_p_list_train = [[] for k in range(self.args.A_n)]
 		p_a_list_train = [[] for k in range(self.args.P_n)]
 		p_p_cite_list_train = [[] for k in range(self.args.P_n)]
-		# 这里可能有问题，因为不是每个东西都有citation
-		v_p_list_train = [[] for k in range(self.args.V_n)]
-		# 我们的pv也是一对多
-		p_v = [[] for k in range(self.args.P_n)]
-
+		b_p_list_train = [[] for k in range(self.args.B_n)]
+		p_b = [[] for k in range(self.args.P_n)]
 		d_p_list_train = [[] for k in range(self.args.D_n)]
-		# 我们的pv也是一对多
 		p_d = [[] for k in range(self.args.P_n)]
+		m_p_list_train = [[] for k in range(self.args.M_n)]
+		p_m = [[] for k in range(self.args.P_n)]
 
 		# relation_f = ["a_p_list_train.txt", "p_a_list_train.txt",\
-		#  "p_p_citation_list.txt", "v_p_list_train.txt"]
+		#  "p_p_citation_list.txt", "b_p_list_train.txt"]
 		# 暂时没有pp
-		relation_f = ["a_p_list_train.txt", "p_a_list_train.txt", "v_p_list_train.txt",
-                    'p_v.txt', "d_p_list_train.txt", 'p_d.txt', "p_p_citation_list.txt"]
+		relation_f = ["a_p_list_train.txt", "p_a_list_train.txt", "b_p_list_train.txt",
+                    'p_b.txt', "d_p_list_train.txt", 'p_d.txt', "p_p_citation_list.txt"]
 		#store academic relational data 
 		for i in range(len(relation_f)):
 			f_name = relation_f[i]
@@ -50,12 +40,12 @@ class input_data(object):
 				elif f_name == 'p_p_citation_list.txt':
 					for j in range(len(neigh_list_id)):
 						p_p_cite_list_train[node_id].append('p'+str(neigh_list_id[j]))
-				elif f_name == 'p_v.txt':
+				elif f_name == 'p_b.txt':
 					for j in range(len(neigh_list_id)):
-						p_v[node_id].append('v'+str(neigh_list_id[j]))
-				elif f_name == 'v_p_list_train.txt':
+						p_b[node_id].append('v'+str(neigh_list_id[j]))
+				elif f_name == 'b_p_list_train.txt':
 					for j in range(len(neigh_list_id)):
-						v_p_list_train[node_id].append('p'+str(neigh_list_id[j]))
+						b_p_list_train[node_id].append('p'+str(neigh_list_id[j]))
 				elif f_name == 'p_d.txt':
 					for j in range(len(neigh_list_id)):
 						p_d[node_id].append('d'+str(neigh_list_id[j]))
@@ -66,14 +56,14 @@ class input_data(object):
 
 		#store paper venue
 		# 这个不适用，是一对多
-		# p_v = [0] * self.args.P_n
-		# p_v_f = open(self.args.data_path + 'p_v.txt', "r")
-		# for line in p_v_f:
+		# p_b = [0] * self.args.P_n
+		# p_b_f = open(self.args.data_path + 'p_b.txt', "r")
+		# for line in p_b_f:
 		# 	line = line.strip()
 		# 	p_id = int(re.split(',',line)[0])
 		# 	v_id = int(re.split(',',line)[1])
-		# 	p_v[p_id] = v_id
-		# p_v_f.close()
+		# 	p_b[p_id] = v_id
+		# p_b_f.close()
 
 		#paper neighbor: author + citation + venue 
 		#这里我们暂时没有citation，且Venue不止一个
@@ -83,7 +73,7 @@ class input_data(object):
 		for i in range(self.args.P_n):
 			p_neigh_list_train[i] += p_a_list_train[i]
 			p_neigh_list_train[i] += p_p_cite_list_train[i] 
-			p_neigh_list_train[i] += p_v[i]
+			p_neigh_list_train[i] += p_b[i]
 			p_neigh_list_train[i] += p_d[i]
 
 
@@ -91,7 +81,7 @@ class input_data(object):
 		self.p_a_list_train = p_a_list_train
 		self.p_p_cite_list_train = p_p_cite_list_train
 		self.p_neigh_list_train = p_neigh_list_train
-		self.v_p_list_train = v_p_list_train
+		self.b_p_list_train = b_p_list_train
 		self.d_p_list_train = d_p_list_train
 
 		if self.args.train_test_label != 2:
@@ -147,24 +137,24 @@ class input_data(object):
 						d_net_embed[int(index[1:])] = embeds
 			net_e_f.close()
 			# pv embedding； 我们的pv embedding应该和下面的pa是类似的，因为是一对多
-			# p_v_net_embed = np.zeros((self.args.P_n, self.args.in_f_d))
-			# p_v = [0] * self.args.P_n
-			# p_v_f = open(self.args.data_path + "p_v.txt", "r")
-			# for line in p_v_f:
+			# p_b_net_embed = np.zeros((self.args.P_n, self.args.in_f_d))
+			# p_b = [0] * self.args.P_n
+			# p_b_f = open(self.args.data_path + "p_b.txt", "r")
+			# for line in p_b_f:
 			# 	line = line.strip()
 			# 	p_id = int(re.split(',', line)[0])
 			# 	v_id = int(re.split(',', line)[1])
-			# 	p_v[p_id] = v_id
-			# 	p_v_net_embed[p_id] = v_net_embed[v_id]
-			# p_v_f.close()
-			p_v_net_embed = np.zeros((self.args.P_n, self.args.in_f_d))
+			# 	p_b[p_id] = v_id
+			# 	p_b_net_embed[p_id] = v_net_embed[v_id]
+			# p_b_f.close()
+			p_b_net_embed = np.zeros((self.args.P_n, self.args.in_f_d))
 			for i in range(self.args.P_n):
-				# 这里可以对上，原因是p_v的长度是按照paper的总量来的，有些可能是空的
-				if len(p_v[i]):
-					for j in range(len(p_v[i])):
-						v_id = int(p_v[i][j][1:])
-						p_v_net_embed[i] = np.add(p_v_net_embed[i], v_net_embed[v_id])
-					p_v_net_embed[i] = p_v_net_embed[i] / len(p_v[i])
+				# 这里可以对上，原因是p_b的长度是按照paper的总量来的，有些可能是空的
+				if len(p_b[i]):
+					for j in range(len(p_b[i])):
+						v_id = int(p_b[i][j][1:])
+						p_b_net_embed[i] = np.add(p_b_net_embed[i], v_net_embed[v_id])
+					p_b_net_embed[i] = p_b_net_embed[i] / len(p_b[i])
 
 			p_d_net_embed = np.zeros((self.args.P_n, self.args.in_f_d))
 			for i in range(self.args.P_n):
@@ -232,24 +222,24 @@ class input_data(object):
 			# #empirically use 5 paper embedding for venue content embeding generation
 			v_text_embed = np.zeros((self.args.V_n, self.args.in_f_d * 5))
 			for i in range(self.args.V_n):
-				if len(v_p_list_train[i]):
+				if len(b_p_list_train[i]):
 					feature_temp = []
-					if len(v_p_list_train[i]) >= 5:
+					if len(b_p_list_train[i]) >= 5:
 						# id_list_temp = random.sample(a_p_list_train[i], 5)
 						for j in range(5):
-							feature_temp.append(p_abstract_embed[int(v_p_list_train[i][j][1:])])
+							feature_temp.append(p_abstract_embed[int(b_p_list_train[i][j][1:])])
 					else:
-						for j in range(len(v_p_list_train[i])):
-							feature_temp.append(p_abstract_embed[int(v_p_list_train[i][j][1:])])
-						for k in range(len(v_p_list_train[i]), 5):
-							feature_temp.append(p_abstract_embed[int(v_p_list_train[i][-1][1:])])
+						for j in range(len(b_p_list_train[i])):
+							feature_temp.append(p_abstract_embed[int(b_p_list_train[i][j][1:])])
+						for k in range(len(b_p_list_train[i]), 5):
+							feature_temp.append(p_abstract_embed[int(b_p_list_train[i][-1][1:])])
 
 					feature_temp = np.reshape(np.asarray(feature_temp), [1, -1])
 					v_text_embed[i] = feature_temp
 
-			self.p_v = p_v
+			self.p_b = p_b
 			self.p_d = p_d
-			self.p_v_net_embed = p_v_net_embed
+			self.p_b_net_embed = p_b_net_embed
 			self.p_d_net_embed = p_d_net_embed
 			self.p_a_net_embed = p_a_net_embed
 			self.p_ref_net_embed = p_ref_net_embed
@@ -477,7 +467,7 @@ class input_data(object):
 					curNode = "p" + str(j)
 				elif i == 2:
 					# 每个v都有p对应
-					neigh_temp = self.v_p_list_train[j]
+					neigh_temp = self.b_p_list_train[j]
 					neigh_train = v_neigh_list_train[j]
 					curNode = "v" + str(j)
 				elif i == 3:
@@ -521,7 +511,7 @@ class input_data(object):
 										neigh_L += 1
 										d_L += 1
 							elif curNode[0] == "v":
-								curNode = random.choice(self.v_p_list_train[int(curNode[1:])])
+								curNode = random.choice(self.b_p_list_train[int(curNode[1:])])
 								if p_L < 29:
 									neigh_train.append(curNode)
 									neigh_L +=1
@@ -707,7 +697,7 @@ class input_data(object):
 									triple_list[1].append(triple)
 								elif neighNode[0] == 'v' and random.random() < triple_sample_p[2]:
 									negNode = random.randint(0, V_n - 1)
-									while len(self.v_p_list_train[negNode]) == 0:
+									while len(self.b_p_list_train[negNode]) == 0:
 										negNode = random.randint(0, V_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[2].append(triple)
@@ -735,7 +725,7 @@ class input_data(object):
 									triple_list[5].append(triple)
 								elif neighNode[0] == 'v' and random.random() < triple_sample_p[6]:
 									negNode = random.randint(0, V_n - 1)
-									while len(self.v_p_list_train[negNode]) == 0:
+									while len(self.b_p_list_train[negNode]) == 0:
 										negNode = random.randint(0, V_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[6].append(triple)
@@ -763,7 +753,7 @@ class input_data(object):
 									triple_list[9].append(triple)
 								elif neighNode[0] == 'v' and random.random() < triple_sample_p[10]:
 									negNode = random.randint(0, V_n - 1)
-									while len(self.v_p_list_train[negNode]) == 0:
+									while len(self.b_p_list_train[negNode]) == 0:
 										negNode = random.randint(0, V_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[10].append(triple)
@@ -791,7 +781,7 @@ class input_data(object):
 									triple_list[13].append(triple)
 								elif neighNode[0] == 'v' and random.random() < triple_sample_p[14]:
 									negNode = random.randint(0, V_n - 1)
-									while len(self.v_p_list_train[negNode]) == 0:
+									while len(self.b_p_list_train[negNode]) == 0:
 										negNode = random.randint(0, V_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[14].append(triple)

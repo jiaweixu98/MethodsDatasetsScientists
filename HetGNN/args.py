@@ -2,22 +2,25 @@ import argparse
 
 def read_args():
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--data_path', type = str, default = '../data/',
+	parser.add_argument('--data_path', type = str, default = ????????????,
 				   help='path to data')
-	parser.add_argument('--model_path', type = str, default = '../model_save/',
+	parser.add_argument('--model_path', type = str, default = '??????????',
 				   help='path to save model')
-	parser.add_argument('--A_n', type=int, default=32384,
+	parser.add_argument('--A_n', type=int, default=??????,
 				   help = 'number of author node')
-	parser.add_argument('--P_n', type = int, default = 6375,
+	parser.add_argument('--P_n', type = int, default = =??????,,
 				   help = 'number of paper node')
-	parser.add_argument('--V_n', type=int, default=33445,
-				   help = 'number of venue node')
-	parser.add_argument('--D_n', type=int, default=228,
+	parser.add_argument('--B_n', type=int, default==??????,,
+				   help = 'number of bio node')
+	parser.add_argument('--D_n', type=int, default ==??????, ,
                      help='number of dataset node')
+	parser.add_argument('--M_n', type=int, default ==??????, ,
+                     help='number of method node')
 	parser.add_argument('--in_f_d', type = int, default = 128,
 				   help = 'input feature dimension')
 	parser.add_argument('--embed_d', type = int, default = 128,
 				   help = 'embedding dimension')
+	################################################ (no ful understanding)
 	parser.add_argument('--lr', type = int, default = 0.001,
 				   help = 'learning rate')
 	parser.add_argument('--batch_s', type = int, default = 20000,
@@ -38,7 +41,7 @@ def read_args():
 	parser.add_argument('--save_model_freq', type = float, default = 1,
 				   help = 'number of iterations to save model')
 	parser.add_argument("--cuda", default = 0, type = int)
-	# how to use the checkpoints?
+	
 	parser.add_argument("--checkpoint", default = '', type=str)
 
 	args = parser.parse_args()
