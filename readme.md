@@ -41,3 +41,7 @@ We have not provided the data.
 
 In the original HetGNN paper, a paper has some direct author neighbors and a venue neighbor.
 Here in our situation, the paper may not have methods or datasets. We matched all the possible data with S2(318884/321216), 99.2%.
+
+
+citation: 225,670
+如果有节点是孤立的，直接丢弃。

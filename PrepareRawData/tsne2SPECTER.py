@@ -1,19 +1,16 @@
 # nohup python -u tsne2SPECTER.py > tsne2SPECTER.log 2>&1 &
 # 这tsne的复杂度太高了，所以我们用PCA，希望可以奏效。
-from tqdm import tqdm
 import numpy as np
 from sklearn.decomposition import PCA
-import subprocess
 import pickle as pk
-import pandas as pd
-from sklearn import preprocessing
-s2id_embeddings = pk.load(open('s2id_embeddings.pkl','rb'))
-# pk.dump(s2id_embeddings,open('s2id_embeddings.pkl','wb'))
-# print(len(s2id_embeddings))
-# s2id_embeddings = {1:[1,2,0],
-# 2:[0,1,2],3:[1,2,1],4:[1,2,1],5:[1,2,1],6:[1,2,1],7:[1,2,1],8:[1,2,1],9:[1,2,1],10:[1,2,1]
-# }
-# print(s2id_embeddings)
+
+
+s2id_embeddings0 = pk.load(open('../../data/processedData/s2id_embeddings0.pkl', 'rb'))
+s2id_embeddings1 = pk.load(open('../../data/processedData/s2id_embeddings1.pkl', 'rb'))
+
+s2id_embeddings = {**s2id_embeddings0, **s2id_embeddings1}
+
+
 X_train = []
 X_train_names = []
 for x in s2id_embeddings:
@@ -37,4 +34,4 @@ for i, x in enumerate(X_train_names):
         #         embedding_file.write("%f\t" % t)        
         # embedding_file.write("\n")
 print('len(pca_embeddings)',len(pca_embeddings))
-pk.dump(pca_embeddings,open('pca_embeddings.pkl','wb'))
+pk.dump(pca_embeddings,open('../../data/processedData/pca_embeddings.pkl','wb'))

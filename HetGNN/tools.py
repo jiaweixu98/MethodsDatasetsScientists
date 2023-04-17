@@ -111,15 +111,13 @@ class HetAgg(nn.Module):
 	def p_content_agg(self, id_batch):
 		embed_d = self.embed_d
 		p_a_embed_batch = self.feature_list[0][id_batch]
-		# p_t_embed_batch = self.feature_list[1][id_batch]
 		p_v_net_embed_batch = self.feature_list[2][id_batch]
 		p_d_net_embed_batch = self.feature_list[10][id_batch]
 		p_a_net_embed_batch = self.feature_list[3][id_batch]
 		p_net_embed_batch = self.feature_list[5][id_batch]
 
 		concate_embed = torch.cat((p_a_embed_batch, p_v_net_embed_batch, p_d_net_embed_batch,p_a_net_embed_batch, p_net_embed_batch), 1).view(len(id_batch[0]), 5, embed_d)
-		# concate_embed = torch.cat((p_v_net_embed_batch,\
-		#  p_a_net_embed_batch, p_net_embed_batch), 1).view(len(id_batch[0]), 3, embed_d)
+
 		concate_embed = torch.transpose(concate_embed, 0, 1)
 		all_state, last_state = self.p_content_rnn(concate_embed)
 		return torch.mean(all_state, 0)
@@ -127,7 +125,6 @@ class HetAgg(nn.Module):
 # 同上，对齐
 	def v_content_agg(self, id_batch):
 		embed_d = self.embed_d
-		# print('v_net_embed_batch id_batch', len(id_batch[0]))
 		v_net_embed_batch = self.feature_list[8][id_batch]
 		v_text_embed_batch_1 = self.feature_list[9][id_batch, :embed_d][0]
 		v_text_embed_batch_2 = self.feature_list[9][id_batch, embed_d: 2 * embed_d][0]
@@ -137,7 +134,6 @@ class HetAgg(nn.Module):
 
 		concate_embed = torch.cat((v_net_embed_batch, v_text_embed_batch_1, v_text_embed_batch_2, v_text_embed_batch_3,\
 			v_text_embed_batch_4, v_text_embed_batch_5), 1).view(len(id_batch[0]), 6, embed_d)
-		# concate_embed = v_net_embed_batch.view(len(id_batch[0]), 1, embed_d)
 		concate_embed = torch.transpose(concate_embed, 0, 1)
 		all_state, last_state = self.v_content_rnn(concate_embed)
 		

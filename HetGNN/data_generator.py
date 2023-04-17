@@ -7,6 +7,7 @@ from itertools import *
 class input_data(object):
 	def __init__(self, args):
 		self.args = args
+		# 不是每个p都有对应的a, p, b, d, m 是否可行？
 		a_p_list_train = [[] for k in range(self.args.A_n)]
 		p_a_list_train = [[] for k in range(self.args.P_n)]
 		p_p_cite_list_train = [[] for k in range(self.args.P_n)]
@@ -17,11 +18,7 @@ class input_data(object):
 		m_p_list_train = [[] for k in range(self.args.M_n)]
 		p_m = [[] for k in range(self.args.P_n)]
 
-		# relation_f = ["a_p_list_train.txt", "p_a_list_train.txt",\
-		#  "p_p_citation_list.txt", "b_p_list_train.txt"]
-		# 暂时没有pp
-		relation_f = ["a_p_list_train.txt", "p_a_list_train.txt", "b_p_list_train.txt",
-                    'p_b.txt', "d_p_list_train.txt", 'p_d.txt', "p_p_citation_list.txt"]
+		relation_f = ["a_p_list_train.txt", "p_a_list_train.txt", "p_p_citation_list.txt", "b_p_list_train.txt", 'p_b.txt', "d_p_list_train.txt", 'p_d.txt', "m_p_list_train.txt", 'p_m.txt', ]
 		#store academic relational data 
 		for i in range(len(relation_f)):
 			f_name = relation_f[i]
@@ -42,7 +39,7 @@ class input_data(object):
 						p_p_cite_list_train[node_id].append('p'+str(neigh_list_id[j]))
 				elif f_name == 'p_b.txt':
 					for j in range(len(neigh_list_id)):
-						p_b[node_id].append('v'+str(neigh_list_id[j]))
+						p_b[node_id].append('b'+str(neigh_list_id[j]))
 				elif f_name == 'b_p_list_train.txt':
 					for j in range(len(neigh_list_id)):
 						b_p_list_train[node_id].append('p'+str(neigh_list_id[j]))
@@ -52,29 +49,23 @@ class input_data(object):
 				elif f_name == 'd_p_list_train.txt':
 					for j in range(len(neigh_list_id)):
 						d_p_list_train[node_id].append('p'+str(neigh_list_id[j]))
+				elif f_name == 'p_m.txt':
+					for j in range(len(neigh_list_id)):
+						p_d[node_id].append('m'+str(neigh_list_id[j]))
+				elif f_name == 'm_p_list_train.txt':
+					for j in range(len(neigh_list_id)):
+						d_p_list_train[node_id].append('p'+str(neigh_list_id[j]))
 			neigh_f.close()
 
-		#store paper venue
-		# 这个不适用，是一对多
-		# p_b = [0] * self.args.P_n
-		# p_b_f = open(self.args.data_path + 'p_b.txt', "r")
-		# for line in p_b_f:
-		# 	line = line.strip()
-		# 	p_id = int(re.split(',',line)[0])
-		# 	v_id = int(re.split(',',line)[1])
-		# 	p_b[p_id] = v_id
-		# p_b_f.close()
 
-		#paper neighbor: author + citation + venue 
-		#这里我们暂时没有citation，且Venue不止一个
-		#补充了citation，但有的会没有；不要紧，没有的话就是空的
-		#补充 dataset
+		#paper neighbor: author + citation + bio + dataset + method
 		p_neigh_list_train = [[] for k in range(self.args.P_n)]
 		for i in range(self.args.P_n):
 			p_neigh_list_train[i] += p_a_list_train[i]
 			p_neigh_list_train[i] += p_p_cite_list_train[i] 
 			p_neigh_list_train[i] += p_b[i]
 			p_neigh_list_train[i] += p_d[i]
+			p_neigh_list_train[i] += p_m[i]
 
 
 		self.a_p_list_train =  a_p_list_train
@@ -83,13 +74,13 @@ class input_data(object):
 		self.p_neigh_list_train = p_neigh_list_train
 		self.b_p_list_train = b_p_list_train
 		self.d_p_list_train = d_p_list_train
-
+		self.m_p_list_train = m_p_list_train
+		# if ==2, it means that just generate data ?
 		if self.args.train_test_label != 2:
 			self.triple_sample_p = self.compute_sample_p()
-			# 这里我们可否直接读进来一个728维度的变量呢，后边需要再细致修改
-			# 确定每一块的采样率
 			#store paper content pre-trained embedding
 			# 这里的ebd注意下,128维度，且第一行是行数+维度
+			# 用abstract 代表所有的 embedding.
 			p_abstract_embed = np.zeros((self.args.P_n, self.args.in_f_d))
 			p_a_e_f = open(self.args.data_path + "p_abstract_embed.txt", "r")
 			for line in islice(p_a_e_f, 1, None): # 这里跳过了第一行
@@ -99,81 +90,74 @@ class input_data(object):
 				p_abstract_embed[index] = embeds
 			p_a_e_f.close()
 
-			# p_title_embed = np.zeros((self.args.P_n, self.args.in_f_d))
-			# p_t_e_f = open(self.args.data_path + "p_title_embed.txt", "r")
-			# for line in islice(p_t_e_f, 1, None):
-			# 	values = line.split()
-			# 	index = int(values[0])
-			# 	embeds = np.asarray(values[1:], dtype='float32')
-			# 	p_title_embed[index] = embeds
-			# p_t_e_f.close()
-
 			self.p_abstract_embed = p_abstract_embed
-			# self.p_abstract_embed = ''
-			# self.p_title_embed = p_title_embed
+			# we do not have this.
 			self.p_title_embed = ''
 
 			#store pre-trained network/content embedding
-			# 这块可以有，注意V要变B
 			a_net_embed = np.zeros((self.args.A_n, self.args.in_f_d))
 			p_net_embed = np.zeros((self.args.P_n, self.args.in_f_d))
 			# 注意维度
-			v_net_embed = np.zeros((self.args.V_n, self.args.in_f_d))
+			b_net_embed = np.zeros((self.args.B_n, self.args.in_f_d))
 			d_net_embed = np.zeros((self.args.D_n, self.args.in_f_d))
-			# 注意路径，这个net是Word2Vec得到的，待会儿要生成一下
+			m_net_embed = np.zeros((self.args.M_n, self.args.in_f_d))
+			# 注意路径，这个net是Word2Vec得到的，待会儿要生成一下。deep walk的结果，每个节点都应该要有联系。
 			net_e_f = open(self.args.data_path + "node_net_embedding.txt", "r")
 			for line in islice(net_e_f, 1, None):
 				line = line.strip()
 				index = re.split(' ', line)[0]
-				if len(index) and (index[0] == 'a' or index[0] == 'v' or index[0] == 'p' or index[0] == 'd'):
+				if len(index) and (index[0] == 'a' or index[0] == 'b' or index[0] == 'p' or index[0] == 'd' or index[0] == 'm'):
 					embeds = np.asarray(re.split(' ', line)[1:], dtype='float32')
 					if index[0] == 'a':
 						a_net_embed[int(index[1:])] = embeds
-					elif index[0] == 'v':
-						v_net_embed[int(index[1:])] = embeds
+					elif index[0] == 'b':
+						b_net_embed[int(index[1:])] = embeds
 					elif index[0] == 'p':
 						p_net_embed[int(index[1:])] = embeds
 					elif index[0] == 'd':
 						d_net_embed[int(index[1:])] = embeds
+					elif index[0] == 'm':
+						m_net_embed[int(index[1:])] = embeds
 			net_e_f.close()
-			# pv embedding； 我们的pv embedding应该和下面的pa是类似的，因为是一对多
-			# p_b_net_embed = np.zeros((self.args.P_n, self.args.in_f_d))
-			# p_b = [0] * self.args.P_n
-			# p_b_f = open(self.args.data_path + "p_b.txt", "r")
-			# for line in p_b_f:
-			# 	line = line.strip()
-			# 	p_id = int(re.split(',', line)[0])
-			# 	v_id = int(re.split(',', line)[1])
-			# 	p_b[p_id] = v_id
-			# 	p_b_net_embed[p_id] = v_net_embed[v_id]
-			# p_b_f.close()
+
 			p_b_net_embed = np.zeros((self.args.P_n, self.args.in_f_d))
 			for i in range(self.args.P_n):
-				# 这里可以对上，原因是p_b的长度是按照paper的总量来的，有些可能是空的
+				# 注意，此处有的 p_b_net_embed会为空！ 因为有些paper 没有 b。是否会导致bug?
 				if len(p_b[i]):
 					for j in range(len(p_b[i])):
-						v_id = int(p_b[i][j][1:])
-						p_b_net_embed[i] = np.add(p_b_net_embed[i], v_net_embed[v_id])
+						b_id = int(p_b[i][j][1:])
+						p_b_net_embed[i] = np.add(p_b_net_embed[i], b_net_embed[b_id])
+					# 平均化处理，这里有一些是空的。因为没有。一个解决办法是学reference, 用本身的ebd代替。
 					p_b_net_embed[i] = p_b_net_embed[i] / len(p_b[i])
 
 			p_d_net_embed = np.zeros((self.args.P_n, self.args.in_f_d))
 			for i in range(self.args.P_n):
-				# 这里可以对上，原因是p_d的长度是按照paper的总量来的，有些可能是空的
+				# 同上
 				if len(p_d[i]):
 					for j in range(len(p_d[i])):
 						d_id = int(p_d[i][j][1:])
 						p_d_net_embed[i] = np.add(p_d_net_embed[i], d_net_embed[d_id])
 					p_d_net_embed[i] = p_d_net_embed[i] / len(p_d[i])
+			
+			p_m_net_embed = np.zeros((self.args.P_n, self.args.in_f_d))
+			for i in range(self.args.P_n):
+				# 同上
+				if len(p_m[i]):
+					for j in range(len(p_m[i])):
+						m_id = int(p_m[i][j][1:])
+						p_m_net_embed[i] = np.add(p_m_net_embed[i], m_net_embed[m_id])
+					p_m_net_embed[i] = p_m_net_embed[i] / len(p_m[i])
 
 			p_a_net_embed = np.zeros((self.args.P_n, self.args.in_f_d))
 			for i in range(self.args.P_n):
-				# 这块的p能对上
+				# 同上
 				if len(p_a_list_train[i]):
 					for j in range(len(p_a_list_train[i])):
 						a_id = int(p_a_list_train[i][j][1:])
 						p_a_net_embed[i] = np.add(p_a_net_embed[i], a_net_embed[a_id])
 					p_a_net_embed[i] = p_a_net_embed[i] / len(p_a_list_train[i])
-				# 参考文献的embedding
+			
+			# 参考文献的embedding, 这个没有用上，原因是一部分没有参考文献？这样ref仅仅在随机游走时用到了。如果一篇文章没有参考文献，那么其参考文献embeddings就是他自己。（似乎也可以说的通。贡献了一部分新东西，因为有的文章有参考文献。）
 			p_ref_net_embed = np.zeros((self.args.P_n, self.args.in_f_d))
 			for i in range(self.args.P_n):
 				if len(p_p_cite_list_train[i]):
@@ -219,9 +203,9 @@ class input_data(object):
 
 					feature_temp = np.reshape(np.asarray(feature_temp), [1, -1])
 					d_text_embed[i] = feature_temp
-			# #empirically use 5 paper embedding for venue content embeding generation
-			v_text_embed = np.zeros((self.args.V_n, self.args.in_f_d * 5))
-			for i in range(self.args.V_n):
+			# #empirically use 5 paper embedding for bioentity content embeding generation
+			b_text_embed = np.zeros((self.args.B_n, self.args.in_f_d * 5))
+			for i in range(self.args.B_n):
 				if len(b_p_list_train[i]):
 					feature_temp = []
 					if len(b_p_list_train[i]) >= 5:
@@ -235,8 +219,25 @@ class input_data(object):
 							feature_temp.append(p_abstract_embed[int(b_p_list_train[i][-1][1:])])
 
 					feature_temp = np.reshape(np.asarray(feature_temp), [1, -1])
-					v_text_embed[i] = feature_temp
+					b_text_embed[i] = feature_temp
+					# #empirically use 5 paper embedding for method content embeding generation
+			m_text_embed = np.zeros((self.args.M_n, self.args.in_f_d * 5))
+			for i in range(self.args.M_n):
+				# 同上
+				if len(m_p_list_train[i]):
+					feature_temp = []
+					if len(m_p_list_train[i]) >= 5:
+						# id_list_temp = random.sample(a_p_list_train[i], 5)
+						for j in range(5):
+							feature_temp.append(p_abstract_embed[int(m_p_list_train[i][j][1:])])
+					else:
+						for j in range(len(m_p_list_train[i])):
+							feature_temp.append(p_abstract_embed[int(m_p_list_train[i][j][1:])])
+						for k in range(len(m_p_list_train[i]), 5):
+							feature_temp.append(p_abstract_embed[int(m_p_list_train[i][-1][1:])])
 
+					feature_temp = np.reshape(np.asarray(feature_temp), [1, -1])
+					m_text_embed[i] = feature_temp
 			self.p_b = p_b
 			self.p_d = p_d
 			self.p_b_net_embed = p_b_net_embed
@@ -246,20 +247,13 @@ class input_data(object):
 			self.p_net_embed = p_net_embed
 			self.a_net_embed = a_net_embed
 			self.a_text_embed = a_text_embed
-			self.v_net_embed = v_net_embed
-			self.v_text_embed = v_text_embed
+			self.b_net_embed = b_net_embed
+			self.b_text_embed = b_text_embed
 			self.d_net_embed = d_net_embed
 			self.d_text_embed = d_text_embed
+			self.m_net_embed = m_net_embed
+			self.m_text_embed = m_text_embed
 			
-
-
-
-
-
-
-
-
-
 
 
 			#store neighbor set from random walk sequence 
@@ -267,6 +261,8 @@ class input_data(object):
 			p_neigh_list_train = [[[] for i in range(self.args.P_n)] for j in range(4)]
 			v_neigh_list_train = [[[] for i in range(self.args.V_n)] for j in range(4)]
 			d_neigh_list_train = [[[] for i in range(self.args.D_n)] for j in range(4)]
+			m_neigh_list_train = [[[] for i in range(self.args.M_n)] for j in range(4)]
+			# 这的注释有点问题。
 			# 这块要随机游走先得到，这里待会儿必须先跑随机游走，需要het_neigh_train.txt；这里的采样数量（10，10，3）和后面的a_L, v_L以及p_L
 			# 这里是重启随机游走已经采样完了，从这里各类型存储top个节点。每个节点找了100个邻居，在这一步从里面采样23个（10+10+3），我们采样30个，10，10，10
 			het_neigh_train_f = open(self.args.data_path + "het_neigh_train.txt", "r")

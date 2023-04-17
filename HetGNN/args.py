@@ -1,5 +1,6 @@
 import argparse
-
+# fill up the default values
+# 对于孤立的节点，必须进行对应的处理，否则会导致特征无法对齐。
 def read_args():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--data_path', type = str, default = ????????????,
