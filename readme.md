@@ -15,7 +15,7 @@ We have five kinds of nodes: **author, paper, bioentity, dataset, method**, and 
 We have not provided the data.
 
 1. **"breast_cancaer_papers_PKG23.csv"** all papers about breast cancer in PKG, including the following fields: PMID, PubYear, ArticleTitle, Abstract.
-    - 25,3891 entries
+    - 25,3891 unique entries
 
 2. **"OBI_Extraction.csv"** includes the following fields: PMID, Mention(PKG), ShowName(OBI), OBI_id, Type, and Confidence.
     - 64,047 entries
@@ -40,4 +40,4 @@ We have not provided the data.
 ## Notes
 
 In the original HetGNN paper, a paper has some direct author neighbors and a venue neighbor.
-Here in our situation, the paper may not have methods or datasets.
+Here in our situation, the paper may not have methods or datasets. We matched all the possible data with S2(318884/321216), 99.2%.
