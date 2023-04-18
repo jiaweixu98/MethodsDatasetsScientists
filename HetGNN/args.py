@@ -39,7 +39,7 @@ def read_args():
 	parser.add_argument("--random_seed", default = 10, type = int)
 	parser.add_argument('--train_test_label', type= int, default = 0,
 				   help='train/test label: 0 - train, 1 - test, 2 - code test/generate negative ids for evaluation')
-	parser.add_argument('--save_model_freq', type = float, default = 1,
+	parser.add_argument('--save_model_freq', type = float, default = 2,
 				   help = 'number of iterations to save model')
 	parser.add_argument("--cuda", default = 0, type = int)
 	

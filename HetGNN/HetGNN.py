@@ -35,7 +35,7 @@ class model_class(object):
 		feature_list = [input_data.p_abstract_embed, input_data.p_title_embed,\
 		input_data.p_b_net_embed, input_data.p_a_net_embed, input_data.p_ref_net_embed,\
 		input_data.p_net_embed, input_data.a_net_embed, input_data.a_text_embed,\
-		input_data.b_net_embed, input_data.b_text_embed, input_data.p_d_net_embed, input_data.d_net_embed, input_data.d_text_embed, input_data.m_net_embed, input_data.m_text_embed,]
+		input_data.b_net_embed, input_data.b_text_embed, input_data.p_d_net_embed, input_data.d_net_embed, input_data.d_text_embed, input_data.m_net_embed, input_data.m_text_embed, input_data.p_m_net_embed]
 
 		for i in range(len(feature_list)):
 			if feature_list[i] == '':
@@ -117,9 +117,9 @@ class model_class(object):
 
 			if iter_i % self.args.save_model_freq == 0:
 				torch.save(self.model.state_dict(), self.args.model_path +
-				           "HetGNN_with_datasetTrdTrain" + str(iter_i) + ".pt")
+				           "HetGNN_with_datasetMethod" + str(iter_i) + ".pt")
 				# save embeddings for evaluation
-				triple_index = 16 
+				triple_index = 25
 				a_out, p_out, v_out = self.model([], triple_index,iter_i)
 			print ('iteration ' + str(iter_i) + ' finish.')
 

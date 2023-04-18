@@ -11,41 +11,47 @@ args = read_args()
 
 
 class HetAgg(nn.Module):
-	def __init__(self, args, feature_list, a_neigh_list_train, p_neigh_list_train, v_neigh_list_train, d_neigh_list_train, a_train_id_list, p_train_id_list, v_train_id_list, d_train_id_list):
+	def __init__(self, args, feature_list, a_neigh_list_train, p_neigh_list_train, b_neigh_list_train, d_neigh_list_train, m_neigh_list_train, a_train_id_list, p_train_id_list, b_train_id_list, d_train_id_list,m_train_id_list ):
 		super(HetAgg, self).__init__()
 		embed_d = args.embed_d
 		in_f_d = args.in_f_d
 		self.args = args 
 		self.P_n = args.P_n
 		self.A_n = args.A_n
-		self.V_n = args.V_n
+		self.B_n = args.B_n
 		self.D_n = args.D_n
+		self.M_n = args.M_n
 		self.feature_list = feature_list
 		self.a_neigh_list_train = a_neigh_list_train
 		self.p_neigh_list_train = p_neigh_list_train
-		self.v_neigh_list_train = v_neigh_list_train
+		self.b_neigh_list_train = b_neigh_list_train
 		self.d_neigh_list_train = d_neigh_list_train
+		self.m_neigh_list_train = m_neigh_list_train
 		self.a_train_id_list = a_train_id_list
 		self.p_train_id_list = p_train_id_list
-		self.v_train_id_list = v_train_id_list
+		self.b_train_id_list = b_train_id_list
 		self.d_train_id_list = d_train_id_list
+		self.m_train_id_list = m_train_id_list
 
 		#self.fc_a_agg = nn.Linear(embed_d * 4, embed_d)
-		# LSTM，输入层，隐藏层，层数；这里在处理什么的embedding呢，看后面；没有content，先注释掉
+		# LSTM，输入层，隐藏层，层数
 		self.a_content_rnn = nn.LSTM(embed_d, int(embed_d/2), 1, bidirectional = True)
 		self.p_content_rnn = nn.LSTM(embed_d, int(embed_d/2), 1, bidirectional = True)
-		self.v_content_rnn = nn.LSTM(embed_d, int(embed_d/2), 1, bidirectional = True)
-		self.d_content_rnn = nn.LSTM(embed_d, int(embed_d/2), 1, bidirectional=True)
+		self.b_content_rnn = nn.LSTM(embed_d, int(embed_d/2), 1, bidirectional = True)
+		self.d_content_rnn = nn.LSTM(embed_d, int(embed_d/2), 1, bidirectional = True)
+		self.m_content_rnn = nn.LSTM(embed_d, int(embed_d/2), 1, bidirectional = True)
 
 		self.a_neigh_rnn = nn.LSTM(embed_d, int(embed_d/2), 1, bidirectional = True)
 		self.p_neigh_rnn = nn.LSTM(embed_d, int(embed_d/2), 1, bidirectional = True)
-		self.v_neigh_rnn = nn.LSTM(embed_d, int(embed_d/2), 1, bidirectional = True)
+		self.b_neigh_rnn = nn.LSTM(embed_d, int(embed_d/2), 1, bidirectional = True)
 		self.d_neigh_rnn = nn.LSTM(embed_d, int(embed_d/2), 1, bidirectional = True)
+		self.m_neigh_rnn = nn.LSTM(embed_d, int(embed_d/2), 1, bidirectional = True)
 
 		self.a_neigh_att = nn.Parameter(torch.ones(embed_d * 2, 1), requires_grad = True)
 		self.p_neigh_att = nn.Parameter(torch.ones(embed_d * 2, 1), requires_grad = True)
-		self.v_neigh_att = nn.Parameter(torch.ones(embed_d * 2, 1), requires_grad = True)
+		self.b_neigh_att = nn.Parameter(torch.ones(embed_d * 2, 1), requires_grad = True)
 		self.d_neigh_att = nn.Parameter(torch.ones(embed_d * 2, 1), requires_grad = True)
+		self.m_neigh_att = nn.Parameter(torch.ones(embed_d * 2, 1), requires_grad = True)
 
 		self.softmax = nn.Softmax(dim = 1)
 		self.act = nn.LeakyReLU()
@@ -76,17 +82,20 @@ class HetAgg(nn.Module):
 #                 '''
 # 0 input_data.p_abstract_embed
 # 1 input_data.p_title_embed,
-# 2 input_data.p_v_net_embed, 
+# 2 input_data.p_b_net_embed, 
 # 3 input_data.p_a_net_embed, 
 # 4 input_data.p_ref_net_embed,\
 # 5 input_data.p_net_embed, 
 # 6 input_data.a_net_embed, 
 # 7 input_data.a_text_embed,\
-# 8 input_data.v_net_embed, 
-# 9 input_data.v_text_embed, 
+# 8 input_data.b_net_embed, 
+# 9 input_data.b_text_embed, 
 # 10 input_data.p_d_net_embed,
 # 11 input_data.d_net_embed, 
-# 12 input_data.d_text_embed
+# 12 input_data.d_text_embed,
+# 13 input_data.m_net_embed, 
+# 14 input_data.m_text_embed
+# 15 input_data.p_m_net_embed
 
 	def a_content_agg(self, id_batch): #heterogeneous content aggregation
 		embed_d = self.embed_d
@@ -111,31 +120,36 @@ class HetAgg(nn.Module):
 	def p_content_agg(self, id_batch):
 		embed_d = self.embed_d
 		p_a_embed_batch = self.feature_list[0][id_batch]
-		p_v_net_embed_batch = self.feature_list[2][id_batch]
+		p_b_net_embed_batch = self.feature_list[2][id_batch]
 		p_d_net_embed_batch = self.feature_list[10][id_batch]
 		p_a_net_embed_batch = self.feature_list[3][id_batch]
 		p_net_embed_batch = self.feature_list[5][id_batch]
+		# no p-p; just average it.
+		p_m_embed_batch = self.feature_list[15][id_batch]
+		# p_m_net_embed_batch = self.feature_list[10][id_batch]
 
-		concate_embed = torch.cat((p_a_embed_batch, p_v_net_embed_batch, p_d_net_embed_batch,p_a_net_embed_batch, p_net_embed_batch), 1).view(len(id_batch[0]), 5, embed_d)
+		# 重要，可能有空值。需要修改。
+		concate_embed = torch.cat((p_a_embed_batch, p_b_net_embed_batch, p_d_net_embed_batch,
+		                          p_a_net_embed_batch, p_net_embed_batch, p_m_embed_batch), 1).view(len(id_batch[0]), 6, embed_d)
 
 		concate_embed = torch.transpose(concate_embed, 0, 1)
 		all_state, last_state = self.p_content_rnn(concate_embed)
 		return torch.mean(all_state, 0)
 
 # 同上，对齐
-	def v_content_agg(self, id_batch):
+	def b_content_agg(self, id_batch):
 		embed_d = self.embed_d
-		v_net_embed_batch = self.feature_list[8][id_batch]
-		v_text_embed_batch_1 = self.feature_list[9][id_batch, :embed_d][0]
-		v_text_embed_batch_2 = self.feature_list[9][id_batch, embed_d: 2 * embed_d][0]
-		v_text_embed_batch_3 = self.feature_list[9][id_batch, 2 * embed_d: 3 * embed_d][0]
-		v_text_embed_batch_4 = self.feature_list[9][id_batch, 3 * embed_d: 4 * embed_d][0]
-		v_text_embed_batch_5 = self.feature_list[9][id_batch, 4 * embed_d:][0]
+		b_net_embed_batch = self.feature_list[8][id_batch]
+		b_text_embed_batch_1 = self.feature_list[9][id_batch, :embed_d][0]
+		b_text_embed_batch_2 = self.feature_list[9][id_batch, embed_d: 2 * embed_d][0]
+		b_text_embed_batch_3 = self.feature_list[9][id_batch, 2 * embed_d: 3 * embed_d][0]
+		b_text_embed_batch_4 = self.feature_list[9][id_batch, 3 * embed_d: 4 * embed_d][0]
+		b_text_embed_batch_5 = self.feature_list[9][id_batch, 4 * embed_d:][0]
 
-		concate_embed = torch.cat((v_net_embed_batch, v_text_embed_batch_1, v_text_embed_batch_2, v_text_embed_batch_3,\
-			v_text_embed_batch_4, v_text_embed_batch_5), 1).view(len(id_batch[0]), 6, embed_d)
+		concate_embed = torch.cat((b_net_embed_batch, b_text_embed_batch_1, b_text_embed_batch_2, b_text_embed_batch_3,\
+			b_text_embed_batch_4, b_text_embed_batch_5), 1).view(len(id_batch[0]), 6, embed_d)
 		concate_embed = torch.transpose(concate_embed, 0, 1)
-		all_state, last_state = self.v_content_rnn(concate_embed)
+		all_state, last_state = self.b_content_rnn(concate_embed)
 		
 		return torch.mean(all_state, 0)
 		
@@ -158,11 +172,28 @@ class HetAgg(nn.Module):
 		return torch.mean(all_state, 0)
 
 
+	def m_content_agg(self, id_batch):
+		embed_d = self.embed_d
+		# print('d_net_embed_batch id_batch', len(id_batch[0]))
+		m_net_embed_batch = self.feature_list[11][id_batch]
+		m_text_embed_batch_1 = self.feature_list[12][id_batch, :embed_d][0]
+		m_text_embed_batch_2 = self.feature_list[12][id_batch, embed_d: 2 * embed_d][0]
+		m_text_embed_batch_3 = self.feature_list[12][id_batch, 2 * embed_d: 3 * embed_d][0]
+		m_text_embed_batch_4 = self.feature_list[12][id_batch, 3 * embed_d: 4 * embed_d][0]
+		m_text_embed_batch_5 = self.feature_list[12][id_batch, 4 * embed_d:][0]
+
+		concate_embed = torch.cat((m_net_embed_batch, m_text_embed_batch_1, m_text_embed_batch_2, m_text_embed_batch_3,\
+			m_text_embed_batch_4, m_text_embed_batch_5), 1).view(len(id_batch[0]), 6, embed_d)
+		concate_embed = torch.transpose(concate_embed, 0, 1)
+		all_state, last_state = self.m_content_rnn(concate_embed)
+		
+		return torch.mean(all_state, 0)
+
 
 	def node_neigh_agg(self, id_batch, node_type): #type based neighbor aggregation with rnn 
 		embed_d = self.embed_d
 
-		if node_type == 4:
+		if node_type == 4 or node_type == 5:
 			batch_s = int(len(id_batch[0]) / 5)
 		else:
 			#print (len(id_batch[0]))
