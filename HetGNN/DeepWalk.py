@@ -1,6 +1,6 @@
 # nohup python DeepWalk.py > DeepWalk.log 2>&1 &
-import string;
-import re;
+import string
+import re
 import random
 import math
 import numpy as np

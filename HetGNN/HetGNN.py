@@ -33,9 +33,9 @@ class model_class(object):
 			exit(0)
 # 
 		feature_list = [input_data.p_abstract_embed, input_data.p_title_embed,\
-		input_data.p_v_net_embed, input_data.p_a_net_embed, input_data.p_ref_net_embed,\
+		input_data.p_b_net_embed, input_data.p_a_net_embed, input_data.p_ref_net_embed,\
 		input_data.p_net_embed, input_data.a_net_embed, input_data.a_text_embed,\
-		input_data.v_net_embed, input_data.v_text_embed, input_data.p_d_net_embed, input_data.d_net_embed, input_data.d_text_embed]
+		input_data.b_net_embed, input_data.b_text_embed, input_data.p_d_net_embed, input_data.d_net_embed, input_data.d_text_embed, input_data.m_net_embed, input_data.m_text_embed,]
 
 		for i in range(len(feature_list)):
 			if feature_list[i] == '':
@@ -49,16 +49,18 @@ class model_class(object):
 
 		a_neigh_list_train = input_data.a_neigh_list_train
 		p_neigh_list_train = input_data.p_neigh_list_train
-		v_neigh_list_train = input_data.v_neigh_list_train
+		b_neigh_list_train = input_data.b_neigh_list_train
 		d_neigh_list_train = input_data.d_neigh_list_train
+		m_neigh_list_train = input_data.m_neigh_list_train
 
 		a_train_id_list = input_data.a_train_id_list
 		p_train_id_list = input_data.p_train_id_list
-		v_train_id_list = input_data.v_train_id_list
+		b_train_id_list = input_data.b_train_id_list
 		d_train_id_list = input_data.d_train_id_list
+		m_train_id_list = input_data.m_train_id_list
 		print('start model') 
 		# must modify HetAgg
-		self.model = tools.HetAgg(args, feature_list, a_neigh_list_train, p_neigh_list_train, v_neigh_list_train, d_neigh_list_train, a_train_id_list, p_train_id_list, v_train_id_list, d_train_id_list)
+		self.model = tools.HetAgg(args, feature_list, a_neigh_list_train, p_neigh_list_train, b_neigh_list_train, d_neigh_list_train, m_neigh_list_train, a_train_id_list, p_train_id_list, b_train_id_list, d_train_id_list, m_train_id_list)
 
 		if self.gpu:
 			self.model.cuda()

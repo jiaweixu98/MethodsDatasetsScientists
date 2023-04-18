@@ -6,18 +6,18 @@ from itertools import *
 from tqdm import tqdm
 
 parser = argparse.ArgumentParser(description = 'input data process')
-parser.add_argument('--A_n', type = int, default = 32384,
+parser.add_argument('--A_n', type = int, default = ...,
 			   help = 'number of author node')
-parser.add_argument('--P_n', type = int, default = 6375,
+parser.add_argument('--P_n', type = int, default = ...,
 			   help = 'number of paper node')
-parser.add_argument('--V_n', type=int, default=33445,
-			   help = 'number of venue node')
-parser.add_argument('--D_n', type=int, default=228,
-                    help='number of dataset node')
-# when did I change it?
-parser.add_argument('--C_n', type = int, default = 4,
-			   help = 'number of node class label')
-parser.add_argument('--data_path', type = str, default = '../data/', help='path to data')
+parser.add_argument('--B_n', type=int, default==??????,,
+				   help = 'number of bio node')
+parser.add_argument('--D_n', type=int, default ==??????, ,
+                     help='number of dataset node')
+parser.add_argument('--M_n', type=int, default ==??????, ,
+                     help='number of method node')
+parser.add_argument('--data_path', type=str, default= ????????????,
+                    help='path to data')
 parser.add_argument('--walk_n', type = int, default = 10,
 			   help='number of walk per root node')
 parser.add_argument('--walk_L', type = int, default = 30,
@@ -34,24 +34,19 @@ print(args)
 class input_data(object):
 	def __init__(self, args):
 		self.args = args
-# 这里，把对应的参数改为我们的数据
+		# 不是每个p都有对应的a, p, b, d, m 是否可行？
 		a_p_list_train = [[] for k in range(self.args.A_n)]
 		p_a_list_train = [[] for k in range(self.args.P_n)]
 		p_p_cite_list_train = [[] for k in range(self.args.P_n)]
-		# 这里可能有问题，因为不是每个东西都有citation
-		v_p_list_train = [[] for k in range(self.args.V_n)]
-		# 我们的pv也是一对多
-		p_v = [[] for k in range(self.args.P_n)]
-
+		b_p_list_train = [[] for k in range(self.args.B_n)]
+		p_b = [[] for k in range(self.args.P_n)]
 		d_p_list_train = [[] for k in range(self.args.D_n)]
-		# 我们的pv也是一对多
 		p_d = [[] for k in range(self.args.P_n)]
+		m_p_list_train = [[] for k in range(self.args.M_n)]
+		p_m = [[] for k in range(self.args.P_n)]
 
-		# relation_f = ["a_p_list_train.txt", "p_a_list_train.txt",\
-		#  "p_p_citation_list.txt", "v_p_list_train.txt"]
-		# 暂时没有pp
-		relation_f = ["a_p_list_train.txt", "p_a_list_train.txt", "v_p_list_train.txt",
-                    'p_v.txt', "d_p_list_train.txt", 'p_d.txt', "p_p_citation_list.txt"]
+		relation_f = ["a_p_list_train.txt", "p_a_list_train.txt", "p_p_citation_list.txt",
+                    "b_p_list_train.txt", 'p_b.txt', "d_p_list_train.txt", 'p_d.txt', "m_p_list_train.txt", 'p_m.txt', ]
 		#store academic relational data
 		for i in range(len(relation_f)):
 			f_name = relation_f[i]
@@ -70,58 +65,47 @@ class input_data(object):
 				elif f_name == 'p_p_citation_list.txt':
 					for j in range(len(neigh_list_id)):
 						p_p_cite_list_train[node_id].append('p'+str(neigh_list_id[j]))
-				elif f_name == 'p_v.txt':
+				elif f_name == 'p_b.txt':
 					for j in range(len(neigh_list_id)):
-						p_v[node_id].append('v'+str(neigh_list_id[j]))
-				elif f_name == 'v_p_list_train.txt':
+						p_b[node_id].append('b'+str(neigh_list_id[j]))
+				elif f_name == 'b_p_list_train.txt':
 					for j in range(len(neigh_list_id)):
-						v_p_list_train[node_id].append('p'+str(neigh_list_id[j]))
+						b_p_list_train[node_id].append('p'+str(neigh_list_id[j]))
 				elif f_name == 'p_d.txt':
 					for j in range(len(neigh_list_id)):
 						p_d[node_id].append('d'+str(neigh_list_id[j]))
 				elif f_name == 'd_p_list_train.txt':
 					for j in range(len(neigh_list_id)):
 						d_p_list_train[node_id].append('p'+str(neigh_list_id[j]))
+				elif f_name == 'p_m.txt':
+					for j in range(len(neigh_list_id)):
+						p_d[node_id].append('m'+str(neigh_list_id[j]))
+				elif f_name == 'm_p_list_train.txt':
+					for j in range(len(neigh_list_id)):
+						d_p_list_train[node_id].append('p'+str(neigh_list_id[j]))
 			neigh_f.close()
 
-		#store paper venue
-		# 这个不适用，是一对多
-		# p_v = [0] * self.args.P_n
-		# p_v_f = open(self.args.data_path + 'p_v.txt', "r")
-		# for line in p_v_f:
-		# 	line = line.strip()
-		# 	p_id = int(re.split(',',line)[0])
-		# 	v_id = int(re.split(',',line)[1])
-		# 	p_v[p_id] = v_id
-		# p_v_f.close()
-
-		#paper neighbor: author + citation + venue
-		#这里我们暂时没有citation，且Venue不止一个
-		#补充了citation，但有的会没有；不要紧，没有的话就是空的
-		#补充 dataset
+		#paper neighbor: author + citation + bio + dataset + method
 		p_neigh_list_train = [[] for k in range(self.args.P_n)]
 		for i in range(self.args.P_n):
 			p_neigh_list_train[i] += p_a_list_train[i]
 			p_neigh_list_train[i] += p_p_cite_list_train[i]
-			p_neigh_list_train[i] += p_v[i]
+			p_neigh_list_train[i] += p_b[i]
 			p_neigh_list_train[i] += p_d[i]
-			# p_neigh_list_train[i].append('v' + str(p_v[i]))
-		#print p_neigh_list_train[11846]
+			p_neigh_list_train[i] += p_m[i]
 
 		self.a_p_list_train = a_p_list_train
 		self.p_a_list_train = p_a_list_train
 		self.p_p_cite_list_train = p_p_cite_list_train
 		self.p_neigh_list_train = p_neigh_list_train
-		self.v_p_list_train = v_p_list_train
+		self.b_p_list_train = b_p_list_train
 		self.d_p_list_train = d_p_list_train
-		self.p_v = p_v
-		self.p_d = p_d
+		self.m_p_list_train = m_p_list_train
 
 # 下面这三个函数，最重要的是随机游走；其他的是干什么呢？
 # 游走，也不用干别的
 	def gen_het_rand_walk(self):
 		het_walk_f = open(self.args.data_path + "het_random_walk_test.txt", "w")
-		#print len(self.p_neigh_list_train)
 		for i in tqdm(range(self.args.walk_n)):
 			for j in range(self.args.A_n):
 				if len(self.a_p_list_train[j]):
@@ -136,13 +120,17 @@ class input_data(object):
 							curNode = int(curNode[1:])
 							curNode = random.choice(self.p_neigh_list_train[curNode])
 							het_walk_f.write(curNode + " ")
-						elif curNode[0] == "v": 
+						elif curNode[0] == "b": 
 							curNode = int(curNode[1:])
-							curNode = random.choice(self.v_p_list_train[curNode])
+							curNode = random.choice(self.b_p_list_train[curNode])
 							het_walk_f.write(curNode + " ")
 						elif curNode[0] == "d": 
 							curNode = int(curNode[1:])
 							curNode = random.choice(self.d_p_list_train[curNode])
+							het_walk_f.write(curNode + " ")
+						elif curNode[0] == "m": 
+							curNode = int(curNode[1:])
+							curNode = random.choice(self.m_p_list_train[curNode])
 							het_walk_f.write(curNode + " ")
 					het_walk_f.write("\n")
 		het_walk_f.close()
