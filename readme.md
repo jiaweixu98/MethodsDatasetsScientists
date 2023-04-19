@@ -43,18 +43,27 @@ In the original HetGNN paper, a paper has some direct author neighbors and a ven
 Here in our situation, the paper may not have methods or datasets. We matched all the possible data with S2(318884/321216), 99.2%.
 
 matched citation: 225,670
-如果有节点是孤立的，直接丢弃。
 matched embeddings: 274,575
 
 
 **Important Notes**
 
-every paper should have its own text embedding.
+every paper should have its own text embedding, as well as the author.
+paper with author & ebd: 260,983 (85.9% of paper with author). we can accept it.
 
 It is important to consider a paper's author or its method, right?
 If a paper does not have an author, just use the paper itself's embedding. Is that ok?
 How to find the neighbors of a paper? Finding its author is the best solution. We must let the paper have at least one author.
 Every paper has at least one author.
 Other nodes (except paper) at least have a paper.
+
+after constrined, the number of nodes:
+len(paper_wauthor_bioentity) 253663
+len(bioentity_wauthor_paper) 499316
+len(paper_wauthor_dataset) 6544
+len(dataset_wauthor_paper) 245
+len(paper_wauthor_method) 45316
+len(method_wauthor_paper) 308
+len(pmid_citing_cited_constrained) 206621
 
 if it is hard to get a fixed number of nodes (especially for datasets and methods), reduce the fixed number.
