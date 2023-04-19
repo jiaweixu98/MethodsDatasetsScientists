@@ -58,6 +58,8 @@ Every paper has at least one author.
 Other nodes (except paper) at least have a paper.
 
 after constrined, the number of nodes:
+len(paper_constrain_author) 260983
+len(author_constrain_paper) 524117
 len(paper_wauthor_bioentity) 253663
 len(bioentity_wauthor_paper) 499316
 len(paper_wauthor_dataset) 6544
@@ -65,5 +67,6 @@ len(dataset_wauthor_paper) 245
 len(paper_wauthor_method) 45316
 len(method_wauthor_paper) 308
 len(pmid_citing_cited_constrained) 206621
+len(paper_constrain_ebd) 260983
 
 if it is hard to get a fixed number of nodes (especially for datasets and methods), reduce the fixed number.
