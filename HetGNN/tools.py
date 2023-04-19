@@ -126,7 +126,6 @@ class HetAgg(nn.Module):
 		p_net_embed_batch = self.feature_list[5][id_batch]
 		# no p-p; just average it.
 		p_m_embed_batch = self.feature_list[15][id_batch]
-		# p_m_net_embed_batch = self.feature_list[10][id_batch]
 
 		# 重要，可能有空值。需要修改。
 		concate_embed = torch.cat((p_a_embed_batch, p_b_net_embed_batch, p_d_net_embed_batch,
@@ -153,7 +152,7 @@ class HetAgg(nn.Module):
 		
 		return torch.mean(all_state, 0)
 		
-		#新增，
+		#新增
 	def d_content_agg(self, id_batch):
 		embed_d = self.embed_d
 		# print('d_net_embed_batch id_batch', len(id_batch[0]))
@@ -175,12 +174,12 @@ class HetAgg(nn.Module):
 	def m_content_agg(self, id_batch):
 		embed_d = self.embed_d
 		# print('d_net_embed_batch id_batch', len(id_batch[0]))
-		m_net_embed_batch = self.feature_list[11][id_batch]
-		m_text_embed_batch_1 = self.feature_list[12][id_batch, :embed_d][0]
-		m_text_embed_batch_2 = self.feature_list[12][id_batch, embed_d: 2 * embed_d][0]
-		m_text_embed_batch_3 = self.feature_list[12][id_batch, 2 * embed_d: 3 * embed_d][0]
-		m_text_embed_batch_4 = self.feature_list[12][id_batch, 3 * embed_d: 4 * embed_d][0]
-		m_text_embed_batch_5 = self.feature_list[12][id_batch, 4 * embed_d:][0]
+		m_net_embed_batch = self.feature_list[13][id_batch]
+		m_text_embed_batch_1 = self.feature_list[14][id_batch, :embed_d][0]
+		m_text_embed_batch_2 = self.feature_list[14][id_batch, embed_d: 2 * embed_d][0]
+		m_text_embed_batch_3 = self.feature_list[14][id_batch, 2 * embed_d: 3 * embed_d][0]
+		m_text_embed_batch_4 = self.feature_list[14][id_batch, 3 * embed_d: 4 * embed_d][0]
+		m_text_embed_batch_5 = self.feature_list[14][id_batch, 4 * embed_d:][0]
 
 		concate_embed = torch.cat((m_net_embed_batch, m_text_embed_batch_1, m_text_embed_batch_2, m_text_embed_batch_3,\
 			m_text_embed_batch_4, m_text_embed_batch_5), 1).view(len(id_batch[0]), 6, embed_d)
@@ -190,13 +189,12 @@ class HetAgg(nn.Module):
 		return torch.mean(all_state, 0)
 
 
-	def node_neigh_agg(self, id_batch, node_type): #type based neighbor aggregation with rnn 
+	def node_neigh_agg(self, id_batch, node_type): #type based neighbor aggregation with rnn. (start from 1 ??)
 		embed_d = self.embed_d
 
 		if node_type == 4 or node_type == 5:
-			batch_s = int(len(id_batch[0]) / 5)
+			batch_s = int(len(id_batch[0]) / 3)
 		else:
-			#print (len(id_batch[0]))
 			batch_s = int(len(id_batch[0]) / 10)
 # 这里调用了，a_content_agg，前面已经处理好了
 		if node_type == 1:
@@ -208,13 +206,17 @@ class HetAgg(nn.Module):
 			neigh_agg = torch.transpose(neigh_agg, 0, 1)
 			all_state, last_state  = self.p_neigh_rnn(neigh_agg)
 		elif node_type == 3:
-			neigh_agg = self.v_content_agg(id_batch).view(batch_s, 10, embed_d)
+			neigh_agg = self.b_content_agg(id_batch).view(batch_s, 10, embed_d)
 			neigh_agg = torch.transpose(neigh_agg, 0, 1)
 			all_state, last_state  = self.v_neigh_rnn(neigh_agg)
 		elif node_type == 4:
-			neigh_agg = self.d_content_agg(id_batch).view(batch_s, 5, embed_d)
+			neigh_agg = self.d_content_agg(id_batch).view(batch_s, 3, embed_d)
 			neigh_agg = torch.transpose(neigh_agg, 0, 1)
 			all_state, last_state  = self.d_neigh_rnn(neigh_agg)
+		elif node_type == 5:
+			neigh_agg = self.m_content_agg(id_batch).view(batch_s, 3, embed_d)
+			neigh_agg = torch.transpose(neigh_agg, 0, 1)
+			all_state, last_state = self.m_neigh_rnn(neigh_agg)
 		neigh_agg = torch.mean(all_state, 0).view(batch_s, embed_d)
 		
 		return neigh_agg
@@ -223,40 +225,53 @@ class HetAgg(nn.Module):
 	def node_het_agg(self, id_batch, node_type): #heterogeneous neighbor aggregation
 		a_neigh_batch = [[0] * 10] * len(id_batch)
 		p_neigh_batch = [[0] * 10] * len(id_batch)
-		v_neigh_batch = [[0] * 10] * len(id_batch)
-		d_neigh_batch = [[0] * 5] * len(id_batch)
+		b_neigh_batch = [[0] * 10] * len(id_batch)
+		d_neigh_batch = [[0] * 3] * len(id_batch)
+		m_neigh_batch = [[0] * 3] * len(id_batch)
 		for i in range(len(id_batch)):
 			if node_type == 1:
 				a_neigh_batch[i] = self.a_neigh_list_train[0][id_batch[i]]
 				p_neigh_batch[i] = self.a_neigh_list_train[1][id_batch[i]]
-				v_neigh_batch[i] = self.a_neigh_list_train[2][id_batch[i]]
+				b_neigh_batch[i] = self.a_neigh_list_train[2][id_batch[i]]
 				d_neigh_batch[i] = self.a_neigh_list_train[3][id_batch[i]]
+				m_neigh_batch[i] = self.a_neigh_list_train[4][id_batch[i]]
 			elif node_type == 2:
 				a_neigh_batch[i] = self.p_neigh_list_train[0][id_batch[i]]
 				p_neigh_batch[i] = self.p_neigh_list_train[1][id_batch[i]]
-				v_neigh_batch[i] = self.p_neigh_list_train[2][id_batch[i]]
+				b_neigh_batch[i] = self.p_neigh_list_train[2][id_batch[i]]
 				d_neigh_batch[i] = self.p_neigh_list_train[3][id_batch[i]]
+				m_neigh_batch[i] = self.p_neigh_list_train[4][id_batch[i]]
 			elif node_type == 3:
-				a_neigh_batch[i] = self.v_neigh_list_train[0][id_batch[i]]
-				p_neigh_batch[i] = self.v_neigh_list_train[1][id_batch[i]]
-				v_neigh_batch[i] = self.v_neigh_list_train[2][id_batch[i]]
-				d_neigh_batch[i] = self.v_neigh_list_train[3][id_batch[i]]
+				a_neigh_batch[i] = self.b_neigh_list_train[0][id_batch[i]]
+				p_neigh_batch[i] = self.b_neigh_list_train[1][id_batch[i]]
+				b_neigh_batch[i] = self.b_neigh_list_train[2][id_batch[i]]
+				d_neigh_batch[i] = self.b_neigh_list_train[3][id_batch[i]]
+				m_neigh_batch[i] = self.b_neigh_list_train[4][id_batch[i]]
 			elif node_type == 4:
 				a_neigh_batch[i] = self.d_neigh_list_train[0][id_batch[i]]
 				p_neigh_batch[i] = self.d_neigh_list_train[1][id_batch[i]]
-				v_neigh_batch[i] = self.d_neigh_list_train[2][id_batch[i]]
+				b_neigh_batch[i] = self.d_neigh_list_train[2][id_batch[i]]
 				d_neigh_batch[i] = self.d_neigh_list_train[3][id_batch[i]]
+				m_neigh_batch[i] = self.d_neigh_list_train[4][id_batch[i]]
+			elif node_type == 5:
+				a_neigh_batch[i] = self.m_neigh_list_train[0][id_batch[i]]
+				p_neigh_batch[i] = self.m_neigh_list_train[1][id_batch[i]]
+				b_neigh_batch[i] = self.m_neigh_list_train[2][id_batch[i]]
+				d_neigh_batch[i] = self.m_neigh_list_train[3][id_batch[i]]
+				m_neigh_batch[i] = self.m_neigh_list_train[4][id_batch[i]]
 
 		a_neigh_batch = np.reshape(a_neigh_batch, (1, -1))
 		a_agg_batch = self.node_neigh_agg(a_neigh_batch, 1)
 		p_neigh_batch = np.reshape(p_neigh_batch, (1, -1))
 		p_agg_batch = self.node_neigh_agg(p_neigh_batch, 2)
 		# print('v_neigh_batch',v_neigh_batch)
-		v_neigh_batch = np.reshape(v_neigh_batch, (1, -1))
-		v_agg_batch = self.node_neigh_agg(v_neigh_batch, 3)
+		b_neigh_batch = np.reshape(b_neigh_batch, (1, -1))
+		b_agg_batch = self.node_neigh_agg(b_neigh_batch, 3)
 		# print('d_neigh_batch',d_neigh_batch)
 		d_neigh_batch = np.reshape(d_neigh_batch, (1, -1))
 		d_agg_batch = self.node_neigh_agg(d_neigh_batch, 4)
+		m_neigh_batch = np.reshape(m_neigh_batch, (1, -1))
+		m_agg_batch = self.node_neigh_agg(m_neigh_batch, 5)
 
 		#attention module
 		id_batch = np.reshape(id_batch, (1, -1))
@@ -265,19 +280,22 @@ class HetAgg(nn.Module):
 		elif node_type == 2:
 			c_agg_batch = self.p_content_agg(id_batch)
 		elif node_type == 3:
-			c_agg_batch = self.v_content_agg(id_batch)
+			c_agg_batch = self.b_content_agg(id_batch)
 		elif node_type == 4:
 			c_agg_batch = self.d_content_agg(id_batch)
+		elif node_type == 5:
+			c_agg_batch = self.m_content_agg(id_batch)
 
 		c_agg_batch_2 = torch.cat((c_agg_batch, c_agg_batch), 1).view(len(c_agg_batch), self.embed_d * 2)
 		a_agg_batch_2 = torch.cat((c_agg_batch, a_agg_batch), 1).view(len(c_agg_batch), self.embed_d * 2)
 		p_agg_batch_2 = torch.cat((c_agg_batch, p_agg_batch), 1).view(len(c_agg_batch), self.embed_d * 2)
-		v_agg_batch_2 = torch.cat((c_agg_batch, v_agg_batch), 1).view(len(c_agg_batch), self.embed_d * 2)
+		b_agg_batch_2 = torch.cat((c_agg_batch, b_agg_batch), 1).view(len(c_agg_batch), self.embed_d * 2)
 		d_agg_batch_2 = torch.cat((c_agg_batch, d_agg_batch), 1).view(len(c_agg_batch), self.embed_d * 2)
+		m_agg_batch_2 = torch.cat((c_agg_batch, m_agg_batch), 1).view(len(c_agg_batch), self.embed_d * 2)
 
 		#compute weights
 		concate_embed = torch.cat((c_agg_batch_2, a_agg_batch_2, p_agg_batch_2,\
-                             v_agg_batch_2, d_agg_batch_2), 1).view(len(c_agg_batch), 5, self.embed_d * 2)
+                             b_agg_batch_2, d_agg_batch_2, m_agg_batch_2), 1).view(len(c_agg_batch), 6, self.embed_d * 2)
 		if node_type == 1:
 			atten_w = self.act(torch.bmm(concate_embed, self.a_neigh_att.unsqueeze(0).expand(len(c_agg_batch),\
 			 *self.a_neigh_att.size())))
@@ -285,16 +303,19 @@ class HetAgg(nn.Module):
 			atten_w = self.act(torch.bmm(concate_embed, self.p_neigh_att.unsqueeze(0).expand(len(c_agg_batch),\
 			 *self.p_neigh_att.size())))
 		elif node_type == 3:
-			atten_w = self.act(torch.bmm(concate_embed, self.v_neigh_att.unsqueeze(0).expand(len(c_agg_batch),\
-			 *self.v_neigh_att.size())))
+			atten_w = self.act(torch.bmm(concate_embed, self.b_neigh_att.unsqueeze(0).expand(len(c_agg_batch),\
+			 *self.b_neigh_att.size())))
 		elif node_type == 4:
 			atten_w = self.act(torch.bmm(concate_embed, self.d_neigh_att.unsqueeze(0).expand(len(c_agg_batch),\
 			 *self.d_neigh_att.size())))
-		atten_w = self.softmax(atten_w).view(len(c_agg_batch), 1, 5)
+		elif node_type == 5:
+			atten_w = self.act(torch.bmm(concate_embed, self.m_neigh_att.unsqueeze(0).expand(len(c_agg_batch),\
+             *self.m_neigh_att.size())))
+		atten_w = self.softmax(atten_w).view(len(c_agg_batch), 1, 6)
 
 		#weighted combination
 		concate_embed = torch.cat((c_agg_batch, a_agg_batch, p_agg_batch,\
-		 v_agg_batch, d_agg_batch), 1).view(len(c_agg_batch), 5, self.embed_d)
+		 b_agg_batch, d_agg_batch, m_agg_batch), 1).view(len(c_agg_batch), 6, self.embed_d)
 		weight_agg_batch = torch.bmm(atten_w, concate_embed).view(len(c_agg_batch), self.embed_d)
 
 		return weight_agg_batch
@@ -303,7 +324,7 @@ class HetAgg(nn.Module):
 	def het_agg(self, triple_index, c_id_batch, pos_id_batch, neg_id_batch, iter_i):
 		embed_d = self.embed_d
 		# batch processing
-		# nine cases for academic data (author, paper, venue)
+		# nine cases for academic data (author, paper, venue); 25 with five kinds of nodes.
 		if triple_index == 0:
 			c_agg = self.node_het_agg(c_id_batch, 1)
 			p_agg = self.node_het_agg(pos_id_batch, 1)
@@ -321,66 +342,104 @@ class HetAgg(nn.Module):
 			p_agg = self.node_het_agg(pos_id_batch, 4)
 			n_agg = self.node_het_agg(neg_id_batch, 4)
 		elif triple_index == 4:
+			c_agg = self.node_het_agg(c_id_batch, 1)
+			p_agg = self.node_het_agg(pos_id_batch, 5)
+			n_agg = self.node_het_agg(neg_id_batch, 5)
+		elif triple_index == 5:
 			c_agg = self.node_het_agg(c_id_batch, 2)
 			p_agg = self.node_het_agg(pos_id_batch, 1)
 			n_agg = self.node_het_agg(neg_id_batch, 1)	
-		elif triple_index == 5:
+		elif triple_index == 6:
 			c_agg = self.node_het_agg(c_id_batch, 2)
 			p_agg = self.node_het_agg(pos_id_batch, 2)
 			n_agg = self.node_het_agg(neg_id_batch, 2)	
-		elif triple_index == 6:
+		elif triple_index == 7:
 			c_agg = self.node_het_agg(c_id_batch, 2)
 			p_agg = self.node_het_agg(pos_id_batch, 3)
 			n_agg = self.node_het_agg(neg_id_batch, 3)		
-		elif triple_index == 7:
+		elif triple_index == 8:
 			c_agg = self.node_het_agg(c_id_batch, 2)
 			p_agg = self.node_het_agg(pos_id_batch, 4)
-			n_agg = self.node_het_agg(neg_id_batch, 4)	
-		elif triple_index == 8:
-			c_agg = self.node_het_agg(c_id_batch, 3)
-			p_agg = self.node_het_agg(pos_id_batch, 1)
-			n_agg = self.node_het_agg(neg_id_batch, 1)
+			n_agg = self.node_het_agg(neg_id_batch, 4)
 		elif triple_index == 9:
-			c_agg = self.node_het_agg(c_id_batch, 3)
-			p_agg = self.node_het_agg(pos_id_batch, 2)
-			n_agg = self.node_het_agg(neg_id_batch, 2)
+			c_agg = self.node_het_agg(c_id_batch, 2)
+			p_agg = self.node_het_agg(pos_id_batch, 5)
+			n_agg = self.node_het_agg(neg_id_batch, 5)
 		elif triple_index == 10:
 			c_agg = self.node_het_agg(c_id_batch, 3)
+			p_agg = self.node_het_agg(pos_id_batch, 1)
+			n_agg = self.node_het_agg(neg_id_batch, 1)
+		elif triple_index == 11:
+			c_agg = self.node_het_agg(c_id_batch, 3)
+			p_agg = self.node_het_agg(pos_id_batch, 2)
+			n_agg = self.node_het_agg(neg_id_batch, 2)
+		elif triple_index == 12:
+			c_agg = self.node_het_agg(c_id_batch, 3)
 			p_agg = self.node_het_agg(pos_id_batch, 3)
 			n_agg = self.node_het_agg(neg_id_batch, 3)
-		elif triple_index == 11:
+		elif triple_index == 13:
 			c_agg = self.node_het_agg(c_id_batch, 3)
 			p_agg = self.node_het_agg(pos_id_batch, 4)
 			n_agg = self.node_het_agg(neg_id_batch, 4)
-		elif triple_index == 12:
+		elif triple_index == 14:
+			c_agg = self.node_het_agg(c_id_batch, 3)
+			p_agg = self.node_het_agg(pos_id_batch, 5)
+			n_agg = self.node_het_agg(neg_id_batch, 5)
+		elif triple_index == 15:
 			c_agg = self.node_het_agg(c_id_batch, 4)
 			p_agg = self.node_het_agg(pos_id_batch, 1)
 			n_agg = self.node_het_agg(neg_id_batch, 1)
-		elif triple_index == 13:
+		elif triple_index == 16:
 			c_agg = self.node_het_agg(c_id_batch, 4)
 			p_agg = self.node_het_agg(pos_id_batch, 2)
 			n_agg = self.node_het_agg(neg_id_batch, 2)
-		elif triple_index == 14:
+		elif triple_index == 17:
 			c_agg = self.node_het_agg(c_id_batch, 4)
 			p_agg = self.node_het_agg(pos_id_batch, 3)
 			n_agg = self.node_het_agg(neg_id_batch, 3)
-		elif triple_index == 15:
+		elif triple_index == 18:
 			c_agg = self.node_het_agg(c_id_batch, 4)
 			p_agg = self.node_het_agg(pos_id_batch, 4)
 			n_agg = self.node_het_agg(neg_id_batch, 4)
-		elif triple_index == 16: #save learned node embedding
+		elif triple_index == 19:
+			c_agg = self.node_het_agg(c_id_batch, 4)
+			p_agg = self.node_het_agg(pos_id_batch, 5)
+			n_agg = self.node_het_agg(neg_id_batch, 5)
+		elif triple_index == 20:
+			c_agg = self.node_het_agg(c_id_batch, 5)
+			p_agg = self.node_het_agg(pos_id_batch, 1)
+			n_agg = self.node_het_agg(neg_id_batch, 1)
+		elif triple_index == 21:
+			c_agg = self.node_het_agg(c_id_batch, 5)
+			p_agg = self.node_het_agg(pos_id_batch, 2)
+			n_agg = self.node_het_agg(neg_id_batch, 2)
+		elif triple_index == 22:
+			c_agg = self.node_het_agg(c_id_batch, 5)
+			p_agg = self.node_het_agg(pos_id_batch, 3)
+			n_agg = self.node_het_agg(neg_id_batch, 3)
+		elif triple_index == 23:
+			c_agg = self.node_het_agg(c_id_batch, 5)
+			p_agg = self.node_het_agg(pos_id_batch, 4)
+			n_agg = self.node_het_agg(neg_id_batch, 4)
+		elif triple_index == 24:
+			c_agg = self.node_het_agg(c_id_batch, 5)
+			p_agg = self.node_het_agg(pos_id_batch, 5)
+			n_agg = self.node_het_agg(neg_id_batch, 5)
+		elif triple_index == 25: #save learned node embedding
 			embed_file = open(self.args.data_path + str(iter_i) +
-			                  "_node_embedding_datasetTrdTrain.txt", "w")
+			                  "_node_embedding_datasetMethod.txt", "w")
 			save_batch_s = self.args.mini_batch_s
-			for i in range(4):
+			for i in range(5):
 				if i == 0:
 					batch_number = int(len(self.a_train_id_list) / save_batch_s)
 				elif i == 1:
 					batch_number = int(len(self.p_train_id_list) / save_batch_s)
 				elif i == 2:
-					batch_number = int(len(self.v_train_id_list) / save_batch_s)
+					batch_number = int(len(self.b_train_id_list) / save_batch_s)
 				elif i == 3:
 					batch_number = int(len(self.d_train_id_list) / save_batch_s)
+				elif i == 4:
+					batch_number = int(len(self.m_train_id_list) / save_batch_s)
 				for j in range(batch_number):
 					if i == 0:
 						id_batch = self.a_train_id_list[j * save_batch_s : (j + 1) * save_batch_s]
@@ -389,11 +448,14 @@ class HetAgg(nn.Module):
 						id_batch = self.p_train_id_list[j * save_batch_s : (j + 1) * save_batch_s]
 						out_temp = self.node_het_agg(id_batch, 2)
 					elif i == 2:
-						id_batch = self.v_train_id_list[j * save_batch_s : (j + 1) * save_batch_s]
+						id_batch = self.b_train_id_list[j * save_batch_s : (j + 1) * save_batch_s]
 						out_temp = self.node_het_agg(id_batch, 3)
 					elif i == 3:
 						id_batch = self.d_train_id_list[j * save_batch_s : (j + 1) * save_batch_s]
 						out_temp = self.node_het_agg(id_batch, 4)
+					elif i == 4:
+						id_batch = self.m_train_id_list[j * save_batch_s : (j + 1) * save_batch_s]
+						out_temp = self.node_het_agg(id_batch, 5)
 					out_temp = out_temp.data.cpu().numpy()
 					for k in range(len(id_batch)):
 						index = id_batch[k]
@@ -402,9 +464,11 @@ class HetAgg(nn.Module):
 						elif i == 1:
 							embed_file.write('p' + str(index) + " ")
 						elif i == 2:
-							embed_file.write('v' + str(index) + " ")
+							embed_file.write('b' + str(index) + " ")
 						elif i == 3:
 							embed_file.write('d' + str(index) + " ")
+						elif i == 4:
+							embed_file.write('m' + str(index) + " ")
 						for l in range(embed_d - 1):
 							embed_file.write(str(out_temp[k][l]) + " ")
 						embed_file.write(str(out_temp[k][-1]) + "\n")
@@ -416,11 +480,14 @@ class HetAgg(nn.Module):
 					id_batch = self.p_train_id_list[batch_number * save_batch_s : -1]
 					out_temp = self.node_het_agg(id_batch, 2) 
 				elif i == 2:
-					id_batch = self.v_train_id_list[batch_number * save_batch_s : -1]
+					id_batch = self.b_train_id_list[batch_number * save_batch_s : -1]
 					out_temp = self.node_het_agg(id_batch, 3)
 				elif i == 3:
 					id_batch = self.d_train_id_list[batch_number * save_batch_s : -1]
-					out_temp = self.node_het_agg(id_batch, 4) 
+					out_temp = self.node_het_agg(id_batch, 4)
+				elif i == 4:
+					id_batch = self.m_train_id_list[batch_number * save_batch_s: -1]
+					out_temp = self.node_het_agg(id_batch, 5)
 				out_temp = out_temp.data.cpu().numpy()
 				for k in range(len(id_batch)):
 					index = id_batch[k]
@@ -429,9 +496,11 @@ class HetAgg(nn.Module):
 					elif i == 1:
 						embed_file.write('p' + str(index) + " ")
 					elif i == 2:
-						embed_file.write('v' + str(index) + " ")
+						embed_file.write('b' + str(index) + " ")
 					elif i == 3:
 						embed_file.write('d' + str(index) + " ")
+					elif i == 4:
+						embed_file.write('m' + str(index) + " ")
 					for l in range(embed_d - 1):
 						embed_file.write(str(out_temp[k][l]) + " ")
 					embed_file.write(str(out_temp[k][-1]) + "\n")

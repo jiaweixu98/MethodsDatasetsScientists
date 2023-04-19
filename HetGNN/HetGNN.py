@@ -59,7 +59,7 @@ class model_class(object):
 		d_train_id_list = input_data.d_train_id_list
 		m_train_id_list = input_data.m_train_id_list
 		print('start model') 
-		# must modify HetAgg
+
 		self.model = tools.HetAgg(args, feature_list, a_neigh_list_train, p_neigh_list_train, b_neigh_list_train, d_neigh_list_train, m_neigh_list_train, a_train_id_list, p_train_id_list, b_train_id_list, d_train_id_list, m_train_id_list)
 
 		if self.gpu:
