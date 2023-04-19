@@ -78,6 +78,8 @@ def generate_data():
             for ref in v:
                 if ref in paper_constrain_set:
                     pmid_citing_cited_constrained[k].append(ref)
+            if len(pmid_citing_cited_constrained[k]) == 0:
+                pmid_citing_cited_constrained.pop(k)
     # next: embeddings:
     paper_constrain_ebd = {}
     for k, v in pmid_pca_embeddings.items():
@@ -119,18 +121,18 @@ def generate_data():
     print('len(pmid_citing_cited_constrained)', len(pmid_citing_cited_constrained))
     print('len(paper_constrain_ebd)', len(paper_constrain_ebd))
 
-    pk.dump(paper_constrain_author, open(
-        '../../data/HetGNNdata/paper_author.pkl', 'wb'))
-    pk.dump(author_constrain_paper, open(
-        '../../data/HetGNNdata/author_paper.pkl', 'wb'))
-    pk.dump(paper_wauthor_bioentity, open('../../data/HetGNNdata/paper_bioentity.pkl', 'wb'))
-    pk.dump(bioentity_wauthor_paper, open('../../data/HetGNNdata/bioentity_paper.pkl', 'wb'))
-    pk.dump(paper_wauthor_dataset, open('../../data/HetGNNdata/paper_dataset.pkl', 'wb'))
-    pk.dump(dataset_wauthor_paper, open('../../data/HetGNNdata/dataset_paper.pkl', 'wb'))
-    pk.dump(paper_wauthor_method, open('../../data/HetGNNdata/paper_method.pkl', 'wb'))
-    pk.dump(method_wauthor_paper, open('../../data/HetGNNdata/method_paper.pkl', 'wb'))
+    # pk.dump(paper_constrain_author, open(
+    #     '../../data/HetGNNdata/paper_author.pkl', 'wb'))
+    # pk.dump(author_constrain_paper, open(
+    #     '../../data/HetGNNdata/author_paper.pkl', 'wb'))
+    # pk.dump(paper_wauthor_bioentity, open('../../data/HetGNNdata/paper_bioentity.pkl', 'wb'))
+    # pk.dump(bioentity_wauthor_paper, open('../../data/HetGNNdata/bioentity_paper.pkl', 'wb'))
+    # pk.dump(paper_wauthor_dataset, open('../../data/HetGNNdata/paper_dataset.pkl', 'wb'))
+    # pk.dump(dataset_wauthor_paper, open('../../data/HetGNNdata/dataset_paper.pkl', 'wb'))
+    # pk.dump(paper_wauthor_method, open('../../data/HetGNNdata/paper_method.pkl', 'wb'))
+    # pk.dump(method_wauthor_paper, open('../../data/HetGNNdata/method_paper.pkl', 'wb'))
     pk.dump(pmid_citing_cited_constrained, open('../../data/HetGNNdata/pmid_citing_cited.pkl', 'wb'))
-    pk.dump(paper_constrain_ebd, open('../../data/HetGNNdata/paper_constrain_ebd.pkl', 'wb'))
+    # pk.dump(paper_constrain_ebd, open('../../data/HetGNNdata/paper_constrain_ebd.pkl', 'wb'))
     # most of the data remained.
     
 
