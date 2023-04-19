@@ -129,6 +129,9 @@ class input_data(object):
 						p_b_net_embed[i] = np.add(p_b_net_embed[i], b_net_embed[b_id])
 					# 平均化处理，这里有一些是空的。因为没有。一个解决办法是学reference, 用本身的ebd代替。 发现自己的邻居和自己一摸一样？可能可以的。
 					p_b_net_embed[i] = p_b_net_embed[i] / len(p_b[i])
+				# so we add this. 
+				else:
+					p_b_net_embed[i] = p_net_embed[i]
 
 			p_d_net_embed = np.zeros((self.args.P_n, self.args.in_f_d))
 			for i in range(self.args.P_n):
@@ -138,6 +141,8 @@ class input_data(object):
 						d_id = int(p_d[i][j][1:])
 						p_d_net_embed[i] = np.add(p_d_net_embed[i], d_net_embed[d_id])
 					p_d_net_embed[i] = p_d_net_embed[i] / len(p_d[i])
+				else:
+					p_d_net_embed[i] = p_net_embed[i]
 			
 			p_m_net_embed = np.zeros((self.args.P_n, self.args.in_f_d))
 			for i in range(self.args.P_n):
@@ -147,10 +152,12 @@ class input_data(object):
 						m_id = int(p_m[i][j][1:])
 						p_m_net_embed[i] = np.add(p_m_net_embed[i], m_net_embed[m_id])
 					p_m_net_embed[i] = p_m_net_embed[i] / len(p_m[i])
+				else:
+					p_m_net_embed[i] = p_net_embed[i]
 
 			p_a_net_embed = np.zeros((self.args.P_n, self.args.in_f_d))
 			for i in range(self.args.P_n):
-				# 同上
+				# 不同上，因为每篇文章都有author.
 				if len(p_a_list_train[i]):
 					for j in range(len(p_a_list_train[i])):
 						a_id = int(p_a_list_train[i][j][1:])

@@ -3,9 +3,9 @@ import argparse
 # 对于孤立的节点，必须进行对应的处理，否则会导致特征无法对齐。
 def read_args():
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--data_path', type = str, default = ????????????,
+	parser.add_argument('--data_path', type = str, default = '../../data/HetGNNdata/',
 				   help='path to data')
-	parser.add_argument('--model_path', type = str, default = '??????????',
+	parser.add_argument('--model_path', type = str, default ='../../data/model_save/',
 				   help='path to save model')
 	parser.add_argument('--A_n', type=int, default=??????,
 				   help = 'number of author node')

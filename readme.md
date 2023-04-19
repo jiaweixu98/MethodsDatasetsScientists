@@ -49,12 +49,12 @@ matched embeddings: 274,575
 
 **Important Notes**
 
+every paper should have its own text embedding.
+
 It is important to consider a paper's author or its method, right?
 If a paper does not have an author, just use the paper itself's embedding. Is that ok?
 How to find the neighbors of a paper? Finding its author is the best solution. We must let the paper have at least one author.
 Every paper has at least one author.
 Other nodes (except paper) at least have a paper.
 
-if it is hard to get fixed number of nodes (expecially for datasets and methods), reduce the fixed number.
-
-sample ratio is weird. why self.args.batch_s / (total_triple_n[i] * 10)?
+if it is hard to get a fixed number of nodes (especially for datasets and methods), reduce the fixed number.

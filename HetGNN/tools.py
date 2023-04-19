@@ -97,7 +97,7 @@ class HetAgg(nn.Module):
 # 14 input_data.m_text_embed
 # 15 input_data.p_m_net_embed
 
-	def a_content_agg(self, id_batch): #heterogeneous content aggregation
+	def a_content_agg(self, id_batch): #heterogeneous content aggregation (author)
 		embed_d = self.embed_d
 		#print len(id_batch)
 		# embed_d = in_f_d, it is flexible to add feature transformer (e.g., FC) here 
@@ -117,19 +117,21 @@ class HetAgg(nn.Module):
 		return torch.mean(all_state, 0)
 
 # 同上
-	def p_content_agg(self, id_batch):
+	def p_content_agg(self, id_batch): # paper
 		embed_d = self.embed_d
+		# here, every paper should have text ebd.
 		p_a_embed_batch = self.feature_list[0][id_batch]
 		p_b_net_embed_batch = self.feature_list[2][id_batch]
 		p_d_net_embed_batch = self.feature_list[10][id_batch]
+		# author here
 		p_a_net_embed_batch = self.feature_list[3][id_batch]
 		p_net_embed_batch = self.feature_list[5][id_batch]
-		# no p-p; just average it.
+		p_ref_net_embed_batch = self.feature_list[4][id_batch]
 		p_m_embed_batch = self.feature_list[15][id_batch]
 
 		# 重要，可能有空值。需要修改。
-		concate_embed = torch.cat((p_a_embed_batch, p_b_net_embed_batch, p_d_net_embed_batch,
-		                          p_a_net_embed_batch, p_net_embed_batch, p_m_embed_batch), 1).view(len(id_batch[0]), 6, embed_d)
+		concate_embed = torch.cat((p_a_embed_batch, p_b_net_embed_batch, p_d_net_embed_batch, p_a_net_embed_batch,
+		                          p_net_embed_batch, p_ref_net_embed_batch, p_m_embed_batch), 1).view(len(id_batch[0]), 7, embed_d)
 
 		concate_embed = torch.transpose(concate_embed, 0, 1)
 		all_state, last_state = self.p_content_rnn(concate_embed)
