@@ -66,7 +66,7 @@ len(paper_wauthor_dataset) 6544
 len(dataset_wauthor_paper) 245
 len(paper_wauthor_method) 45316
 len(method_wauthor_paper) 308
-len(pmid_citing_cited_constrained) 206621
+len(pmid_citing_cited_constrained) 205761
 len(paper_constrain_ebd) 260983
 
 if it is hard to get a fixed number of nodes (especially for datasets and methods), reduce the fixed number.

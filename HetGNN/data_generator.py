@@ -51,10 +51,10 @@ class input_data(object):
 						d_p_list_train[node_id].append('p'+str(neigh_list_id[j]))
 				elif f_name == 'p_m.txt':
 					for j in range(len(neigh_list_id)):
-						p_d[node_id].append('m'+str(neigh_list_id[j]))
+						p_m[node_id].append('m'+str(neigh_list_id[j]))
 				elif f_name == 'm_p_list_train.txt':
 					for j in range(len(neigh_list_id)):
-						d_p_list_train[node_id].append('p'+str(neigh_list_id[j]))
+						m_p_list_train[node_id].append('p'+str(neigh_list_id[j]))
 			neigh_f.close()
 
 
