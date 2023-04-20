@@ -3,7 +3,8 @@ import re
 import random
 from collections import Counter
 from itertools import *
-
+from tqdm import tqdm
+import pickle as pk
 class input_data(object):
 	def __init__(self, args):
 		self.args = args
@@ -351,14 +352,16 @@ class input_data(object):
 			b_neigh_list_train_top = [[[] for i in range(self.args.B_n)] for j in range(5)]
 			d_neigh_list_train_top = [[[] for i in range(self.args.D_n)] for j in range(5)]
 			m_neigh_list_train_top = [[[] for i in range(self.args.M_n)] for j in range(5)]
-			top_k = [10, 10, 10, 3, 3] #fix each neighor type size, becasue the dataset and method is relatively rare.
+			top_k = [10, 10, 10, 2, 3] #fix each neighor type size, becasue the dataset and method is relatively rare.
 			# they should not be empty!
 			for i in range(self.args.A_n):
 				for j in range(5):
 					a_neigh_list_train_temp = Counter(a_neigh_list_train[j][i])
 					top_list = a_neigh_list_train_temp.most_common(top_k[j])
 					neigh_size = 0
-					if j == 3 or j == 4:
+					if j == 3:
+						neigh_size = 2
+					elif j == 4:
 						neigh_size = 3
 					else:
 						neigh_size = 10
@@ -374,7 +377,9 @@ class input_data(object):
 					p_neigh_list_train_temp = Counter(p_neigh_list_train[j][i])
 					top_list = p_neigh_list_train_temp.most_common(top_k[j])
 					neigh_size = 0
-					if j == 3 or j == 4:
+					if j == 3:
+						neigh_size = 2
+					elif j == 4:
 						neigh_size = 3
 					else:
 						neigh_size = 10
@@ -389,7 +394,9 @@ class input_data(object):
 					b_neigh_list_train_temp = Counter(b_neigh_list_train[j][i])
 					top_list = b_neigh_list_train_temp.most_common(top_k[j])
 					neigh_size = 0
-					if j == 3 or j == 4 :
+					if j == 3:
+						neigh_size = 2
+					elif j == 4:
 						neigh_size = 3
 					else:
 						neigh_size = 10
@@ -404,13 +411,15 @@ class input_data(object):
 					d_neigh_list_train_temp = Counter(d_neigh_list_train[j][i])
 					top_list = d_neigh_list_train_temp.most_common(top_k[j])
 					neigh_size = 0
-					if j == 3 or j == 4:
+					if j == 3:
+						neigh_size = 2
+					elif j == 4:
 						neigh_size = 3
 					else:
 						neigh_size = 10
 					for k in range(len(top_list)):
 						d_neigh_list_train_top[j][i].append(int(top_list[k][0]))
-					if len(d_neigh_list_train_top[j][i]) and len(d_neigh_dlist_train_top[j][i]) < neigh_size:
+					if len(d_neigh_list_train_top[j][i]) and len(d_neigh_list_train_top[j][i]) < neigh_size:
 						for l in range(len(d_neigh_list_train_top[j][i]), neigh_size):
 							d_neigh_list_train_top[j][i].append(
 								random.choice(d_neigh_list_train_top[j][i]))
@@ -420,7 +429,9 @@ class input_data(object):
 					m_neigh_list_train_temp = Counter(m_neigh_list_train[j][i])
 					top_list = m_neigh_list_train_temp.most_common(top_k[j])
 					neigh_size = 0
-					if j == 3 or j == 4:
+					if j == 3:
+						neigh_size = 2
+					elif j == 4:
 						neigh_size = 3
 					else:
 						neigh_size = 10
@@ -495,6 +506,7 @@ class input_data(object):
 
 			#重启随机游走
 	def het_walk_restart(self):
+		badnode = []
 		a_neigh_list_train = [[] for k in range(self.args.A_n)]
 		p_neigh_list_train = [[] for k in range(self.args.P_n)]
 		b_neigh_list_train = [[] for k in range(self.args.B_n)]
@@ -502,8 +514,8 @@ class input_data(object):
 		m_neigh_list_train = [[] for k in range(self.args.M_n)]
 		#generate neighbor set via random walk with restart
 		node_n = [self.args.A_n, self.args.P_n, self.args.B_n, self.args.D_n, self.args.M_n]
-		for i in range(5):
-			for j in range(node_n[i]):
+		for i in tqdm(range(5)):
+			for j in tqdm(range(node_n[i])):
 				if i == 0:
 					# temp是从第一个节点开始抽
 					neigh_temp = self.a_p_list_train[j]
@@ -538,74 +550,91 @@ class input_data(object):
 					b_L = 0
 					d_L = 0
 					m_L = 0
-					while neigh_L < 110: #maximum neighbor size = 110,(apbdm) 30,30,30,10,10
-						rand_p = random.random() #return p； 返回的概率调小了，多走两步吧。
-						if rand_p > 0.4:
-							if curNode[0] == "a":
-								# find a neighbor p.
-								curNode = random.choice(self.a_p_list_train[int(curNode[1:])])
-								if p_L < 30: #size constraint (make sure each type of neighobr is sampled)
-									neigh_train.append(curNode)
-									neigh_L += 1
-									p_L += 1
-							elif curNode[0] == "p":
-								# self.p_neigh_list_train != p_neigh_list_train; find any type, at least it is author node.
-								curNode = random.choice(self.p_neigh_list_train[int(curNode[1:])])
-								# avoid go back to the same author. so many authors.
-								if curNode != ('a' + str(j)) and curNode[0] == 'a' and a_L < 30:
-									neigh_train.append(curNode)
-									neigh_L += 1
-									a_L += 1
-								# avoid go back to the same identities.
-								elif curNode != ('b' + str(j)) and curNode[0] == 'b' and b_L < 30:
-									neigh_train.append(curNode)
-									neigh_L += 1
-									b_L += 1
-								elif curNode[0] == 'd':
-									if d_L < 10:
-										neigh_train.append(curNode)
-										neigh_L += 1
-										d_L += 1
-								elif curNode[0] == 'm':
-									if m_L < 10:
-										neigh_train.append(curNode)
-										neigh_L += 1
-										m_L += 1
-							elif curNode[0] == "b":
-								curNode = random.choice(self.b_p_list_train[int(curNode[1:])])
-								if p_L < 30:
-									neigh_train.append(curNode)
-									neigh_L +=1
-									p_L += 1
-							elif curNode[0] == "d":
-								curNode = random.choice(self.d_p_list_train[int(curNode[1:])])
-								if p_L < 30:
-									neigh_train.append(curNode)
-									neigh_L +=1
-									p_L += 1
-							elif curNode[0] == "m":
-								curNode = random.choice(self.m_p_list_train[int(curNode[1:])])
-								if p_L < 30:
-									neigh_train.append(curNode)
-									neigh_L += 1
-									p_L += 1
-						else:
-							# 这样是返回了
-							if i == 0:
-								curNode = ('a' + str(j))
-							elif i == 1:
-								curNode = ('p' + str(j))
-							elif i == 2:
-								curNode = ('b' + str(j))
-							elif i == 3:
-								curNode = ('d' + str(j))
-							elif i == 4:
-								curNode = ('m' + str(j))
-							# if curNode == flag_curNode:
-							# 	back_count += 1
-							# 	if back_count == 2000:
-							# 		# print('遇到一个死结，随机游走10万次后',j)
-							# 		break
+					from interruptingcow import timeout
+					try:
+						with timeout(2, exception=RuntimeError):
+							while neigh_L < 96: #maximum neighbor size = 96,(apbdm) 30,30,30,2,4
+								rand_p = random.random() #return p； 返回的概率调小了，多走两步吧。
+								if rand_p > 0.05:
+									if curNode[0] == "a":
+										# find a neighbor p.
+										curNode = random.choice(self.a_p_list_train[int(curNode[1:])])
+										if p_L < 30: #size constraint (make sure each type of neighobr is sampled)
+											neigh_train.append(curNode)
+											neigh_L += 1
+											p_L += 1
+									elif curNode[0] == "p":
+									# self.p_neigh_list_train != p_neigh_list_train; find any type, at least it is author node.
+										curNode = random.choice(self.p_neigh_list_train[int(curNode[1:])])
+										# avoid go back to the same author. so many authors.
+										if curNode != ('a' + str(j)) and curNode[0] == 'a' and a_L < 30:
+											neigh_train.append(curNode)
+											neigh_L += 1
+											a_L += 1
+									# avoid go back to the same identities.
+										elif curNode != ('b' + str(j)) and curNode[0] == 'b' and b_L < 30:
+											neigh_train.append(curNode)
+											neigh_L += 1
+											b_L += 1
+										elif curNode[0] == 'd':
+											if d_L < 2:
+												neigh_train.append(curNode)
+												neigh_L += 1
+												d_L += 1
+										elif curNode[0] == 'm':
+											if m_L < 4:
+												neigh_train.append(curNode)
+												neigh_L += 1
+												m_L += 1
+									elif curNode[0] == "b":
+										curNode = random.choice(self.b_p_list_train[int(curNode[1:])])
+										if p_L < 30:
+											neigh_train.append(curNode)
+											neigh_L +=1
+											p_L += 1
+									elif curNode[0] == "d":
+										curNode = random.choice(self.d_p_list_train[int(curNode[1:])])
+										if p_L < 30:
+											neigh_train.append(curNode)
+											neigh_L +=1
+											p_L += 1
+									elif curNode[0] == "m":
+										curNode = random.choice(self.m_p_list_train[int(curNode[1:])])
+										if p_L < 30:
+											neigh_train.append(curNode)
+											neigh_L += 1
+											p_L += 1
+								else:
+									# 这样是返回了
+									if i == 0:
+										curNode = ('a' + str(j))
+									elif i == 1:
+										curNode = ('p' + str(j))
+									elif i == 2:
+										curNode = ('b' + str(j))
+									elif i == 3:
+										curNode = ('d' + str(j))
+									elif i == 4:
+										curNode = ('m' + str(j))
+								# if curNode == flag_curNode:
+								# 	back_count += 1
+								# 	if back_count == 2000:
+								# 		# print('遇到一个死结，随机游走10万次后',j)
+								# 		break
+					except RuntimeError:
+						if i == 0:
+							curNode = ('a' + str(j))
+						elif i == 1:
+							curNode = ('p' + str(j))
+						elif i == 2:
+							curNode = ('b' + str(j))
+						elif i == 3:
+							curNode = ('d' + str(j))
+						elif i == 4:
+							curNode = ('m' + str(j))
+						print(curNode, " : didn't finish within 2 seconds")
+						badnode.append(curNode)
+
 
 		for i in range(5):
 			for j in range(node_n[i]):
@@ -644,6 +673,7 @@ class input_data(object):
 						neigh_f.write(neigh_train[k] + ",")
 					neigh_f.write(neigh_train[-1] + "\n")
 		neigh_f.close()
+		pk.dump(badnode, open('badnode.pkl', 'wb'))
 
 		# 负采样比例计算(). 每一种配对出现的可能性。
 	def compute_sample_p(self):

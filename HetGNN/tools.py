@@ -194,7 +194,9 @@ class HetAgg(nn.Module):
 	def node_neigh_agg(self, id_batch, node_type): #type based neighbor aggregation with rnn. (start from 1 ??)
 		embed_d = self.embed_d
 
-		if node_type == 4 or node_type == 5:
+		if node_type == 4:
+			batch_s = int(len(id_batch[0]) / 2)
+		elif node_type == 5:
 			batch_s = int(len(id_batch[0]) / 3)
 		else:
 			batch_s = int(len(id_batch[0]) / 10)
@@ -212,7 +214,7 @@ class HetAgg(nn.Module):
 			neigh_agg = torch.transpose(neigh_agg, 0, 1)
 			all_state, last_state  = self.v_neigh_rnn(neigh_agg)
 		elif node_type == 4:
-			neigh_agg = self.d_content_agg(id_batch).view(batch_s, 3, embed_d)
+			neigh_agg = self.d_content_agg(id_batch).view(batch_s, 2, embed_d)
 			neigh_agg = torch.transpose(neigh_agg, 0, 1)
 			all_state, last_state  = self.d_neigh_rnn(neigh_agg)
 		elif node_type == 5:
@@ -228,7 +230,7 @@ class HetAgg(nn.Module):
 		a_neigh_batch = [[0] * 10] * len(id_batch)
 		p_neigh_batch = [[0] * 10] * len(id_batch)
 		b_neigh_batch = [[0] * 10] * len(id_batch)
-		d_neigh_batch = [[0] * 3] * len(id_batch)
+		d_neigh_batch = [[0] * 2] * len(id_batch)
 		m_neigh_batch = [[0] * 3] * len(id_batch)
 		for i in range(len(id_batch)):
 			if node_type == 1:

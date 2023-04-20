@@ -12,7 +12,7 @@ We have five kinds of nodes: **author, paper, bioentity, dataset, method**, and 
 
 ## Raw Data Descriptor
 
-We have not provided the data.
+We will provide the raw data on request.
 
 1. **"breast_cancaer_papers_PKG23.csv"** all papers about breast cancer in PKG, including the following fields: PMID, PubYear, ArticleTitle, Abstract.
     - 253,891 unique entries
@@ -40,33 +40,24 @@ We have not provided the data.
 ## Notes
 
 In the original HetGNN paper, a paper has some direct author neighbors and a venue neighbor.
-Here in our situation, the paper may not have methods or datasets. We matched all the possible data with S2(318884/321216), 99.2%.
+Here in our situation, we let each paper have at least one author and the text embedding (from title, abstract, and citation relationships). The paper may not have methods or datasets.
 
-matched citation: 225,670
-matched embeddings: 274,575
+Every paper should have its text embedding, as well as the author.
+Paper with author & ebd: 260,983 (85.9% of paper with author).
 
-
-**Important Notes**
-
-every paper should have its own text embedding, as well as the author.
-paper with author & ebd: 260,983 (85.9% of paper with author). we can accept it.
-
-It is important to consider a paper's author or its method, right?
 If a paper does not have an author, just use the paper itself's embedding. Is that ok?
-How to find the neighbors of a paper? Finding its author is the best solution. We must let the paper have at least one author.
-Every paper has at least one author.
-Other nodes (except paper) at least have a paper.
 
-after constrined, the number of nodes:
-len(paper_constrain_author) 260983
-len(author_constrain_paper) 524117
-len(paper_wauthor_bioentity) 253663
-len(bioentity_wauthor_paper) 499316
-len(paper_wauthor_dataset) 6544
-len(dataset_wauthor_paper) 245
-len(paper_wauthor_method) 45316
-len(method_wauthor_paper) 308
-len(pmid_citing_cited_constrained) 205761
-len(paper_constrain_ebd) 260983
+#papers with authors: 260,983
+#authors: 524,117
+#papers with bioentities 253,663
+#bioentities 499,316
+#papers with datasets 6,544
+#datasets 245
+#papers with methods 45,316
+#methods with papers 308
+#papers with references 205,761
+#papers with text embeddings 260,983
 
-if it is hard to get a fixed number of nodes (especially for datasets and methods), reduce the fixed number.
+It is hard to get a fixed number of nodes (especially for datasets and methods), so we reduce the fixed number and reduce the rate of going back to the original node.
+
+A concern: so many nodes have 0 data and method, but we try a random walk to get it a method/dataset node. Does that make sense? Thanks to the attention mechanism, the unimportant node will be ignored.
