@@ -61,3 +61,6 @@ If a paper does not have an author, just use the paper itself's embedding. Is th
 It is hard to get a fixed number of nodes (especially for datasets and methods), so we reduce the fixed number and reduce the rate of going back to the original node.
 
 A concern: so many nodes have 0 data and method, but we try a random walk to get it a method/dataset node. Does that make sense? Thanks to the attention mechanism, the unimportant node will be ignored.
+
+We also employ an easy configuration: only keep the paper nodes having the author, datasets and methods. Check the 
+subset folder.
