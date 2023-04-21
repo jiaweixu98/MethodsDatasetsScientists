@@ -175,6 +175,7 @@ class HetAgg(nn.Module):
 
 	def m_content_agg(self, id_batch):
 		embed_d = self.embed_d
+		# too many empty values, why?
 		# print('d_net_embed_batch id_batch', len(id_batch[0]))
 		m_net_embed_batch = self.feature_list[13][id_batch]
 		m_text_embed_batch_1 = self.feature_list[14][id_batch, :embed_d][0]
@@ -194,9 +195,7 @@ class HetAgg(nn.Module):
 	def node_neigh_agg(self, id_batch, node_type): #type based neighbor aggregation with rnn. (start from 1 ??)
 		embed_d = self.embed_d
 
-		if node_type == 4:
-			batch_s = int(len(id_batch[0]) / 2)
-		elif node_type == 5:
+		if node_type == 4 or node_type == 5:
 			batch_s = int(len(id_batch[0]) / 3)
 		else:
 			batch_s = int(len(id_batch[0]) / 10)
@@ -212,12 +211,13 @@ class HetAgg(nn.Module):
 		elif node_type == 3:
 			neigh_agg = self.b_content_agg(id_batch).view(batch_s, 10, embed_d)
 			neigh_agg = torch.transpose(neigh_agg, 0, 1)
-			all_state, last_state  = self.v_neigh_rnn(neigh_agg)
+			all_state, last_state  = self.b_neigh_rnn(neigh_agg)
 		elif node_type == 4:
-			neigh_agg = self.d_content_agg(id_batch).view(batch_s, 2, embed_d)
+			neigh_agg = self.d_content_agg(id_batch).view(batch_s, 3, embed_d)
 			neigh_agg = torch.transpose(neigh_agg, 0, 1)
 			all_state, last_state  = self.d_neigh_rnn(neigh_agg)
 		elif node_type == 5:
+			# print(id_batch)
 			neigh_agg = self.m_content_agg(id_batch).view(batch_s, 3, embed_d)
 			neigh_agg = torch.transpose(neigh_agg, 0, 1)
 			all_state, last_state = self.m_neigh_rnn(neigh_agg)
@@ -230,7 +230,7 @@ class HetAgg(nn.Module):
 		a_neigh_batch = [[0] * 10] * len(id_batch)
 		p_neigh_batch = [[0] * 10] * len(id_batch)
 		b_neigh_batch = [[0] * 10] * len(id_batch)
-		d_neigh_batch = [[0] * 2] * len(id_batch)
+		d_neigh_batch = [[0] * 3] * len(id_batch)
 		m_neigh_batch = [[0] * 3] * len(id_batch)
 		for i in range(len(id_batch)):
 			if node_type == 1:
@@ -274,6 +274,7 @@ class HetAgg(nn.Module):
 		# print('d_neigh_batch',d_neigh_batch)
 		d_neigh_batch = np.reshape(d_neigh_batch, (1, -1))
 		d_agg_batch = self.node_neigh_agg(d_neigh_batch, 4)
+		# print(m_neigh_batch)
 		m_neigh_batch = np.reshape(m_neigh_batch, (1, -1))
 		m_agg_batch = self.node_neigh_agg(m_neigh_batch, 5)
 

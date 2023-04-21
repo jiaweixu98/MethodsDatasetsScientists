@@ -255,6 +255,7 @@ class input_data(object):
 			self.p_b_net_embed = p_b_net_embed
 			self.p_d_net_embed = p_d_net_embed
 			self.p_a_net_embed = p_a_net_embed
+			self.p_m_net_embed = p_m_net_embed
 			self.p_ref_net_embed = p_ref_net_embed
 			self.p_net_embed = p_net_embed
 			self.a_net_embed = a_net_embed
@@ -265,6 +266,7 @@ class input_data(object):
 			self.d_text_embed = d_text_embed
 			self.m_net_embed = m_net_embed
 			self.m_text_embed = m_text_embed
+			
 			
 
 
@@ -352,16 +354,14 @@ class input_data(object):
 			b_neigh_list_train_top = [[[] for i in range(self.args.B_n)] for j in range(5)]
 			d_neigh_list_train_top = [[[] for i in range(self.args.D_n)] for j in range(5)]
 			m_neigh_list_train_top = [[[] for i in range(self.args.M_n)] for j in range(5)]
-			top_k = [10, 10, 10, 2, 3] #fix each neighor type size, becasue the dataset and method is relatively rare.
+			top_k = [10, 10, 10, 3, 3] #fix each neighor type size, becasue the dataset and method is relatively rare.
 			# they should not be empty!
 			for i in range(self.args.A_n):
 				for j in range(5):
 					a_neigh_list_train_temp = Counter(a_neigh_list_train[j][i])
 					top_list = a_neigh_list_train_temp.most_common(top_k[j])
 					neigh_size = 0
-					if j == 3:
-						neigh_size = 2
-					elif j == 4:
+					if j == 3 or j == 4:
 						neigh_size = 3
 					else:
 						neigh_size = 10
@@ -377,9 +377,7 @@ class input_data(object):
 					p_neigh_list_train_temp = Counter(p_neigh_list_train[j][i])
 					top_list = p_neigh_list_train_temp.most_common(top_k[j])
 					neigh_size = 0
-					if j == 3:
-						neigh_size = 2
-					elif j == 4:
+					if j == 3 or j == 4:
 						neigh_size = 3
 					else:
 						neigh_size = 10
@@ -394,9 +392,7 @@ class input_data(object):
 					b_neigh_list_train_temp = Counter(b_neigh_list_train[j][i])
 					top_list = b_neigh_list_train_temp.most_common(top_k[j])
 					neigh_size = 0
-					if j == 3:
-						neigh_size = 2
-					elif j == 4:
+					if j == 3 or j == 4:
 						neigh_size = 3
 					else:
 						neigh_size = 10
@@ -411,9 +407,7 @@ class input_data(object):
 					d_neigh_list_train_temp = Counter(d_neigh_list_train[j][i])
 					top_list = d_neigh_list_train_temp.most_common(top_k[j])
 					neigh_size = 0
-					if j == 3:
-						neigh_size = 2
-					elif j == 4:
+					if j == 3 or j == 4:
 						neigh_size = 3
 					else:
 						neigh_size = 10
@@ -429,9 +423,7 @@ class input_data(object):
 					m_neigh_list_train_temp = Counter(m_neigh_list_train[j][i])
 					top_list = m_neigh_list_train_temp.most_common(top_k[j])
 					neigh_size = 0
-					if j == 3:
-						neigh_size = 2
-					elif j == 4:
+					if j == 3 or j == 4:
 						neigh_size = 3
 					else:
 						neigh_size = 10
@@ -553,9 +545,9 @@ class input_data(object):
 					from interruptingcow import timeout
 					try:
 						with timeout(2, exception=RuntimeError):
-							while neigh_L < 96: #maximum neighbor size = 96,(apbdm) 30,30,30,2,4
+							while neigh_L < 110: #maximum neighbor size = 110,(apbdm) 30,30,30,10,10 (why add one?)
 								rand_p = random.random() #return p； 返回的概率调小了，多走两步吧。
-								if rand_p > 0.05:
+								if rand_p > 0.5:
 									if curNode[0] == "a":
 										# find a neighbor p.
 										curNode = random.choice(self.a_p_list_train[int(curNode[1:])])
@@ -577,12 +569,12 @@ class input_data(object):
 											neigh_L += 1
 											b_L += 1
 										elif curNode[0] == 'd':
-											if d_L < 2:
+											if d_L < 10:
 												neigh_train.append(curNode)
 												neigh_L += 1
 												d_L += 1
 										elif curNode[0] == 'm':
-											if m_L < 4:
+											if m_L < 10:
 												neigh_train.append(curNode)
 												neigh_L += 1
 												m_L += 1

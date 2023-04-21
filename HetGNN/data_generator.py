@@ -255,6 +255,7 @@ class input_data(object):
 			self.p_b_net_embed = p_b_net_embed
 			self.p_d_net_embed = p_d_net_embed
 			self.p_a_net_embed = p_a_net_embed
+			self.p_m_net_embed = p_m_net_embed
 			self.p_ref_net_embed = p_ref_net_embed
 			self.p_net_embed = p_net_embed
 			self.a_net_embed = a_net_embed

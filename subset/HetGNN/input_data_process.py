@@ -6,17 +6,17 @@ from itertools import *
 from tqdm import tqdm
 
 parser = argparse.ArgumentParser(description = 'input data process')
-parser.add_argument('--A_n', type=int, default= 524117,
+parser.add_argument('--A_n', type=int, default= 33212,
 				   help = 'number of author node')
-parser.add_argument('--P_n', type = int, default = 260983,
+parser.add_argument('--P_n', type = int, default = 6544,
 				   help = 'number of paper node')
-parser.add_argument('--B_n', type=int, default= 499316,
+parser.add_argument('--B_n', type=int, default=34373,
 				   help = 'number of bio node')
 parser.add_argument('--D_n', type=int, default = 245,
                      help='number of dataset node')
-parser.add_argument('--M_n', type=int, default = 308,
+parser.add_argument('--M_n', type=int, default=89,
                      help='number of method node')
-parser.add_argument('--data_path', type=str, default= '../../data/HetGNNdata/',
+parser.add_argument('--data_path', type=str, default= '../../../data/subsetHetGNNdata/',
                     help='path to data')
 parser.add_argument('--walk_n', type = int, default = 10,
 			   help='number of walk per root node')

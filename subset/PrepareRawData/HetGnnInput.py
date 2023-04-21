@@ -5,19 +5,16 @@ from tqdm import tqdm
 import pickle as pk
 
 def generate_input_data():
-    paper_author = pk.load( open(
-        '../../data/HetGNNdata/paper_author.pkl', 'rb'))
-    author_paper = pk.load( open(
-        '../../data/HetGNNdata/author_paper.pkl', 'rb'))
-    paper_bioentity = pk.load( open('../../data/HetGNNdata/paper_bioentity.pkl', 'rb'))
-    bioentity_paper = pk.load( open('../../data/HetGNNdata/bioentity_paper.pkl', 'rb'))
-    paper_dataset = pk.load( open('../../data/HetGNNdata/paper_dataset.pkl', 'rb'))
-    dataset_paper = pk.load( open('../../data/HetGNNdata/dataset_paper.pkl', 'rb'))
-    paper_method = pk.load( open(
-        '../../data/HetGNNdata/paper_method.pkl', 'rb'))
-    method_paper = pk.load( open('../../data/HetGNNdata/method_paper.pkl', 'rb'))
-    paper_citing_cited = pk.load( open('../../data/HetGNNdata/pmid_citing_cited.pkl', 'rb'))
-    paper_ebd = pk.load( open('../../data/HetGNNdata/paper_constrain_ebd.pkl', 'rb'))
+    paper_author = pk.load( open('../../../data/subsetHetGNNdata/paper_author.pkl', 'rb'))
+    author_paper = pk.load( open('../../../data/subsetHetGNNdata/author_paper.pkl', 'rb'))
+    paper_bioentity = pk.load( open('../../../data/subsetHetGNNdata/paper_bioentity.pkl', 'rb'))
+    bioentity_paper = pk.load( open('../../../data/subsetHetGNNdata/bioentity_paper.pkl', 'rb'))
+    paper_dataset = pk.load( open('../../../data/subsetHetGNNdata/paper_dataset.pkl', 'rb'))
+    dataset_paper = pk.load( open('../../../data/subsetHetGNNdata/dataset_paper.pkl', 'rb'))
+    paper_method = pk.load(open('../../../data/subsetHetGNNdata/paper_method.pkl', 'rb'))
+    method_paper = pk.load( open('../../../data/subsetHetGNNdata/method_paper.pkl', 'rb'))
+    paper_citing_cited = pk.load( open('../../../data/subsetHetGNNdata/pmid_citing_cited.pkl', 'rb'))
+    paper_ebd = pk.load(open('../../../data/subsetHetGNNdata/paper_constrain_ebd.pkl', 'rb'))
     # 将id变为顺序数字index（Pcount）
     PID_trans_Pcount = {}
     Pcount_trans_PID = {}
@@ -28,8 +25,9 @@ def generate_input_data():
         PID_trans_Pcount[PID] = count
         Pcount_trans_PID[count] = PID
         count += 1
-    pk.dump(PID_trans_Pcount, open('PID_trans_Pcount.pkl', 'wb'))
-    pk.dump(Pcount_trans_PID, open('Pcount_trans_PID.pkl', 'wb'))
+    pk.dump(PID_trans_Pcount, open('../../../data/subsetHetGNNdata/PID_trans_Pcount.pkl', 'wb'))
+    pk.dump(Pcount_trans_PID, open(
+        '../../../data/subsetHetGNNdata/Pcount_trans_PID.pkl', 'wb'))
     # author 从0开始
 
 
@@ -41,8 +39,9 @@ def generate_input_data():
         AID_trans_Acount[AID] = count
         Acount_trans_AID[count] = AID
         count += 1
-    pk.dump(AID_trans_Acount, open('AID_trans_Acount.pkl', 'wb'))
-    pk.dump(Acount_trans_AID, open('Acount_trans_AID.pkl', 'wb'))
+    pk.dump(AID_trans_Acount, open('../../../data/subsetHetGNNdata/AID_trans_Acount.pkl', 'wb'))
+    pk.dump(Acount_trans_AID, open(
+        '../../../data/subsetHetGNNdata/Acount_trans_AID.pkl', 'wb'))
 
     # bioentity 从0开始
     count = 0
@@ -52,8 +51,8 @@ def generate_input_data():
         BID_trans_Bcount[BID] = count
         Bcount_trans_BID[count] = BID
         count += 1
-    pk.dump(BID_trans_Bcount, open('BID_trans_Bcount.pkl', 'wb'))
-    pk.dump(Bcount_trans_BID, open('Bcount_trans_BID.pkl', 'wb'))
+    pk.dump(BID_trans_Bcount, open('../../../data/subsetHetGNNdata/BID_trans_Bcount.pkl', 'wb'))
+    pk.dump(Bcount_trans_BID, open('../../../data/subsetHetGNNdata/Bcount_trans_BID.pkl', 'wb'))
 
 
     # dataset 从0开始
@@ -64,8 +63,8 @@ def generate_input_data():
         DID_trans_Dcount[DID] = count
         Dcount_trans_DID[count] = DID
         count += 1
-    pk.dump(DID_trans_Dcount, open('DID_trans_Dcount.pkl', 'wb'))
-    pk.dump(Dcount_trans_DID, open('Dcount_trans_DID.pkl', 'wb'))
+    pk.dump(DID_trans_Dcount, open('../../../data/subsetHetGNNdata/DID_trans_Dcount.pkl', 'wb'))
+    pk.dump(Dcount_trans_DID, open('../../../data/subsetHetGNNdata/Dcount_trans_DID.pkl', 'wb'))
 
     # method 从0开始
     count = 0
@@ -75,8 +74,9 @@ def generate_input_data():
         MID_trans_Mcount[MID] = count
         Mcount_trans_MID[count] = MID
         count += 1
-    pk.dump(MID_trans_Mcount, open('MID_trans_Mcount.pkl', 'wb'))
-    pk.dump(Mcount_trans_MID, open('Mcount_trans_MID.pkl', 'wb'))
+    pk.dump(MID_trans_Mcount, open('../../../data/subsetHetGNNdata/MID_trans_Mcount.pkl', 'wb'))
+    pk.dump(Mcount_trans_MID, open(
+        '../../../data/subsetHetGNNdata/Mcount_trans_MID.pkl', 'wb'))
 
     paper_c2author_c = {}
     author_c2paper_c = {}
@@ -122,7 +122,6 @@ def generate_input_data():
         method_c2paper_c[MID_trans_Mcount[k]] = list(
             map(lambda x: PID_trans_Pcount[x], v))
 
-
     for k, v in paper_citing_cited.items():
         paper_c2citation_c[PID_trans_Pcount[k]] = list(
             map(lambda x: PID_trans_Pcount[x], v))
@@ -130,97 +129,96 @@ def generate_input_data():
     for k, v in paper_ebd.items():
         paper_c2ebd[PID_trans_Pcount[k]] = v
 
-    # p_a_list_train_f = open("../../data/HetGNNdata/p_a_list_train.txt", "w")
-    # sorted_paper_c2author_c = sorted(
-    #     paper_c2author_c.items(), key=operator.itemgetter(0))
-    # for k, v in dict(sorted_paper_c2author_c).items():
-    #     p_a_list_train_f.write(str(k) + ":")
-    #     for tt in range(len(v)-1):
-    #         p_a_list_train_f.write(str(v[tt]) + ",")
-    #     p_a_list_train_f.write(str(v[-1]))
-    #     p_a_list_train_f.write("\n")
-    # p_a_list_train_f.close()
+    p_a_list_train_f = open("../../../data/subsetHetGNNdata/p_a_list_train.txt", "w")
+    sorted_paper_c2author_c = sorted(
+        paper_c2author_c.items(), key=operator.itemgetter(0))
+    for k, v in dict(sorted_paper_c2author_c).items():
+        p_a_list_train_f.write(str(k) + ":")
+        for tt in range(len(v)-1):
+            p_a_list_train_f.write(str(v[tt]) + ",")
+        p_a_list_train_f.write(str(v[-1]))
+        p_a_list_train_f.write("\n")
+    p_a_list_train_f.close()
 
-    # a_p_list_train_f = open("../../data/HetGNNdata/a_p_list_train.txt", "w")
-    # sorted_author_c2paper_c = sorted(
-    #     author_c2paper_c.items(), key=operator.itemgetter(0))
-    # for k, v in dict(sorted_author_c2paper_c).items():
-    #     a_p_list_train_f.write(str(k) + ":")
-    #     for tt in range(len(v)-1):
-    #         a_p_list_train_f.write(str(v[tt]) + ",")
-    #     a_p_list_train_f.write(str(v[-1]))
-    #     a_p_list_train_f.write("\n")
-    # a_p_list_train_f.close()
+    a_p_list_train_f = open("../../../data/subsetHetGNNdata/a_p_list_train.txt", "w")
+    sorted_author_c2paper_c = sorted(
+        author_c2paper_c.items(), key=operator.itemgetter(0))
+    for k, v in dict(sorted_author_c2paper_c).items():
+        a_p_list_train_f.write(str(k) + ":")
+        for tt in range(len(v)-1):
+            a_p_list_train_f.write(str(v[tt]) + ",")
+        a_p_list_train_f.write(str(v[-1]))
+        a_p_list_train_f.write("\n")
+    a_p_list_train_f.close()
 
-    # b_p_list_train_f = open("../../data/HetGNNdata/b_p_list_train.txt", "w")
-    # sorted_bio_c2paper_c = sorted(
-    #     bio_c2paper_c.items(), key=operator.itemgetter(0))
-    # for k, v in dict(sorted_bio_c2paper_c).items():
-    #     b_p_list_train_f.write(str(k) + ":")
-    #     for tt in range(len(v)-1):
-    #         b_p_list_train_f.write(str(v[tt]) + ",")
-    #     b_p_list_train_f.write(str(v[-1]))
-    #     b_p_list_train_f.write("\n")
-    # b_p_list_train_f.close()
+    b_p_list_train_f = open("../../../data/subsetHetGNNdata/b_p_list_train.txt", "w")
+    sorted_bio_c2paper_c = sorted(
+        bio_c2paper_c.items(), key=operator.itemgetter(0))
+    for k, v in dict(sorted_bio_c2paper_c).items():
+        b_p_list_train_f.write(str(k) + ":")
+        for tt in range(len(v)-1):
+            b_p_list_train_f.write(str(v[tt]) + ",")
+        b_p_list_train_f.write(str(v[-1]))
+        b_p_list_train_f.write("\n")
+    b_p_list_train_f.close()
 
-    # p_b_f = open("../../data/HetGNNdata/p_b.txt", "w")
-    # sorted_paper_c2bio_c = sorted(
-    #     paper_c2bio_c.items(), key=operator.itemgetter(0))
-    # for k, v in dict(sorted_paper_c2bio_c).items():
-    #     p_b_f.write(str(k) + ":")
-    #     for tt in range(len(v)-1):
-    #         p_b_f.write(str(v[tt]) + ",")
-    #     p_b_f.write(str(v[-1]))
-    #     p_b_f.write("\n")
-    # p_b_f.close()
+    p_b_f = open("../../../data/subsetHetGNNdata/p_b.txt", "w")
+    sorted_paper_c2bio_c = sorted(
+        paper_c2bio_c.items(), key=operator.itemgetter(0))
+    for k, v in dict(sorted_paper_c2bio_c).items():
+        p_b_f.write(str(k) + ":")
+        for tt in range(len(v)-1):
+            p_b_f.write(str(v[tt]) + ",")
+        p_b_f.write(str(v[-1]))
+        p_b_f.write("\n")
+    p_b_f.close()
 
+    d_p_list_train_f = open("../../../data/subsetHetGNNdata/d_p_list_train.txt", "w")
+    sorted_dataset_c2paper_c = sorted(
+        dataset_c2paper_c.items(), key=operator.itemgetter(0))
+    for k, v in dict(sorted_dataset_c2paper_c).items():
+        d_p_list_train_f.write(str(k) + ":")
+        for tt in range(len(v)-1):
+            d_p_list_train_f.write(str(v[tt]) + ",")
+        d_p_list_train_f.write(str(v[-1]))
+        d_p_list_train_f.write("\n")
+    d_p_list_train_f.close()
 
-    # d_p_list_train_f = open("../../data/HetGNNdata/d_p_list_train.txt", "w")
-    # sorted_dataset_c2paper_c = sorted(
-    #     dataset_c2paper_c.items(), key=operator.itemgetter(0))
-    # for k, v in dict(sorted_dataset_c2paper_c).items():
-    #     d_p_list_train_f.write(str(k) + ":")
-    #     for tt in range(len(v)-1):
-    #         d_p_list_train_f.write(str(v[tt]) + ",")
-    #     d_p_list_train_f.write(str(v[-1]))
-    #     d_p_list_train_f.write("\n")
-    # d_p_list_train_f.close()
+    p_d_f = open("../../../data/subsetHetGNNdata/p_d.txt", "w")
+    sorted_paper_c2dataset_c = sorted(
+        paper_c2dataset_c.items(), key=operator.itemgetter(0))
+    for k, v in dict(sorted_paper_c2dataset_c).items():
+        p_d_f.write(str(k) + ":")
+        for tt in range(len(v)-1):
+            p_d_f.write(str(v[tt]) + ",")
+        p_d_f.write(str(v[-1]))
+        p_d_f.write("\n")
+    p_d_f.close()
 
-    # p_d_f = open("../../data/HetGNNdata/p_d.txt", "w")
-    # sorted_paper_c2dataset_c = sorted(
-    #     paper_c2dataset_c.items(), key=operator.itemgetter(0))
-    # for k, v in dict(sorted_paper_c2dataset_c).items():
-    #     p_d_f.write(str(k) + ":")
-    #     for tt in range(len(v)-1):
-    #         p_d_f.write(str(v[tt]) + ",")
-    #     p_d_f.write(str(v[-1]))
-    #     p_d_f.write("\n")
-    # p_d_f.close()
+    p_p_citation_list = open(
+        "../../../data/subsetHetGNNdata/p_p_citation_list.txt", "w")
+    sorted_paper_c2citation_c = sorted(
+        paper_c2citation_c.items(), key=operator.itemgetter(0))
+    for k, v in dict(sorted_paper_c2citation_c).items():
+        p_p_citation_list.write(str(k) + ":")
+        for tt in range(len(v)-1):
+            p_p_citation_list.write(str(v[tt]) + ",")
+        p_p_citation_list.write(str(v[-1]))
+        p_p_citation_list.write("\n")
+    p_p_citation_list.close()
 
-
-    # p_p_citation_list = open("../../data/HetGNNdata/p_p_citation_list.txt", "w")
-    # sorted_paper_c2citation_c = sorted(
-    #     paper_c2citation_c.items(), key=operator.itemgetter(0))
-    # for k, v in dict(sorted_paper_c2citation_c).items():
-    #     p_p_citation_list.write(str(k) + ":")
-    #     for tt in range(len(v)-1):
-    #         p_p_citation_list.write(str(v[tt]) + ",")
-    #     p_p_citation_list.write(str(v[-1]))
-    #     p_p_citation_list.write("\n")
-    # p_p_citation_list.close()
-
-    # p_abstract_embed = open("../../data/HetGNNdata/p_abstract_embed.txt", "w")
-    # sorted_paper_c2ebd = sorted(paper_c2ebd.items(), key=operator.itemgetter(0))
-    # p_abstract_embed.write(str(len(sorted_paper_c2ebd))+' 128'+"\n")
-    # for k, v in dict(sorted_paper_c2ebd).items():
-    #     p_abstract_embed.write(str(k)+' ')
-    #     for tt in range(len(v)-1):
-    #         p_abstract_embed.write(str(v[tt]) + " ")
-    #     p_abstract_embed.write(str(v[-1]))
-    #     p_abstract_embed.write("\n")
-    # p_abstract_embed.close()
+    p_abstract_embed = open("../../../data/subsetHetGNNdata/p_abstract_embed.txt", "w")
+    sorted_paper_c2ebd = sorted(paper_c2ebd.items(), key=operator.itemgetter(0))
+    p_abstract_embed.write(str(len(sorted_paper_c2ebd))+' 128'+"\n")
+    for k, v in dict(sorted_paper_c2ebd).items():
+        p_abstract_embed.write(str(k)+' ')
+        for tt in range(len(v)-1):
+            p_abstract_embed.write(str(v[tt]) + " ")
+        p_abstract_embed.write(str(v[-1]))
+        p_abstract_embed.write("\n")
+    p_abstract_embed.close()
     
-    m_p_list_train_f = open("../../data/HetGNNdata/m_p_list_train.txt", "w")
+    m_p_list_train_f = open("../../../data/subsetHetGNNdata/m_p_list_train.txt", "w")
     sorted_method_c2paper_c = sorted(
         method_c2paper_c.items(), key=operator.itemgetter(0))
     for k, v in dict(sorted_method_c2paper_c).items():
@@ -230,8 +228,8 @@ def generate_input_data():
         m_p_list_train_f.write(str(v[-1]))
         m_p_list_train_f.write("\n")
     m_p_list_train_f.close()
-
-    p_m_f = open("../../data/HetGNNdata/p_m.txt", "w")
+    
+    p_m_f = open("../../../data/subsetHetGNNdata/p_m.txt", "w")
     sorted_paper_c2method_c = sorted(
         paper_c2method_c.items(), key=operator.itemgetter(0))
     for k, v in dict(sorted_paper_c2method_c).items():

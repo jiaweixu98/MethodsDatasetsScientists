@@ -16,7 +16,8 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=lo
 def read_random_walk_corpus():
 	walks=[]
 	#inputfile = open("../data/academic_test/meta_random_walk_APVPA_test.txt","r")
-	inputfile = open("../../data/HetGNNdata/het_random_walk_test.txt", "r")
+	inputfile = open(
+		"../../../data/subsetHetGNNdata/het_random_walk_test.txt", "r")
 	for line in inputfile:
 		path = []
 		node_list=re.split(' ',line)
@@ -33,5 +34,6 @@ model = Word2Vec(walk_corpus, size = dimen, window = window, min_count = 0, work
 
 print("Output...")
 #model.wv.save_word2vec_format("../data/node_embedding.txt")
-model.wv.save_word2vec_format("../../data/HetGNNdata/node_net_embedding.txt")
+model.wv.save_word2vec_format(
+	"../../../data/subsetHetGNNdata/node_net_embedding.txt")
 

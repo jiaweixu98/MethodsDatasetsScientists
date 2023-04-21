@@ -37,6 +37,8 @@ We will provide the raw data on request.
     - unique author: 556,952
     - unique paper: 303,911
 
+**A problem: only 1143 paper have both methods and datasets.**
+
 ## Notes
 
 In the original HetGNN paper, a paper has some direct author neighbors and a venue neighbor.
@@ -62,5 +64,21 @@ It is hard to get a fixed number of nodes (especially for datasets and methods),
 
 A concern: so many nodes have 0 data and method, but we try a random walk to get it a method/dataset node. Does that make sense? Thanks to the attention mechanism, the unimportant node will be ignored.
 
-We also employ an easy configuration: only keep the paper nodes having the author, datasets and methods. Check the 
-subset folder.
+**We also employ an easy configuration: only keep the paper nodes having the author, datasets and methods. Check the 
+subset folder.**
+
+**A problem: only 1143 paper have both methods and datasets.**
+
+In subset
+
+paper 6,544
+paper_author 6,544
+author_constrain_paper 33,212
+paper_bioentity 6,518
+bioentity_paper 34,373
+paper_dataset 6,544
+dataset_paper 245
+paper_method 1,143
+method_paper 89
+pmid_citing_cited_constrained 3,286
+paper_ebd 6,544

@@ -97,19 +97,7 @@ def generate_data():
                 author_constrain_paper[author].append(k)
             else:
                 author_constrain_paper[author] = [k]
-    # paper_wauthor_bioentity
-    paper_wauthor_dataset = {}
-    for k, v in paper_dataset.items():
-        k = str(k)
-        if k in paper_constrain_set:
-            paper_wauthor_dataset[k] = v
-    dataset_wauthor_paper = {}
-    for k, v in paper_wauthor_dataset.items():
-        for dataset in v:
-            if dataset in dataset_wauthor_paper:
-                dataset_wauthor_paper[dataset].append(k)
-            else:
-                dataset_wauthor_paper[dataset] = [k]
+
     print('len(paper_constrain_author)', len(paper_constrain_author))
     print('len(author_constrain_paper)', len(author_constrain_paper))
     print('len(paper_wauthor_bioentity)', len(paper_wauthor_bioentity))
