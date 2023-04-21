@@ -212,7 +212,7 @@ class HetAgg(nn.Module):
 		elif node_type == 3:
 			neigh_agg = self.b_content_agg(id_batch).view(batch_s, 10, embed_d)
 			neigh_agg = torch.transpose(neigh_agg, 0, 1)
-			all_state, last_state  = self.v_neigh_rnn(neigh_agg)
+			all_state, last_state  = self.m_neigh_rnn(neigh_agg)
 		elif node_type == 4:
 			neigh_agg = self.d_content_agg(id_batch).view(batch_s, 2, embed_d)
 			neigh_agg = torch.transpose(neigh_agg, 0, 1)
