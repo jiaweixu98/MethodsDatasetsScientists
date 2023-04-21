@@ -1,5 +1,5 @@
 # nohup python -u HetGNN.py --train_test_label 2 > HetGNN_train_test_label2.log 2>&1 &
-# nohup python -u HetGNN.py > HetGNN_with_dataSet.log 2>&1 &
+# nohup python -u HetGNN.py > HetGNN_with_dataSetMethod.log 2>&1 &
 # nohup python -u HetGNN.py --checkpoint "../model_save/HetGNN_with_dataset99.pt" > HetGNN_with_dataSetSecTrain.log 2>&1 &
 # nohup python -u HetGNN.py --checkpoint "../model_save/HetGNN_with_datasetSecTrain99.pt" > HetGNN_with_dataSetTrdTrain.log 2>&1 &
 import torch

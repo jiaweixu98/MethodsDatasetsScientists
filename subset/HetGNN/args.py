@@ -7,13 +7,13 @@ def read_args():
 				   help='path to data')
 	parser.add_argument('--model_path', type=str, default='../../../data/subsetmodel_save/',
 				   help='path to save model')
-	parser.add_argument('--A_n', type=int, default= 33212,
+	parser.add_argument('--A_n', type=int, default= 6824,
 				   help = 'number of author node')
-	parser.add_argument('--P_n', type = int, default = 6544,
+	parser.add_argument('--P_n', type = int, default = 1143,
 				   help = 'number of paper node')
-	parser.add_argument('--B_n', type=int, default=34373,
+	parser.add_argument('--B_n', type=int, default=8633,
 				   help = 'number of bio node')
-	parser.add_argument('--D_n', type=int, default = 245,
+	parser.add_argument('--D_n', type=int, default = 128,
                      help='number of dataset node')
 	parser.add_argument('--M_n', type=int, default=89,
                      help='number of method node')

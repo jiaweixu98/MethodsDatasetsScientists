@@ -787,6 +787,8 @@ class input_data(object):
 
 		# 防止内存爆炸
 	def sample_het_walk_triple(self):
+		badnode = pk.load(open('badnode.pkl', 'rb'))
+		badnode = set(badnode)
 		print ("sampling triple relations ...")
 		triple_list = [[] for k in range(25)]
 		window = self.args.window
@@ -809,42 +811,46 @@ class input_data(object):
 				path.append(path_list[i])
 			for j in range(walk_L):
 				centerNode = path[j]
-				if len(centerNode) > 1:
+				# can not be a bad node.
+				if len(centerNode) > 1 and (centerNode not in badnode):
 					if centerNode[0] == 'a':
 						for k in range(j - window, j + window + 1):
 							if k and k < walk_L and k != j:
 								# neighNode是相关节点；即contex，正例。 neg是负例。
 								neighNode = path[k]
+								# 不能是坏点 can not be a bad node.
+								if neighNode in badnode:
+									continue
 								# 小于随机数，才进行。
 								if neighNode[0] == 'a' and random.random() < triple_sample_p[0]:
 									negNode = random.randint(0, A_n - 1)
 									# 如果是空的，再抽。
-									while len(self.a_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, A_n - 1)
 									# random negative sampling get similar performance as noise distribution sampling
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[0].append(triple)
 								elif neighNode[0] == 'p' and random.random() < triple_sample_p[1]:
 									negNode = random.randint(0, P_n - 1)
-									while len(self.p_a_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, P_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[1].append(triple)
 								elif neighNode[0] == 'b' and random.random() < triple_sample_p[2]:
 									negNode = random.randint(0, B_n - 1)
-									while len(self.b_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, B_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[2].append(triple)
 								elif neighNode[0] == 'd' and random.random() < triple_sample_p[3]:
 									negNode = random.randint(0, D_n - 1)
-									while len(self.d_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, D_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[3].append(triple)
 								elif neighNode[0] == 'm' and random.random() < triple_sample_p[4]:
 									negNode = random.randint(0, M_n - 1)
-									while len(self.m_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, M_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[4].append(triple)
@@ -852,33 +858,35 @@ class input_data(object):
 						for k in range(j - window, j + window + 1):
 							if k and k < walk_L and k != j:
 								neighNode = path[k]
+								if neighNode in badnode:
+									continue
 								if neighNode[0] == 'a' and random.random() < triple_sample_p[5]:
 									negNode = random.randint(0, A_n - 1)
-									while len(self.a_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, A_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[5].append(triple)
 								elif neighNode[0] == 'p' and random.random() < triple_sample_p[6]:
 									negNode = random.randint(0, P_n - 1)
-									while len(self.p_a_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, P_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[6].append(triple)
 								elif neighNode[0] == 'b' and random.random() < triple_sample_p[7]:
 									negNode = random.randint(0, B_n - 1)
-									while len(self.b_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, B_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[7].append(triple)
 								elif neighNode[0] == 'd' and random.random() < triple_sample_p[8]:
 									negNode = random.randint(0, D_n - 1)
-									while len(self.d_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, D_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[8].append(triple)
 								elif neighNode[0] == 'm' and random.random() < triple_sample_p[9]:
 									negNode = random.randint(0, M_n - 1)
-									while len(self.m_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, M_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[9].append(triple)
@@ -886,33 +894,35 @@ class input_data(object):
 						for k in range(j - window, j + window + 1):
 							if k and k < walk_L and k != j:
 								neighNode = path[k]
+								if neighNode in badnode:
+									continue
 								if neighNode[0] == 'a' and random.random() < triple_sample_p[10]:
 									negNode = random.randint(0, A_n - 1)
-									while len(self.a_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, A_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[10].append(triple)
 								elif neighNode[0] == 'p' and random.random() < triple_sample_p[11]:
 									negNode = random.randint(0, P_n - 1)
-									while len(self.p_a_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, P_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[11].append(triple)
 								elif neighNode[0] == 'b' and random.random() < triple_sample_p[12]:
 									negNode = random.randint(0, B_n - 1)
-									while len(self.b_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, B_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[12].append(triple)
 								elif neighNode[0] == 'd' and random.random() < triple_sample_p[13]:
 									negNode = random.randint(0, D_n - 1)
-									while len(self.d_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, D_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[13].append(triple)
 								elif neighNode[0] == 'm' and random.random() < triple_sample_p[14]:
 									negNode = random.randint(0, M_n - 1)
-									while len(self.m_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, M_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[14].append(triple)
@@ -920,33 +930,35 @@ class input_data(object):
 						for k in range(j - window, j + window + 1):
 							if k and k < walk_L and k != j:
 								neighNode = path[k]
+								if neighNode in badnode:
+									continue
 								if neighNode[0] == 'a' and random.random() < triple_sample_p[15]:
 									negNode = random.randint(0, A_n - 1)
-									while len(self.a_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, A_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[15].append(triple)
 								elif neighNode[0] == 'p' and random.random() < triple_sample_p[16]:
 									negNode = random.randint(0, P_n - 1)
-									while len(self.p_a_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, P_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[16].append(triple)
 								elif neighNode[0] == 'b' and random.random() < triple_sample_p[17]:
 									negNode = random.randint(0, B_n - 1)
-									while len(self.b_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, B_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[17].append(triple)
 								elif neighNode[0] == 'd' and random.random() < triple_sample_p[18]:
 									negNode = random.randint(0, D_n - 1)
-									while len(self.d_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, D_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[18].append(triple)
 								elif neighNode[0] == 'm' and random.random() < triple_sample_p[19]:
 									negNode = random.randint(0, M_n - 1)
-									while len(self.m_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, M_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[19].append(triple)
@@ -954,33 +966,35 @@ class input_data(object):
 						for k in range(j - window, j + window + 1):
 							if k and k < walk_L and k != j:
 								neighNode = path[k]
+								if neighNode in badnode:
+									continue
 								if neighNode[0] == 'a' and random.random() < triple_sample_p[20]:
 									negNode = random.randint(0, A_n - 1)
-									while len(self.a_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, A_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[20].append(triple)
 								elif neighNode[0] == 'p' and random.random() < triple_sample_p[21]:
 									negNode = random.randint(0, P_n - 1)
-									while len(self.p_a_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, P_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[21].append(triple)
 								elif neighNode[0] == 'b' and random.random() < triple_sample_p[22]:
 									negNode = random.randint(0, B_n - 1)
-									while len(self.b_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, B_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[22].append(triple)
 								elif neighNode[0] == 'd' and random.random() < triple_sample_p[23]:
 									negNode = random.randint(0, D_n - 1)
-									while len(self.d_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, D_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[23].append(triple)
 								elif neighNode[0] == 'm' and random.random() < triple_sample_p[24]:
 									negNode = random.randint(0, M_n - 1)
-									while len(self.m_p_list_train[negNode]) == 0:
+									while negNode in badnode:
 										negNode = random.randint(0, M_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[24].append(triple)

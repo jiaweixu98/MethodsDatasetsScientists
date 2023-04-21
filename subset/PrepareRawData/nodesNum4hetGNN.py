@@ -9,16 +9,14 @@ def generate_data():
     paper_bioentity = pk.load(open('../../../data/processedData/paper_bioentity.pkl', 'rb'))
     paper_dataset = pk.load(open('../../../data/processedData/paper_dataset.pkl', 'rb'))
     paper_method = pk.load(open('../../../data/processedData/paper_method.pkl', 'rb'))
-    allPaperset = pk.load(
-        open('../../../data/processedData/allPaperset.pkl', 'rb'))
+    allPaperset = pk.load(open('../../../data/processedData/allPaperset.pkl', 'rb'))
     print('len(allPaperset))', len(allPaperset))
     # we let every paper has an author (at least)
     # paper must have embeddings!
-    pmid_pca_embeddings = pk.load(
-        open('../../../data/processedData/pmid_pca_embeddings.pkl', 'rb'))
+    pmid_pca_embeddings = pk.load(open('../../../data/processedData/pmid_pca_embeddings.pkl', 'rb'))
     paper_constrain_list = []
     for paper in allPaperset:
-        if (paper in paper_author) and (int(paper) in paper_dataset) and (int(paper) in paper_dataset) and (paper in pmid_pca_embeddings):
+        if (paper in paper_author) and (int(paper) in paper_dataset) and (int(paper) in paper_method) and (paper in pmid_pca_embeddings):
             paper_constrain_list.append(paper)
     paper_constrain_set = set(paper_constrain_list)
     print('len(paper_constrain_set)', len(paper_constrain_set))
