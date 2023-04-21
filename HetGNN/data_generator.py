@@ -829,32 +829,32 @@ class input_data(object):
 								if neighNode[0] == 'a' and random.random() < triple_sample_p[0]:
 									negNode = random.randint(0, A_n - 1)
 									# 如果是空的，再抽。
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, A_n - 1)
 									# random negative sampling get similar performance as noise distribution sampling
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[0].append(triple)
 								elif neighNode[0] == 'p' and random.random() < triple_sample_p[1]:
 									negNode = random.randint(0, P_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, P_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[1].append(triple)
 								elif neighNode[0] == 'b' and random.random() < triple_sample_p[2]:
 									negNode = random.randint(0, B_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, B_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[2].append(triple)
 								elif neighNode[0] == 'd' and random.random() < triple_sample_p[3]:
 									negNode = random.randint(0, D_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, D_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[3].append(triple)
 								elif neighNode[0] == 'm' and random.random() < triple_sample_p[4]:
 									negNode = random.randint(0, M_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, M_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[4].append(triple)
@@ -866,31 +866,31 @@ class input_data(object):
 									continue
 								if neighNode[0] == 'a' and random.random() < triple_sample_p[5]:
 									negNode = random.randint(0, A_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, A_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[5].append(triple)
 								elif neighNode[0] == 'p' and random.random() < triple_sample_p[6]:
 									negNode = random.randint(0, P_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, P_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[6].append(triple)
 								elif neighNode[0] == 'b' and random.random() < triple_sample_p[7]:
 									negNode = random.randint(0, B_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, B_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[7].append(triple)
 								elif neighNode[0] == 'd' and random.random() < triple_sample_p[8]:
 									negNode = random.randint(0, D_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, D_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[8].append(triple)
 								elif neighNode[0] == 'm' and random.random() < triple_sample_p[9]:
 									negNode = random.randint(0, M_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, M_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[9].append(triple)
@@ -902,31 +902,31 @@ class input_data(object):
 									continue
 								if neighNode[0] == 'a' and random.random() < triple_sample_p[10]:
 									negNode = random.randint(0, A_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, A_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[10].append(triple)
 								elif neighNode[0] == 'p' and random.random() < triple_sample_p[11]:
 									negNode = random.randint(0, P_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, P_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[11].append(triple)
 								elif neighNode[0] == 'b' and random.random() < triple_sample_p[12]:
 									negNode = random.randint(0, B_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, B_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[12].append(triple)
 								elif neighNode[0] == 'd' and random.random() < triple_sample_p[13]:
 									negNode = random.randint(0, D_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, D_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[13].append(triple)
 								elif neighNode[0] == 'm' and random.random() < triple_sample_p[14]:
 									negNode = random.randint(0, M_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, M_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[14].append(triple)
@@ -938,31 +938,31 @@ class input_data(object):
 									continue
 								if neighNode[0] == 'a' and random.random() < triple_sample_p[15]:
 									negNode = random.randint(0, A_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, A_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[15].append(triple)
 								elif neighNode[0] == 'p' and random.random() < triple_sample_p[16]:
 									negNode = random.randint(0, P_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, P_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[16].append(triple)
 								elif neighNode[0] == 'b' and random.random() < triple_sample_p[17]:
 									negNode = random.randint(0, B_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, B_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[17].append(triple)
 								elif neighNode[0] == 'd' and random.random() < triple_sample_p[18]:
 									negNode = random.randint(0, D_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, D_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[18].append(triple)
 								elif neighNode[0] == 'm' and random.random() < triple_sample_p[19]:
 									negNode = random.randint(0, M_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, M_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[19].append(triple)
@@ -974,31 +974,31 @@ class input_data(object):
 									continue
 								if neighNode[0] == 'a' and random.random() < triple_sample_p[20]:
 									negNode = random.randint(0, A_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, A_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[20].append(triple)
 								elif neighNode[0] == 'p' and random.random() < triple_sample_p[21]:
 									negNode = random.randint(0, P_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, P_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[21].append(triple)
 								elif neighNode[0] == 'b' and random.random() < triple_sample_p[22]:
 									negNode = random.randint(0, B_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, B_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[22].append(triple)
 								elif neighNode[0] == 'd' and random.random() < triple_sample_p[23]:
 									negNode = random.randint(0, D_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, D_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[23].append(triple)
 								elif neighNode[0] == 'm' and random.random() < triple_sample_p[24]:
 									negNode = random.randint(0, M_n - 1)
-									while negNode in badnode:
+									while neighNode[0] + str(negNode) in badnode:
 										negNode = random.randint(0, M_n - 1)
 									triple = [int(centerNode[1:]), int(neighNode[1:]), int(negNode)]
 									triple_list[24].append(triple)
