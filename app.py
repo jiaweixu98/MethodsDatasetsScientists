@@ -15,15 +15,16 @@ import io
 buffer = io.StringIO()
 
 # 读取数据
-dataset = pd.read_csv('../../githubdata/ScientistsWithDatasets-1data/dataset.csv', index_col=0)
-author = pd.read_csv('../../githubdata/ScientistsWithDatasets-1data/author.csv', index_col=0)
+dataset = pd.read_csv('../data/subsetHetGNNdata/dataset.csv', index_col=0)
+author = pd.read_csv('../data/subsetHetGNNdata/author.csv', index_col=0)
+method = pd.read_csv('../data/subsetHetGNNdata/method.csv', index_col=0)
 B2AIauthor = author.loc[author['isB2AI'] == 1]
 
 GreatGPT = ['Bioentities: Cancer Signaling Molecules<br>Keywords: Therapeutic Mechanisms', 'Bioentities: Health & Disease Risk Factors<br>Keywords: Epidemiology & Research Methods',
 'Bioentities: Breast Cancer Genetics Biomarkers<br>Keywords: Genetics & Biomarkers', 
 'Bioentities: Breast Cancer Treatments<br>Keywords: Cancer Treatment & Management',
 'Bioentities: Tumor Microenvironment Metastasis Molecules<br>Keywords: Tumor Metastasis & Matrix Biology']
-ClusterPosition = [[-10,50],[55,-50],[-40,-50],[75,20],[-75,20],]
+ClusterPosition = [[-55, 30], [-40, -30], [15, 40], [55, -30],   [-10, 10], ]
 # Clusteranlge = [0,-45,0,45,-60]
 # 开始画图，构建一个Figure()
 figSwD = go.Figure()
@@ -53,13 +54,26 @@ figSwD.add_trace(go.Scattergl(x=dataset['X'], y=dataset['Y'],
     name='<b>'+'DataSets'+'<b>',
    
 ))
+
+# 此处是method的trace
+figSwD.add_trace(go.Scattergl(x=method['X'], y=method['Y'],
+                              marker=dict(size=10, color = '#7f7f7f'),
+                              # cross dot
+                              marker_symbol = 203,
+    customdata=np.stack((method.index, method['Name']), axis=-1),
+    mode='markers',
+    hovertemplate='<br><br><b>method ID<b>: %{customdata[0]}<br><b>method Name<b>: %{customdata[1]}<extra></extra>',
+    name='<b>'+'OBI Methods'+'<b>',
+   
+))
+
 # B2AIauthor，breast cancer area只有六个人
 figSwD.add_trace(go.Scattergl(x=B2AIauthor['X'], y=B2AIauthor['Y'],
                               customdata=np.stack((B2AIauthor.index, B2AIauthor['Name'], B2AIauthor['MainAffi'].apply(lambda t: str(t)).apply(lambda t: "<br>".join(textwrap.wrap(t, 30))
                                                                                                                                         ), B2AIauthor['clusterID'], B2AIauthor['CareerAge'], B2AIauthor['CitedNum'],  B2AIauthor['isB2AI']), axis=-1),
                               mode='markers',
-                              hovertemplate='<b>Author ID<b>: %{customdata[0]}<br><b>Author Name<b>: %{customdata[1]}<br><b>Cluster ID<b>: %{customdata[3]}<br><b>Career Age<b>: %{customdata[4]}<br><b>#Cited<b>: %{customdata[5]}<br><b>isB2AI<b>: %{customdata[6]}<br><br><b>Author Main Affiliation<br><b>: %{customdata[2]}<extra></extra>',
-                              marker=dict(size=30),
+                              hovertemplate='<b>Author ID<b>: %{customdata[0]}<br><b>Author Name<b>: %{customdata[1]}<br><b>Cluster ID<b>: %{customdata[3]}<br><b>Career Age<b>: %{customdata[4]}<br><b>#Cited<b>: %{customdata[5]}<br><b>isB2AI<b>: %{customdata[6]}<br><br><b>Author Main Affiliation:<br><b> %{customdata[2]}<extra></extra>',
+                              marker=dict(size=30, color='#e377c2'),
                               marker_symbol=22,
                               # this is the name of the trace
                               name='<b>'+'Bridge2AI Talent in Breast Cancer' + '<b>',
@@ -89,7 +103,8 @@ for i in range(5):
 figSwD.update_scenes(camera_center=dict(x=0.5,y=0,z=0),)
 figSwD.update_layout(
     title='Breast Cancer Area: Scientists with Datasets <br> <br> <sup>Hover over a node to see <b> details</b>.  Use the mouse wheel or the ‘+’ and ‘-’ buttons on the top right of the canvas to <b>zoom in and out </b>.</sup>',
-    xaxis_range=[-50,150],
+    xaxis_range=[-75,125],
+    yaxis_range=[-60,80],
     plot_bgcolor='rgba(229 , 236, 264, 1)',
     # paper_bgcolor='#fff',
     legend=dict(itemsizing='constant',title_font_family="Times New Roman",
@@ -101,11 +116,11 @@ figSwD.update_layout(
     hoverlabel=dict(
         font_size=10,
     ),
-    yaxis_visible=False, 
+    # yaxis_visible=False, 
     height=800,
-                     yaxis_showticklabels=False, 
-                     xaxis_visible=False, 
-                     xaxis_showticklabels=False,
+                    #  yaxis_showticklabels=False, 
+                    #  xaxis_visible=False, 
+                    #  xaxis_showticklabels=False,
                      
     yaxis={
                         'scaleanchor': 'x',

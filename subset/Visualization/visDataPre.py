@@ -57,53 +57,57 @@ method_cluster = {}
 for i in dataset_emd.keys():
     dataset_cluster[i] = dataset_author_method_kmeans_label[i]
 for i in author_emd.keys():
-    author_cluster[i] = dataset_author_method_kmeans_label[i]
+    author_cluster[int(i)] = dataset_author_method_kmeans_label[i]
 for i in method_emd.keys():
     method_cluster[i] = dataset_author_method_kmeans_label[i]
-# tsne
-dataset_author_method_embedded = TSNE(n_components=2, learning_rate='auto',init='random', perplexity=100).fit_transform(dataset_author_method_array)
-dataset_author_method_ebd = {}
-for i in range(len(dataset_author_method_keys)):
-    dataset_author_method_ebd[dataset_author_method_keys[i]] = dataset_author_method_embedded[i]
+# # tsne
+# dataset_author_method_embedded = TSNE(n_components=2, learning_rate='auto',init='random', perplexity=100).fit_transform(dataset_author_method_array)
+# dataset_author_method_ebd = {}
+# for i in range(len(dataset_author_method_keys)):
+#     dataset_author_method_ebd[dataset_author_method_keys[i]] = dataset_author_method_embedded[i]
 
-dataset_position = {}
-author_position = {}
-method_position = {}
-for i in dataset_emd.keys():
-    dataset_position[i] = dataset_author_method_ebd[i]
-for i in author_emd.keys():
-    author_position[i] = dataset_author_method_ebd[i]
-for i in method_emd.keys():
-    method_position[i] = dataset_author_method_ebd[i]
+# dataset_position = {}
+# author_position = {}
+# method_position = {}
+# for i in dataset_emd.keys():
+#     dataset_position[i] = dataset_author_method_ebd[i]
+# for i in author_emd.keys():
+#     author_position[i] = dataset_author_method_ebd[i]
+# for i in method_emd.keys():
+#     method_position[i] = dataset_author_method_ebd[i]
 
-pk.dump(dataset_position, open('../../../data/subsetHetGNNdata/dataset_position.pkl', 'wb'))
-pk.dump(author_position, open('../../../data/subsetHetGNNdata/author_position.pkl', 'wb'))
-pk.dump(method_position, open('../../../data/subsetHetGNNdata/method_position.pkl', 'wb'))
-# 上面处理好了数据集 和 作者的坐标
+# pk.dump(dataset_position, open('../../../data/subsetHetGNNdata/dataset_position.pkl', 'wb'))
+# pk.dump(author_position, open('../../../data/subsetHetGNNdata/author_position.pkl', 'wb'))
+# pk.dump(method_position, open('../../../data/subsetHetGNNdata/method_position.pkl', 'wb'))
+# # 上面处理好了数据集 和 作者的坐标
+
+dataset_position = pk.load( open('../../../data/subsetHetGNNdata/dataset_position.pkl', 'rb'))
+author_position = pk.load( open('../../../data/subsetHetGNNdata/author_position.pkl', 'rb'))
+method_position = pk.load( open('../../../data/subsetHetGNNdata/method_position.pkl', 'rb'))
 
 authorBreastSet = set(author_position.keys())
 dataBreastSet = set(dataset_position.keys())
 methodBreastSet = set(method_position.keys())
 
-# 转换为dataframe
-df_dataset = pd.DataFrame(dataset_position).T
-df_author = pd.DataFrame(author_position).T
-df_method = pd.DataFrame(method_position).T
+# # 转换为dataframe
+# df_dataset = pd.DataFrame(dataset_position).T
+# df_author = pd.DataFrame(author_position).T
+# df_method = pd.DataFrame(method_position).T
 
-df_author = df_author.rename({0: 'X', 1: 'Y'}, axis=1)
-df_dataset = df_dataset.rename({0: 'X', 1: 'Y'}, axis=1)
-df_method = df_method.rename({0: 'X', 1: 'Y'}, axis=1)
+# df_author = df_author.rename({0: 'X', 1: 'Y'}, axis=1)
+# df_dataset = df_dataset.rename({0: 'X', 1: 'Y'}, axis=1)
+# df_method = df_method.rename({0: 'X', 1: 'Y'}, axis=1)
 
-df_dataset.to_csv('../../../data/subsetHetGNNdata/dataset.csv', encoding='utf-8')
-df_author.to_csv('../../../data/subsetHetGNNdata/author.csv', encoding='utf-8')
-df_method.to_csv('../../../data/subsetHetGNNdata/method.csv', encoding='utf-8')
+# df_dataset.to_csv('../../../data/subsetHetGNNdata/dataset.csv', encoding='utf-8')
+# df_author.to_csv('../../../data/subsetHetGNNdata/author.csv', encoding='utf-8')
+# df_method.to_csv('../../../data/subsetHetGNNdata/method.csv', encoding='utf-8')
 
 dataset = pd.read_csv('../../../data/subsetHetGNNdata/dataset.csv', index_col=0)
 author = pd.read_csv('../../../data/subsetHetGNNdata/author.csv', index_col=0)
 method = pd.read_csv('../../../data/subsetHetGNNdata/method.csv', index_col=0)
 
 # add author name!
-f = open("../../../data/subsetHetGNNdata/Authors.csv", "r")
+f = open("../../../data/subsetHetGNNdata/Authors.csv", "r", encoding='utf-8' )
 author_name = {}
 author_CareerAge = {}
 author_PaperNum = {}
@@ -132,7 +136,7 @@ datasetIDName = {}
 for line in tqdm(f):
     line = line.strip().split(',')
     if line[3] in dataBreastSet:
-        datasetIDName[int(line[3])] = line[2]
+        datasetIDName[line[3]] = line[2]
 f.close()
 print('len(datasetIDName)',len(datasetIDName))
 dataset['Name'] = pd.Series(datasetIDName)
@@ -143,7 +147,7 @@ obiIDName = {}
 for line in tqdm(f):
     line = line.strip().split(',')
     if line[3] in methodBreastSet:
-        obiIDName[int(line[3])] = line[2]
+        obiIDName[line[3]] = line[2]
 f.close()
 print('len(obiIDName)',len(obiIDName))
 method['Name'] = pd.Series(obiIDName)
@@ -153,7 +157,7 @@ author['clusterID'] = pd.Series(author_cluster)
 method['clusterID'] = pd.Series(method_cluster)
 
 # add author B2AI!
-f = open("../../../data/subsetHetGNNdata/B2AiAuthors.csv", "r")
+f = open("../../../data/subsetHetGNNdata/B2AiAuthors.csv", "r", encoding = 'utf-8' )
 author_B2AI = {}
 for i in authorBreastSet:
     author_B2AI[int(i)] = 0
