@@ -277,9 +277,13 @@ class input_data(object):
 			m_neigh_list_train = [[[] for i in range(self.args.M_n)] for j in range(5)]
 			# random walk (with restart results)
 			het_neigh_train_f = open(self.args.data_path + "het_neigh_train.txt", "r")
+			badnode = pk.load(open('badnode.pkl', 'rb'))
+			badnode = set(badnode)
 			for line in het_neigh_train_f:
 				line = line.strip()
 				node_id = re.split(':', line)[0]
+				if node_id in badnode:
+					continue
 				neigh = re.split(':', line)[1]
 				neigh_list = re.split(',', neigh)
 				# determine what this line is. len(node_id) > 1 is useless here?
