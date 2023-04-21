@@ -2,45 +2,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
 import pickle as pk
 from tqdm import tqdm
-import re
-
-
-# Constants
-PUNCTUATION = """!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"""
-TOP_K_KEYWORDS = 100  # top k number of keywords to retrieve in a ranked document
-STOPWORD_PATH = "stopwords.txt"
-
-def clean_text(text):
-    """Doc cleaning"""
-
-    # Lowering text
-    text = text.lower()
-
-    # Removing punctuation
-    text = "".join([c for c in text if c not in PUNCTUATION])
-
-    # Removing whitespace and newlines
-    text = re.sub('\s+', ' ', text)
-
-    return text
-
-
-author = pd.read_csv('../../../data/subsetHetGNNdata/author.csv', index_col=0, encoding='utf-8')
+from collections import Counter
+author = pd.read_csv('../../../data/subsetHetGNNdata/author.csv', index_col=0)
 cluster_authors = {}
 for i in range(5):
     cluster_authors[i] = list(map(str,list(author.loc[author['clusterID'] == i].index)))
-cluster_authors_text = {}
-
-article_title = pd.read_csv(
-    '../../../data/breast_cancaer_papers_PKG23.csv')
-paper_titleAbstract = {}
-article_title['TitleAbstract'] = article_title['ArticleTitle'] + \
-    article_title['Abstract']
-article_title.dropna(subset=['TitleAbstract'], inplace=True)
-article_title['TitleAbstract'] = article_title['TitleAbstract'].apply(clean_text)
-for index, row in article_title.iterrows():
-    paper_titleAbstract[str(row['PMID'])] = row['TitleAbstract']
-
+cluster_authors_bioentity = {}
 # 作者集合、论文集合
 # author_set = set(list(map(str, list(author.index))))
 # paper_set = set()
@@ -73,31 +40,41 @@ for index, row in article_title.iterrows():
 # f.close()
 # print('len(paper_bioentity)',len(paper_bioentity))
 # pk.dump(paper_bioentity,open('paper_bioentity.pkl','wb'))
-# paper_bioentity = pk.load(open('paper_bioentity.pkl', 'rb'))
+paper_bioentity = pk.load(
+    open('../../../data/subsetHetGNNdata/paper_bioentity.pkl', 'rb'))
 author_paper = pk.load(
     open('../../../data/subsetHetGNNdata/author_paper.pkl', 'rb'))
 for k,v in tqdm(cluster_authors.items()):
     # 构建词组
-    cluster_authors_text[k] = ''
+    cluster_authors_bioentity[k] = []
     for author in v:
         # 对应的paper集合
         paper_set = author_paper[author]
         for paper in paper_set:
             try:
-                cluster_authors_text[k] += ' '+paper_titleAbstract[paper]
+                cluster_authors_bioentity[k] += paper_bioentity[paper]
             except:
                 continue
 for k in range(5):
-    print('len(cluster_authors_text[k]', len(cluster_authors_text[k]))
+    print('len(cluster_authors_bioentity[k]', len(
+        cluster_authors_bioentity[k]))
+
+TOP_K_KEYWORDS = 100
+tokenized_list_of_sentences = [
+    cluster_authors_bioentity[0], 
+    cluster_authors_bioentity[1],
+    cluster_authors_bioentity[2],
+    cluster_authors_bioentity[3],
+    cluster_authors_bioentity[4]]
 
 
-def get_stopwords_list(stop_file_path):
-    """load stop words """
+def identity_tokenizer(text):
+    return text
 
-    with open(stop_file_path, 'r', encoding="utf-8") as f:
-        stopwords = f.readlines()
-        stop_set = set(m.strip() for m in stopwords)
-        return list(frozenset(stop_set))
+
+vectorizer = TfidfVectorizer(tokenizer=identity_tokenizer, lowercase=False)
+vectorizer.fit_transform(tokenized_list_of_sentences)
+feature_names = vectorizer.get_feature_names()
 
 
 def sort_coo(coo_matrix):
@@ -145,19 +122,13 @@ def extract_topn_from_vector(feature_names, sorted_items, topn=2):
 
     return results
 
-stopwords=get_stopwords_list(STOPWORD_PATH)
-vectorizer = TfidfVectorizer(
-    stop_words=stopwords, smooth_idf=True, use_idf=True)
-vectorizer.fit_transform([cluster_authors_text[0],cluster_authors_text[1],cluster_authors_text[2],cluster_authors_text[3],cluster_authors_text[4]])
-feature_names = vectorizer.get_feature_names()
 
+print('cluster_authors_bioentity[0]',get_keywords(vectorizer, feature_names, cluster_authors_bioentity[0]))
 
-print('cluster_authors_text[0]',get_keywords(vectorizer, feature_names, cluster_authors_text[0]))
+print('cluster_authors_bioentity[1]',get_keywords(vectorizer, feature_names, cluster_authors_bioentity[1]))
 
-print('cluster_authors_text[1]',get_keywords(vectorizer, feature_names, cluster_authors_text[1]))
+print('cluster_authors_bioentity[2]',get_keywords(vectorizer, feature_names, cluster_authors_bioentity[2]))
 
-print('cluster_authors_text[2]',get_keywords(vectorizer, feature_names, cluster_authors_text[2]))
+print('cluster_authors_bioentity[3]',get_keywords(vectorizer, feature_names, cluster_authors_bioentity[3]))
 
-print('cluster_authors_text[3]',get_keywords(vectorizer, feature_names, cluster_authors_text[3]))
-
-print('cluster_authors_text[4]',get_keywords(vectorizer, feature_names, cluster_authors_text[4]))
+print('cluster_authors_bioentity[4]',get_keywords(vectorizer, feature_names, cluster_authors_bioentity[4]))

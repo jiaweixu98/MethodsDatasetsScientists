@@ -3,8 +3,6 @@ import pandas as pd
 import pickle as pk
 from tqdm import tqdm
 import re
-import os
-import string
 
 
 # Constants
@@ -26,14 +24,18 @@ def clean_text(text):
 
     return text
 
-author = pd.read_csv('author.csv', index_col=0)
+
+author = pd.read_csv('../../../data/subsetHetGNNdata/author.csv', index_col=0, encoding='utf-8')
 cluster_authors = {}
 for i in range(5):
     cluster_authors[i] = list(map(str,list(author.loc[author['clusterID'] == i].index)))
 cluster_authors_text = {}
 
-article_title = pd.read_csv('../data/withtitle_article_datasets_breast_cancer.csv')
+article_title = pd.read_csv(
+    '../../../data/breast_cancaer_papers_PKG23.csv')
 paper_titleAbstract = {}
+article_title['TitleAbstract'] = article_title['ArticleTitle'] + \
+    article_title['Abstract']
 article_title.dropna(subset=['TitleAbstract'], inplace=True)
 article_title['TitleAbstract'] = article_title['TitleAbstract'].apply(clean_text)
 for index, row in article_title.iterrows():
@@ -72,7 +74,8 @@ for index, row in article_title.iterrows():
 # print('len(paper_bioentity)',len(paper_bioentity))
 # pk.dump(paper_bioentity,open('paper_bioentity.pkl','wb'))
 # paper_bioentity = pk.load(open('paper_bioentity.pkl', 'rb'))
-author_paper = pk.load(open('author_paper.pkl','rb'))
+author_paper = pk.load(
+    open('../../../data/subsetHetGNNdata/author_paper.pkl', 'rb'))
 for k,v in tqdm(cluster_authors.items()):
     # 构建词组
     cluster_authors_text[k] = ''

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Breast Cancer Area: Scientists with Datasets.</title>
+  <title>Breast Cancer Area: Scientists with Datasets and Methods.</title>
   <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" media="screen" rel="stylesheet"
     type="text/css" />
@@ -38,8 +38,8 @@
           <div class="banner-table flex-column">
             <div class="flex-row">
               <div class="flex-item flex-column">
-                <h2 class="add-top-margin-small">Breast Cancer Area: Scientists with Datasets. &nbsp; (Use wide screen devices to get the best user experience ! ) <a
-                    href="https://github.com/jiaweixu98/ScientistsWithDatasets"
+                <h2 class="add-top-margin-small">Breast Cancer Area: Scientists with Datasets and Methods. &nbsp; (Use wide screen devices to get the best user experience ! ) <a
+                    href="https://github.com/jiaweixu98/MethodsDatasetsScientists"
                     style="text-decoration:none;font-size:15px;color:#ffffff;"> <b>
                       <i class="fa fa-github"></i> Github repository </b>
                   </a></h2>
@@ -57,15 +57,13 @@
                     href="https://www.nature.com/articles/s41597-020-0543-2"
                     style="text-decoration:none;color:#FFA15A;">
                     <b>Pubmed Knowledge Graph</b></a>
-                  Dataset. This includes four kinds of nodes: scientists, datasets, papers, and bioentities. Their
+                  Dataset. This includes four kinds of nodes: scientists, OBI methods, datasets, papers, and bioentities. Their
                   relationships include writing, collaboration, mention, citing, and use.
 
                   <br><br>We visualized <b> scientists</b> and<b> datasets </b>using K-means clustering (k=5) and T-SNE.
                   The
-                  cluster labels are based on bioentities, abstracts, titles, TF-IDF, and chatGPT.
-                  <br><br> At the bottom of this page, we list the <b>main words of each cluster</b>, including both
-                  bioentities-based and
-                  abstract-title-based clusters.
+                  cluster labels are based on abstracts, titles, TF-IDF, and chatGPT.
+                  <br><br> At the bottom of this page, we list the <b>main words of each cluster</b>, including abstract-title-based clusters.
                   <br><br>
                   <b> How to interact with the graph? </b>
                 </p>
@@ -88,109 +86,142 @@
             <!-- <h2>How breast cancer scientists work?</h2> -->
 
             <iframe class="iframe-in-body" scrolling="no"
-              src="https://jiaweixu98.github.io/pagesRepo/datasets.html"></iframe>
+              src="https://jiaweixu98.github.io/pagesRepo/subset bio dataset and method.html"></iframe>
               <hr>
-            <h3>Below are the main words of each cluster derived from tf-idf, including both bioentities-based and abstract-title-based clusters. </h3>
+            <h3>Below are the main words of each cluster derived from tf-idf, including and abstract-title-based clusters. </h3>
             <p class="text">
               <ul>
                 <li>
-                  <h3 style="color:#636EFA ;">Cluster 0 &nbsp;&nbsp; Cancer signaling molecules
-                    (bioentities)&nbsp;&nbsp;
-                    Therapeutic
-                    Mechanisms (keywords) </h3>
+                  <h3 style="color:#636EFA ;">Cluster 0 &nbsp;&nbsp; Sentinel Lymph Node Biopsy for Breast Cancer </h3>
                 </li>
                 <ul>
-                  <p>Bioentities: 'leptin', 'NF-κB', 'ATP', 'MAPK', 'DOX', 'AKT', 'MCF7', 'ERK', 'HBXIP', 'Bax', 'MTT',
+                  <!-- <p>Bioentities: 'leptin', 'NF-κB', 'ATP', 'MAPK', 'DOX', 'AKT', 'MCF7', 'ERK', 'HBXIP', 'Bax', 'MTT',
                     'Bcl-2',
                     'oxygen', 'NF-B', 'CXCR4', 'STAT3', 'p38', 'anticancer', 'curcumin', 'siRNA', 'cisplatin', 'ERα',
                     'CSCs', 'mTOR',
-                    'p21', 'PEG', 'PTX'</p>
-                  <p>Keywords: 'rgd', 'western', 'anticancer', 'acid', 'investigated', 'apoptosis', 'integrin',
-                    'mechanisms',
-                    'enhanced', 'delivery', 'inhibits', 'nfb', 'present', 'line', 'demonstrated', 'induced', 'inhibit',
-                    'antitumor',
-                    'nanoparticles', 'therapeutic', 'mitochondrial', 'resistance', 'addition', 'drug', 'mechanism',
-                    'assay', 'targeting'
+                    'p21', 'PEG', 'PTX'</p> -->
+                    <p><b>This cluster includes words related to the use of sentinel lymph node biopsy (SLNB) for breast
+                      cancer diagnosis and treatment, including imaging techniques like fluorescence and indocyanine
+                      green (ICG), as well as detection methods like radioisotope and blue dye. Other terms include
+                      axillary lymph nodes, lymphatic mapping, metastasis, and randomized trials.</b></p>
+                  <p>Keywords: 'icg', 'breast', 'patients', 'cancer', 'sln', 'fluorescence', 'lymph', 'node', 'imaging',
+                    'indocyanine', 'sentinel', 'using', 'green', 'detection', 'blue', 'dye', 'biopsy', 'slnb', 'ri',
+                    'study', 'method', 'slns', 'tumor', 'nir', 'rate', 'mb', 'therapy', 'group', 'nodes', 'cells',
+                    'compared', 'photothermal', 'lymphatic', 'radioisotope', 'combination', 'axillary', 'clinical',
+                    'nearinfrared', 'identified', 'identification', 'nps', 'can', 'detected', 'tracer', 'mapping',
+                    'nanoparticles', 'positive', 'laser', 'vivo', 'performed', 'injection', 'system', 'lesions', 'only',
+                    'showed', 'combined', 'fluorescent', 'irradiation', 'navigation', 'number', 'dox', 'treatment',
+                    'radioactive', 'drug', 'intraoperative', 'groups', 'sns', 'technique', 'alone', 'high', 'potential',
+                    'surgery', 'underwent', 'tc', 'early', 'mmm', 'studies', 'effect', 'radiocolloid', 'nanoplatform',
+                    'methods', 'surgical', 'trial', 'significantly', 'significant', 'sensitivity', 'results', 'sn',
+                    'metastasis', 'synergistic', 'included', 'cell', 'vitro', 'randomized', 'cases', 'tumors', 'first',
+                    'nac', 'icghsa', 'who'
                   </p>
                 </ul>
 
                 <li>
-                  <h3 style="color:#EF553B ;">Cluster 1 &nbsp;&nbsp; Health and disease risk factors
-                    (bioentities)&nbsp;&nbsp;
-                    Epidemiology and Research Methods (keywords) </h3>
+                  <h3 style="color:#EF553B ;">Cluster 1 &nbsp;&nbsp; Breast Cancer Diagnosis and Treatment Studies </h3>
                 </li>
                 <ul>
-                  <p>Bioentities: 'overweight', 'folate', 'colorectal cancer', 'insulin', 'BCS', 'postmenopausal breast
+                  <p><b>This cluster focuses on studies related to breast cancer diagnosis and treatment, including
+                    keywords like risk, biopsy, clinical trials, and survival. Other terms include systematic reviews,
+                    chemotherapy, lymph node status, and meta-analysis.</b></p>
+                  <!-- <p>Bioentities: 'overweight', 'folate', 'colorectal cancer', 'insulin', 'BCS', 'postmenopausal breast
                     cancer',
                     'Tamoxifen', 'testosterone', 'vitamin D', 'MD', 'depression', 'IGF-I', 'anxiety', 'prostate cancer',
                     'metformin',
-                    'obesity', 'Participants', 'estrogens', '"breast', 'diabetes'</p>
-                  <p>Keywords: 'confidence', 'la', 'rr', 'research', 'embase', 'incidence', 'casecontrol',
-                    'polymorphism',
-                    'science',
-                    'population', 'ratio', 'cohort', 'screening', 'diagnosis', 'will', 'physical', 'care',
-                    'interventions', 'de',
-                    'models', 'published', 'mortality', 'health', 'searched', 'cochrane', 'web', 'intake',
-                    'relationship',
-                    'associations', 'age', 'subgroup', 'les', 'databases', 'odds', 'survivors', 'conducted',
-                    'intervention'</p>
+                    'obesity', 'Participants', 'estrogens', '"breast', 'diabetes'</p> -->
+                  <p>Keywords: 'breast', 'cancer', 'patients', 'studies', '95', 'risk', 'ci', 'women', 'biopsy',
+                    'metaanalysis', 'review', 'treatment', 'node', 'clinical', 'associated', 'using', 'lymph', 'study',
+                    'pubmed', 'analysis', 'included', 'systematic', 'axillary', 'results', 'trials', 'lesions',
+                    'association', 'status', 'performed', 'data', 'significant', 'surgery', 'evidence', 'survival',
+                    'factors', 'rate', 'cochrane', 'hr', 'compared', 'may', 'screening', 'tumor', 'literature', 'cases',
+                    'expression', 'group', 'sentinel', 'pooled', 'significantly', 'therapy', 'exercise', 'embase',
+                    'positive', 'chemotherapy', 'articles', 'age', 'slnb', 'years', 'nodes', 'increased', 'diagnosis',
+                    'including', 'total', 'disease', 'search', 'showed', 'model', 'reported', 'found', 'outcomes', 'bc',
+                    'arm', 'identified', 'higher', 'patient', 'postmenopausal', 'negative', 'menopausal', 'randomized',
+                    'cnb', 'followup', 'alnd', 'primary', 'published', 'surgical', 'os', 'subgroup', 'rt', 'can',
+                    'quality', 'anastrozole', 'management', 'polymorphism', 'who', 'high', 'lymphedema', 'recurrence',
+                    'invasive', 'sln', 'number'</p>
                 </ul>
                 <li>
-                  <h3 style="color:#00CC96 ;">Cluster 2 &nbsp;&nbsp; Breast cancer genetics and biomarkers
-                    (bioentities)&nbsp;&nbsp;
-                    Genetics and Biomarkers (keywords) </h3>
+                  <h3 style="color:#00CC96 ;">Cluster 2 &nbsp;&nbsp; MMPs and Breast Cancer Invasion and Metastasis
+                  </h3>
                 </li>
                 <ul>
-                  <p>Bioentities: 'ESR1', 'CHEK2', 'CBC', 'ATM', 'BRCA1 mutation', 'PRS', 'ERBB2', 'RNA', 'c', 'AR',
+                  <p><b>This cluster includes words related to the role of matrix metalloproteinases (MMPs) in breast
+                    cancer invasion and metastasis, including keywords like tumor growth, protein levels, and migration.
+                    Other terms include tissue assay, MMP inhibitors, and correlation with prognosis.</b></p>
+                  <!-- <p>Bioentities: 'ESR1', 'CHEK2', 'CBC', 'ATM', 'BRCA1 mutation', 'PRS', 'ERBB2', 'RNA', 'c', 'AR',
                     'PALB2', 'breast
                     and ovarian cancer', 'BRCA2 mutations', 'miRNA', 'Estrogen', 'single nucleotide polymorphisms',
                     'TP53', 'familial
-                    breast cancer', 'FGFR2'</p>
-                  <p>Keywords: 'brca2', 'network', 'brca1', 'variants', 'samples', 'mirnas', 'estrogen', 'mutation',
-                    'identify', 'dna',
-                    'differentially', 'functional', 'her2', 'biological', 'common', 'prognosis', 'status', 'er',
-                    'independent', 'genes',
-                    'interaction', 'database', 'impc', 'analyses', 'mutations'</p>
+                    breast cancer', 'FGFR2'</p> -->
+                  <p>Keywords: 'breast', 'cancer', 'expression', 'cells', 'cell', 'mmp9', 'tumor', 'metastasis',
+                    'invasion', 'mmp2', 'matrix', 'patients', 'human', 'study', 'protein', 'levels', 'assay',
+                    'mdamb231', 'invasive', 'significantly', 'activity', 'associated', 'analysis', 'using', 'tissue',
+                    'carcinoma', 'results', 'role', 'showed', 'mmps', 'migration', 'mcf7', 'growth', 'effect', 'mrna',
+                    'survival', 'may', 'timp1', 'potential', 'proliferation', 'tumors', 'mmp', 'gene', 'factor',
+                    'compared', 'progression', 'increased', 'found', 'signaling', 'significant', 'immunohistochemistry',
+                    'inhibitor', 'metalloproteinases', 'treatment', 'metastatic', 'lymph', 'correlation', 'prognostic',
+                    'higher', 'metalloproteinase', 'correlated', 'mmp13', 'vitro', 'apoptosis', 'high', 'inhibited',
+                    'timp2', 'decreased', 'western', 'stromal', 'mmp1', 'node', 'pathway', 'effects', 'activation',
+                    'tissues', 'primary', 'clinical', 'group', 'inhibition', 'expressed', 'carcinomas', 'detected',
+                    'vivo', 'genes', 'lines', 'well', 'transcription', 'mt1mmp', 'assays', 'vegf', 'extracellular',
+                    'revealed', 'observed', 'data', 'positive', 'performed', 'suggest', 'rkip', 'receptor'</p>
                 </ul>
                 <li>
-                  <h3 style="color:#AB63FA ;">Cluster 3 &nbsp;&nbsp; Breast cancer treatments (bioentities)&nbsp;&nbsp;
-                    Cancer Treatment
-                    and Management (keywords) </h3>
+                  <h3 style="color:#AB63FA ;">Cluster 3 &nbsp;&nbsp; Breast Cancer and Fertility Preservation</h3>
                 </li>
                 <ul>
-                  <p>Bioentities: '5-fluorouracil', 'early breast cancer', 'diarrhea', 'fulvestrant', 'SLN',
+                  <p><b>This cluster includes words related to fertility preservation in breast cancer patients, including
+                    keywords like oocyte cryopreservation, ovarian suppression, and embryo cryopreservation. Other terms
+                    include chemotherapy-induced amenorrhea, in vitro fertilization, and oncofertility.</b></p>
+                  <!-- <p>Bioentities: '5-fluorouracil', 'early breast cancer', 'diarrhea', 'fulvestrant', 'SLN',
                     'pertuzumab',
                     'bevacizumab', 'taxanes', 'hormone receptor', 'G-CSF', 'palbociclib', 'CTC', 'zoledronic acid',
                     'everolimus', 'ABC',
                     'exemestane', 'gemcitabine', 'nausea', 'anthracyclines', 'methotrexate', 'neutropenia',
                     'vinorelbine',
                     'lapatinib',
-                    'HER2-positive breast cancer', 'Trastuzumab', 'CMF', 'taxane', 'fluorouracil'</p>
-                  <p>Keywords: 'apbi', 'radiation', 'followup', 'early', 'trial', 'time', 'median', 'patient',
-                    'lesions',
-                    'rate', 'hr',
-                    'trastuzumab', 'adjuvant', 'radiotherapy', 'chemotherapy', 'treated', 'lymphedema', 'recurrence',
-                    'outcome',
-                    'reconstruction', 'only', 'sln', 'node', 'icg', 'neoadjuvant', 'efficacy', 'axillary', 'biopsy',
-                    'advanced', 'os',
-                    'rates', 'plus', 'surgery', 'toxicity', 'mastectomy', 'surgical', 'sentinel', 'randomized',
-                    'months',
-                    'fluorescence'
+                    'HER2-positive breast cancer', 'Trastuzumab', 'CMF', 'taxane', 'fluorouracil'</p> -->
+                  <p>Keywords: 'breast', 'cancer', 'genes', 'expression', 'gene', 'analysis', 'microarray', 'using',
+                    'data', 'cell', 'cells', 'degs', 'identified', 'differentially', 'study', 'pathways', 'expressed',
+                    'patients', 'pathway', 'bc', 'associated', 'signaling', 'may', 'samples', 'tumor', 'molecular',
+                    'performed', 'potential', 'enrichment', 'network', 'mirnas', 'ontology', 'results', 'database',
+                    'protein', 'including', 'biological', 'mir375', 'interaction', 'human', 'clinical', 'based',
+                    'targets', 'survival', 'kegg', 'treatment', 'mirna', 'upregulated', 'target', 'tissues', 'profiles',
+                    'showed', 'resistance', 'normal', 'mechanisms', 'found', 'involved', 'high', 'identify', 'mcf7',
+                    'profiling', 'metastasis', 'ppi', 'role', 'set', 'functional', 'total', 'datasets', 'revealed',
+                    'analyzed', 'significantly', 'studies', 'geo', 'omnibus', 'progression', 'tissue', 'networks',
+                    'rna', 'hub', 'cinobufotalin', 'prognostic', 'proteins', 'analyses', 'novel', 'can', 'important',
+                    'enriched', 'compared', 'lncrnas', 'mrna', 'sets', 'disease', 'new', 'key', 'drug', 'downregulated',
+                    'differential', 'response', 'cdna', 'tumors'
                   </p>
                 </ul>
 
                 <li>
-                  <h3 style="color:#FFA15A ;">Cluster 4 &nbsp;&nbsp; Tumor microenvironment and metastasis molecules
-                    (bioentities)&nbsp;&nbsp; Tumor Metastasis and Matrix Biology (keywords) </h3>
+                  <h3 style="color:#FFA15A ;">Cluster 4 &nbsp;&nbsp; Breast Cancer and Lifestyle Factors </h3>
                 </li>
                 <ul>
-                  <p>Bioentities: 'MMPs', 'MT1-MMP', 'TIMP-2', 'uPA', 'TIMP-1', 'carcinomas', 'collagen', 'uPAR',
+                  <p><b>This cluster focuses on lifestyle factors that may affect breast cancer risk and outcomes,
+                    including keywords like physical activity, diet, and smoking. Other terms include biomarkers,
+                    obesity, and alcohol consumption.</b></p>
+                  <!-- <p>Bioentities: 'MMPs', 'MT1-MMP', 'TIMP-2', 'uPA', 'TIMP-1', 'carcinomas', 'collagen', 'uPAR',
                     'steroid', 'matrix
-                    metalloproteinases', 'tumor cell', 'MMP-1', 'MMP', 'PAI-1', 'carcinoma'</p>
-                  <p>Keywords: 'carcinomas', 'suggest', 'metastases', 'metalloproteinase', 'serum', 'membrane', 'type',
-                    'metalloproteinases', 'timp2', 'inhibitors', 'stromal', 'degradation', 'bone', 'mmps', 'timp1',
-                    'mrna', 'mmp',
-                    'mt1mmp', 'collagen', 'tumour', 'correlated', 'extracellular', 'mmp1'</p>
+                    metalloproteinases', 'tumor cell', 'MMP-1', 'MMP', 'PAI-1', 'carcinoma'</p> -->
+                  <p>Keywords: 'breast', 'cancer', 'tumor', 'expression', 'cells', 'patients', 'cell', 'analysis',
+                    'using', 'carcinoma', 'impc', 'study', 'tumors', 'gene', 'protein', 'cases', 'human', 'associated',
+                    'her2', 'treatment', 'invasive', 'showed', 'receptor', 'may', 'results', 'therapy', 'significantly',
+                    'data', 'metastasis', 'er', 'compared', 'clinical', 'samples', 'estrogen', 'imaging', 'tissue',
+                    'genes', 'proteins', 'can', 'metastatic', 'levels', 'high', 'mga', 'survival', 'mpd', 'identified',
+                    'higher', 'immunohistochemistry', 'molecular', 'disease', 'potential', 'found', 'tissues', 'lymph',
+                    'status', 'mutations', 'response', 'growth', 'performed', 'primary', 'positive', 'significant',
+                    'binding', 'signaling', 'factor', 'drug', 'including', 'activity', 'node', 'effects', 'dna',
+                    'micropapillary', 'observed', 'prognostic', 'assay', 'analyzed', 'method', 'novel', 'diagnosis',
+                    'increased', 'mcf7', 'new', 'group', 'staining', 'target', 'revealed', 'based', 'cancers', 'lines',
+                    'detected', 'role', 'vivo', 'studies', 'ductal', 'biomarker', 'patient', 'level', 'development',
+                    'number', 'biopsy'</p>
             </p>
             </ul>
             </ul>
@@ -207,7 +238,7 @@
       <div class="flex-item flex-column">
         <h2>Contact</h2>
         <p class="text add-bottom-margin-large">
-          Any question? Look at the <a href="https://github.com/jiaweixu98/ScientistsWithDatasets"
+          Any question? Look at the <a href="https://github.com/jiaweixu98/MethodsDatasetsScientists"
             style="text-decoration:none;font-size:15px;color:#ffffff;"> <b>
               <i class="fa fa-github"></i> Github repository </b> for more information.
           </a>

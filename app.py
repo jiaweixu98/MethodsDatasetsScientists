@@ -20,10 +20,16 @@ author = pd.read_csv('../data/subsetHetGNNdata/author.csv', index_col=0)
 method = pd.read_csv('../data/subsetHetGNNdata/method.csv', index_col=0)
 B2AIauthor = author.loc[author['isB2AI'] == 1]
 
-GreatGPT = ['Bioentities: Cancer Signaling Molecules<br>Keywords: Therapeutic Mechanisms', 'Bioentities: Health & Disease Risk Factors<br>Keywords: Epidemiology & Research Methods',
-'Bioentities: Breast Cancer Genetics Biomarkers<br>Keywords: Genetics & Biomarkers', 
-'Bioentities: Breast Cancer Treatments<br>Keywords: Cancer Treatment & Management',
-'Bioentities: Tumor Microenvironment Metastasis Molecules<br>Keywords: Tumor Metastasis & Matrix Biology']
+# GreatGPT = ['Bioentities: Cancer Signaling Molecules<br>Keywords: Therapeutic Mechanisms', 'Bioentities: Health & Disease Risk Factors<br>Keywords: Epidemiology & Research Methods',
+# 'Bioentities: Breast Cancer Genetics Biomarkers<br>Keywords: Genetics & Biomarkers', 
+# 'Bioentities: Breast Cancer Treatments<br>Keywords: Cancer Treatment & Management',
+# 'Bioentities: Tumor Microenvironment Metastasis Molecules<br>Keywords: Tumor Metastasis & Matrix Biology']
+
+GreatGPT = ['Sentinel Lymph Node Biopsy for Breast Cancer', 'Breast Cancer Diagnosis and Treatment Studies',
+            'MMPs and Breast Cancer Invasion and Metastasis',
+            'Breast Cancer and Fertility Preservation',
+            'Breast Cancer and Lifestyle Factors']
+
 ClusterPosition = [[-55, 30], [-40, -30], [15, 40], [55, -30],   [-10, 10], ]
 # Clusteranlge = [0,-45,0,45,-60]
 # 开始画图，构建一个Figure()
@@ -87,7 +93,7 @@ for i in range(5):
     text='<b>'+GreatGPT[i]+'<b>',
         showarrow=False,
     font=dict(
-        size=10,
+        size=14,
         color=px.colors.qualitative.Plotly[i]
     ),
     align="center",
@@ -102,7 +108,7 @@ for i in range(5):
 # 设置下整体的layout，注意给legend 设置的位置; 以及配色。
 figSwD.update_scenes(camera_center=dict(x=0.5,y=0,z=0),)
 figSwD.update_layout(
-    title='Breast Cancer Area: Scientists with Datasets <br> <br> <sup>Hover over a node to see <b> details</b>.  Use the mouse wheel or the ‘+’ and ‘-’ buttons on the top right of the canvas to <b>zoom in and out </b>.</sup>',
+    title='Breast Cancer Area: Scientists with Datasets and Methods. <br> <br> <sup>Hover over a node to see <b> details</b>.  Use the mouse wheel or the ‘+’ and ‘-’ buttons on the top right of the canvas to <b>zoom in and out </b>.</sup>',
     xaxis_range=[-75,125],
     yaxis_range=[-60,80],
     plot_bgcolor='rgba(229 , 236, 264, 1)',
