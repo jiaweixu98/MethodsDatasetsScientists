@@ -1,7 +1,6 @@
 # nohup python -u HetGNN.py --train_test_label 2 > HetGNN_train_test_label2.log 2>&1 &
 # nohup python -u HetGNN.py > HetGNN_with_dataSetMethod.log 2>&1 &
-# nohup python -u HetGNN.py --checkpoint "../model_save/HetGNN_with_dataset99.pt" > HetGNN_with_dataSetSecTrain.log 2>&1 &
-# nohup python -u HetGNN.py --checkpoint "../model_save/HetGNN_with_datasetSecTrain99.pt" > HetGNN_with_dataSetTrdTrain.log 2>&1 &
+# nohup python -u HetGNN.py --checkpoint "../../data/model_save/HetGNN_with_datasetMethod2.pt" > HetGNN_with_dataSetSecTrain.log 2>&1 &
 import torch
 import torch.optim as optim
 import data_generator
@@ -69,13 +68,16 @@ class model_class(object):
 		self.optim = optim.Adam(self.parameters, lr=self.args.lr, weight_decay = 0)
 		self.model.init_weights()
 
-
 	def model_train(self):
 		print ('model training ...')
 		# here is a great one, we can continue a unfinished training here.
 		if self.args.checkpoint != '':
 			self.model.load_state_dict(torch.load(self.args.checkpoint))
-		
+		if self.args.output == 'check output':
+			triple_index = 25
+			a_out, p_out, v_out = self.model([], triple_index, 'checkoutput')
+			print('check output')
+			return 0
 		self.model.train()
 		mini_batch_s = self.args.mini_batch_s
 		embed_d = self.args.embed_d

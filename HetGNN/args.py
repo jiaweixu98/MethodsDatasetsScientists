@@ -41,11 +41,12 @@ def read_args():
 				   help='train/test label: 0 - train, 1 - test, 2 - code test/generate negative ids for evaluation')
 	parser.add_argument('--save_model_freq', type = float, default = 1,
 				   help = 'number of iterations to save model')
-	parser.add_argument('--save_model_embeddings_freq', type=float, default=50,
+	parser.add_argument('--save_model_embeddings_freq', type=float, default=200,
                      help='number of iterations to save embeddings')
 	parser.add_argument("--cuda", default = 0, type = int)
 	
 	parser.add_argument("--checkpoint", default = '', type=str)
+	parser.add_argument("--output", default='', type=str)
 
 	args = parser.parse_args()
 
