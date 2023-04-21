@@ -1,0 +1,223 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Breast Cancer Area: Scientists with Datasets.</title>
+  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" media="screen" rel="stylesheet"
+    type="text/css" />
+  <link href="css/frame.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="css/controls.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="css/custom.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="js/footer.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <style>
+    .menu-index {
+      color: rgb(255, 255, 255) !important;
+      opacity: 1 !important;
+      font-weight: 700 !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="menu-container"></div>
+  <div class="content-container">
+    <div class="content">
+      <div class="content-table flex-column">
+        <!--Start Header-->
+        <!-- <div class="banner"
+      style="background: url('img/dummy-background.jpeg') no-repeat center; background-size: cover; height: 300px;">
+    </div> -->
+        <div class="banner">
+          <div class="banner-table flex-column">
+            <div class="flex-row">
+              <div class="flex-item flex-column">
+                <h2 class="add-top-margin-small">Breast Cancer Area: Scientists with Datasets. &nbsp; (Use wide screen devices to get the best user experience ! ) <a
+                    href="https://github.com/jiaweixu98/ScientistsWithDatasets"
+                    style="text-decoration:none;font-size:15px;color:#ffffff;"> <b>
+                      <i class="fa fa-github"></i> Github repository </b>
+                  </a></h2>
+                <p class="text">
+                  Explore our interactive graph to see how breast cancer scientists work. Learn about their knowledge,
+                  the data they use, and the <a href="https://bridge2ai.org/"
+                    style="text-decoration:none; color:#FFA15A;">
+                    <b>Bridge2AI</b></a> scientists leading the way.
+                </p>
+                <p class="text">
+                  We use <a href="https://dl.acm.org/doi/pdf/10.1145/3292500.3330961"
+                    style="text-decoration:none;color:#FFA15A;"> <b>HetGNN (Heterogeneous Graph Neural
+                      Network)</b></a>
+                  to represent node embeddings in the Breast Cancer area with the <a
+                    href="https://www.nature.com/articles/s41597-020-0543-2"
+                    style="text-decoration:none;color:#FFA15A;">
+                    <b>Pubmed Knowledge Graph</b></a>
+                  Dataset. This includes four kinds of nodes: scientists, datasets, papers, and bioentities. Their
+                  relationships include writing, collaboration, mention, citing, and use.
+
+                  <br><br>We visualized <b> scientists</b> and<b> datasets </b>using K-means clustering (k=5) and T-SNE.
+                  The
+                  cluster labels are based on bioentities, abstracts, titles, TF-IDF, and chatGPT.
+                  <br><br> At the bottom of this page, we list the <b>main words of each cluster</b>, including both
+                  bioentities-based and
+                  abstract-title-based clusters.
+                  <br><br>
+                  <b> How to interact with the graph? </b>
+                </p>
+                <ol style="text-decoration:none;color:#ffffff;">
+                  <li>Use the mouse wheel or the ‘+’ and ‘-’ buttons on the top right of the canvas to <b>zoom in and
+                      out</b>.</li>
+                  <li>Hover over a node to see <b>details</b>.</li>
+                  <li>Double-click to autoscale and recover default settings.</li>
+                  <li>Click the legends to hide/show groups of nodes.</li>
+                  <li>Other tools are located on the top right of the canvas.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--End Header-->
+        <!--Start Text with Iframe-->
+        <div class="flex-row">
+          <div class="flex-item flex-column">
+            <!-- <h2>How breast cancer scientists work?</h2> -->
+
+            <iframe class="iframe-in-body" scrolling="no"
+              src="https://jiaweixu98.github.io/pagesRepo/datasets.html"></iframe>
+              <hr>
+            <h3>Below are the main words of each cluster derived from tf-idf, including both bioentities-based and abstract-title-based clusters. </h3>
+            <p class="text">
+              <ul>
+                <li>
+                  <h3 style="color:#636EFA ;">Cluster 0 &nbsp;&nbsp; Cancer signaling molecules
+                    (bioentities)&nbsp;&nbsp;
+                    Therapeutic
+                    Mechanisms (keywords) </h3>
+                </li>
+                <ul>
+                  <p>Bioentities: 'leptin', 'NF-κB', 'ATP', 'MAPK', 'DOX', 'AKT', 'MCF7', 'ERK', 'HBXIP', 'Bax', 'MTT',
+                    'Bcl-2',
+                    'oxygen', 'NF-B', 'CXCR4', 'STAT3', 'p38', 'anticancer', 'curcumin', 'siRNA', 'cisplatin', 'ERα',
+                    'CSCs', 'mTOR',
+                    'p21', 'PEG', 'PTX'</p>
+                  <p>Keywords: 'rgd', 'western', 'anticancer', 'acid', 'investigated', 'apoptosis', 'integrin',
+                    'mechanisms',
+                    'enhanced', 'delivery', 'inhibits', 'nfb', 'present', 'line', 'demonstrated', 'induced', 'inhibit',
+                    'antitumor',
+                    'nanoparticles', 'therapeutic', 'mitochondrial', 'resistance', 'addition', 'drug', 'mechanism',
+                    'assay', 'targeting'
+                  </p>
+                </ul>
+
+                <li>
+                  <h3 style="color:#EF553B ;">Cluster 1 &nbsp;&nbsp; Health and disease risk factors
+                    (bioentities)&nbsp;&nbsp;
+                    Epidemiology and Research Methods (keywords) </h3>
+                </li>
+                <ul>
+                  <p>Bioentities: 'overweight', 'folate', 'colorectal cancer', 'insulin', 'BCS', 'postmenopausal breast
+                    cancer',
+                    'Tamoxifen', 'testosterone', 'vitamin D', 'MD', 'depression', 'IGF-I', 'anxiety', 'prostate cancer',
+                    'metformin',
+                    'obesity', 'Participants', 'estrogens', '"breast', 'diabetes'</p>
+                  <p>Keywords: 'confidence', 'la', 'rr', 'research', 'embase', 'incidence', 'casecontrol',
+                    'polymorphism',
+                    'science',
+                    'population', 'ratio', 'cohort', 'screening', 'diagnosis', 'will', 'physical', 'care',
+                    'interventions', 'de',
+                    'models', 'published', 'mortality', 'health', 'searched', 'cochrane', 'web', 'intake',
+                    'relationship',
+                    'associations', 'age', 'subgroup', 'les', 'databases', 'odds', 'survivors', 'conducted',
+                    'intervention'</p>
+                </ul>
+                <li>
+                  <h3 style="color:#00CC96 ;">Cluster 2 &nbsp;&nbsp; Breast cancer genetics and biomarkers
+                    (bioentities)&nbsp;&nbsp;
+                    Genetics and Biomarkers (keywords) </h3>
+                </li>
+                <ul>
+                  <p>Bioentities: 'ESR1', 'CHEK2', 'CBC', 'ATM', 'BRCA1 mutation', 'PRS', 'ERBB2', 'RNA', 'c', 'AR',
+                    'PALB2', 'breast
+                    and ovarian cancer', 'BRCA2 mutations', 'miRNA', 'Estrogen', 'single nucleotide polymorphisms',
+                    'TP53', 'familial
+                    breast cancer', 'FGFR2'</p>
+                  <p>Keywords: 'brca2', 'network', 'brca1', 'variants', 'samples', 'mirnas', 'estrogen', 'mutation',
+                    'identify', 'dna',
+                    'differentially', 'functional', 'her2', 'biological', 'common', 'prognosis', 'status', 'er',
+                    'independent', 'genes',
+                    'interaction', 'database', 'impc', 'analyses', 'mutations'</p>
+                </ul>
+                <li>
+                  <h3 style="color:#AB63FA ;">Cluster 3 &nbsp;&nbsp; Breast cancer treatments (bioentities)&nbsp;&nbsp;
+                    Cancer Treatment
+                    and Management (keywords) </h3>
+                </li>
+                <ul>
+                  <p>Bioentities: '5-fluorouracil', 'early breast cancer', 'diarrhea', 'fulvestrant', 'SLN',
+                    'pertuzumab',
+                    'bevacizumab', 'taxanes', 'hormone receptor', 'G-CSF', 'palbociclib', 'CTC', 'zoledronic acid',
+                    'everolimus', 'ABC',
+                    'exemestane', 'gemcitabine', 'nausea', 'anthracyclines', 'methotrexate', 'neutropenia',
+                    'vinorelbine',
+                    'lapatinib',
+                    'HER2-positive breast cancer', 'Trastuzumab', 'CMF', 'taxane', 'fluorouracil'</p>
+                  <p>Keywords: 'apbi', 'radiation', 'followup', 'early', 'trial', 'time', 'median', 'patient',
+                    'lesions',
+                    'rate', 'hr',
+                    'trastuzumab', 'adjuvant', 'radiotherapy', 'chemotherapy', 'treated', 'lymphedema', 'recurrence',
+                    'outcome',
+                    'reconstruction', 'only', 'sln', 'node', 'icg', 'neoadjuvant', 'efficacy', 'axillary', 'biopsy',
+                    'advanced', 'os',
+                    'rates', 'plus', 'surgery', 'toxicity', 'mastectomy', 'surgical', 'sentinel', 'randomized',
+                    'months',
+                    'fluorescence'
+                  </p>
+                </ul>
+
+                <li>
+                  <h3 style="color:#FFA15A ;">Cluster 4 &nbsp;&nbsp; Tumor microenvironment and metastasis molecules
+                    (bioentities)&nbsp;&nbsp; Tumor Metastasis and Matrix Biology (keywords) </h3>
+                </li>
+                <ul>
+                  <p>Bioentities: 'MMPs', 'MT1-MMP', 'TIMP-2', 'uPA', 'TIMP-1', 'carcinomas', 'collagen', 'uPAR',
+                    'steroid', 'matrix
+                    metalloproteinases', 'tumor cell', 'MMP-1', 'MMP', 'PAI-1', 'carcinoma'</p>
+                  <p>Keywords: 'carcinomas', 'suggest', 'metastases', 'metalloproteinase', 'serum', 'membrane', 'type',
+                    'metalloproteinases', 'timp2', 'inhibitors', 'stromal', 'degradation', 'bone', 'mmps', 'timp1',
+                    'mrna', 'mmp',
+                    'mt1mmp', 'collagen', 'tumour', 'correlated', 'extracellular', 'mmp1'</p>
+            </p>
+            </ul>
+            </ul>
+          </div>
+        </div>
+        <!--END Text with Iframe-->
+      </div>
+    </div>
+  </div>
+  <div class="footer-container">
+<div class="banner">
+  <div class="banner-table flex-column">
+    <div class="flex-row">
+      <div class="flex-item flex-column">
+        <h2>Contact</h2>
+        <p class="text add-bottom-margin-large">
+          Any question? Look at the <a href="https://github.com/jiaweixu98/ScientistsWithDatasets"
+            style="text-decoration:none;font-size:15px;color:#ffffff;"> <b>
+              <i class="fa fa-github"></i> Github repository </b> for more information.
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>
