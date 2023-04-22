@@ -1,5 +1,10 @@
 # Understanding Breast Cancer Scientists with Datasets & Methods
 
+ We use <a href="https://dl.acm.org/doi/pdf/10.1145/3292500.3330961"
+                    style="text-decoration:none;color:#FFA15A;"> <b>HetGNN (Heterogeneous Graph Neural Network)</b></a> to represent node embeddings in the Breast Cancer area with the <a
+                    href="https://www.nature.com/articles/s41597-020-0543-2"
+                    style="text-decoration:none;color:#FFA15A;"> <b>Pubmed Knowledge Graph</b></a> Dataset.
+
 If you have any questions, please report them in the issue tracker.
 
 The demo website: [Breast Cancer: Scientists with Methods and Datasets.](<https://jiaweixu98.github.io/MethodsDatasetsScientists/>)
@@ -91,14 +96,13 @@ Paper with author & embeddings: 260,983 (85.9% of paper with author).
 - #papers with references 205,761
 - #papers with text embeddings 260,983
 
-It is hard to get a fixed number of nodes (especially for datasets and methods), so we reduce the fixed number and reduce the rate of going back to the original node. We only keep the nodes with enough types and amount of neighbor nodes.
+Because most authors (or papers) do not have methods neighbor nodes or datasets neighbor nodes, it is impossible to get a large fixed number of nodes (especially for datasets and methods) with the original configuration of [HetGNN](<https://dl.acm.org/doi/pdf/10.1145/3292500.3330961>). Therefore, we reduce the fixed number and reduce the rate of going back to the original node. In this way, we keep most nodes, and they have enough types and amount of neighbor nodes.
 
 A concern: so many nodes have 0 data and method, but we try a random walk to get it a method/dataset node. Does that make sense? Thanks to the attention mechanism, the unimportant node will be ignored.
 
-**We also employ an easy configuration: only keep the paper nodes having the author, datasets, and methods. Check the 
-subset folder.**
+**In the subset folder, We only keep the paper nodes having the author, datasets, and methods. It is superfast but only has ~6000 authors.**
 
-**A problem: only 1143 papers have both methods and datasets.**
+**A problem: only 1143 papers and ~6000 authors have both methods and datasets.**
 
 In subset
 
