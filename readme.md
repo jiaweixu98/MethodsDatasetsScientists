@@ -1,9 +1,10 @@
 # Understanding Breast Cancer Scientists with Datasets & Methods
 
+If you have any questions, please report them in the issue tracker.
+
 The demo website: [Breast Cancer: Scientists with Methods and Datasets.](<https://jiaweixu98.github.io/MethodsDatasetsScientists/>)
 
 This is an early version of our project based on a subset of all authors. This version of the visualization demo is based on the 6,824 authors in the breast cancer area with datasets and methods.
-
 
 
 - #authors: 6,824
