@@ -25,10 +25,10 @@ B2AIauthor = author.loc[author['isB2AI'] == 1]
 # 'Bioentities: Breast Cancer Treatments<br>Keywords: Cancer Treatment & Management',
 # 'Bioentities: Tumor Microenvironment Metastasis Molecules<br>Keywords: Tumor Metastasis & Matrix Biology']
 
-GreatGPT = ['Sentinel Lymph Node Biopsy for Breast Cancer', 'Breast Cancer Diagnosis and Treatment Studies',
-            'MMPs and Breast Cancer Invasion and Metastasis',
-            'Breast Cancer and Fertility Preservation',
-            'Breast Cancer and Lifestyle Factors']
+GreatGPT = ['Talents: Sentinel Lymph Node Biopsy for Breast Cancer', 'Talents: Breast Cancer Diagnosis and Treatment Studies',
+            'Talents: MMPs and Breast Cancer Invasion and Metastasis',
+            'Talents: Breast Cancer and Fertility Preservation',
+            'Talents: Breast Cancer and Lifestyle Factors']
 
 ClusterPosition = [[-55, 30], [-40, -30], [15, 40], [55, -30],   [-10, 10], ]
 # Clusteranlge = [0,-45,0,45,-60]
@@ -122,11 +122,11 @@ figSwD.update_layout(
     hoverlabel=dict(
         font_size=10,
     ),
-    # yaxis_visible=False, 
+    yaxis_visible=False, 
     height=800,
-                    #  yaxis_showticklabels=False, 
-                    #  xaxis_visible=False, 
-                    #  xaxis_showticklabels=False,
+                     yaxis_showticklabels=False, 
+                     xaxis_visible=False, 
+                     xaxis_showticklabels=False,
                      
     yaxis={
                         'scaleanchor': 'x',
