@@ -3,7 +3,7 @@ import pandas as pd
 import pickle as pk
 from tqdm import tqdm
 from collections import Counter
-author = pd.read_csv('../../../data/subsetHetGNNdata/author.csv', index_col=0)
+author = pd.read_csv('../../data/HetGNNdata/authors4atlas.csv', index_col=0)
 cluster_authors = {}
 for i in range(5):
     cluster_authors[i] = list(map(str,list(author.loc[author['clusterID'] == i].index)))
@@ -41,9 +41,9 @@ cluster_authors_bioentity = {}
 # print('len(paper_bioentity)',len(paper_bioentity))
 # pk.dump(paper_bioentity,open('paper_bioentity.pkl','wb'))
 paper_bioentity = pk.load(
-    open('../../../data/subsetHetGNNdata/paper_bioentity.pkl', 'rb'))
+    open('../../data/HetGNNdata/paper_bioentity.pkl', 'rb'))
 author_paper = pk.load(
-    open('../../../data/subsetHetGNNdata/author_paper.pkl', 'rb'))
+    open('../../data/HetGNNdata/author_paper.pkl', 'rb'))
 for k,v in tqdm(cluster_authors.items()):
     # 构建词组
     cluster_authors_bioentity[k] = []
@@ -59,7 +59,7 @@ for k in range(5):
     print('len(cluster_authors_bioentity[k]', len(
         cluster_authors_bioentity[k]))
 
-TOP_K_KEYWORDS = 100
+TOP_K_KEYWORDS = 50
 tokenized_list_of_sentences = [
     cluster_authors_bioentity[0], 
     cluster_authors_bioentity[1],
@@ -72,7 +72,7 @@ def identity_tokenizer(text):
     return text
 
 
-vectorizer = TfidfVectorizer(tokenizer=identity_tokenizer, lowercase=False)
+vectorizer = TfidfVectorizer(use_idf=True, max_df=0.5, min_df=1, tokenizer=identity_tokenizer, lowercase=False)
 vectorizer.fit_transform(tokenized_list_of_sentences)
 feature_names = vectorizer.get_feature_names()
 
@@ -123,12 +123,5 @@ def extract_topn_from_vector(feature_names, sorted_items, topn=2):
     return results
 
 
-print('cluster_authors_bioentity[0]',get_keywords(vectorizer, feature_names, cluster_authors_bioentity[0]))
-
-print('cluster_authors_bioentity[1]',get_keywords(vectorizer, feature_names, cluster_authors_bioentity[1]))
-
-print('cluster_authors_bioentity[2]',get_keywords(vectorizer, feature_names, cluster_authors_bioentity[2]))
-
-print('cluster_authors_bioentity[3]',get_keywords(vectorizer, feature_names, cluster_authors_bioentity[3]))
-
-print('cluster_authors_bioentity[4]',get_keywords(vectorizer, feature_names, cluster_authors_bioentity[4]))
+for i in range(5):
+    print('Scientists Cluster %d'%i,get_keywords(vectorizer, feature_names, cluster_authors_bioentity[i]))

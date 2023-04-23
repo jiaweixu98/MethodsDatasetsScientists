@@ -25,10 +25,17 @@ def clean_text(text):
     return text
 
 
-author = pd.read_csv('../../data/HetGNNdata/author.csv', index_col=0, encoding='utf-8')
-cluster_authors = {}
-for i in range(5):
-    cluster_authors[i] = list(map(str,list(author.loc[author['clusterID'] == i].index)))
+author = pd.read_csv('../../data/HetGNNdata/authors4atlas.csv',
+                     index_col=0, encoding='utf-8')
+# cluster_authors = {}
+# for i in range(5):
+#     cluster_authors[i] = list(map(str,list(author.loc[author['clusterID'] == i].index)))
+# cluster_authors_text = {}
+
+
+authors_index = list(map(str,list(author.index)))
+
+
 cluster_authors_text = {}
 
 article_title = pd.read_csv(
@@ -37,7 +44,7 @@ paper_titleAbstract = {}
 article_title['TitleAbstract'] = article_title['ArticleTitle'] + \
     article_title['Abstract']
 article_title.dropna(subset=['TitleAbstract'], inplace=True)
-article_title['TitleAbstract'] = article_title['TitleAbstract'].apply(clean_text)
+# article_title['TitleAbstract'] = article_title['TitleAbstract'].apply(clean_text)
 for index, row in article_title.iterrows():
     paper_titleAbstract[str(row['PMID'])] = row['TitleAbstract']
 
@@ -77,18 +84,31 @@ for index, row in article_title.iterrows():
 author_paper = pk.load(
     open('../../data/HetGNNdata/author_paper.pkl', 'rb'))
 
-
-for k,v in tqdm(cluster_authors.items()):
+authors_text = {}
+for k, v in tqdm(author_paper.items()):
     # 构建词组
-    cluster_authors_text[k] = ''
+    authors_text[k] = ''
     for author in v:
         # 对应的paper集合
         paper_set = author_paper[author]
         for paper in paper_set:
             try:
-                cluster_authors_text[k] += ' '+paper_titleAbstract[paper]
+                authors_text[k] += ' '+paper_titleAbstract[paper]
             except:
                 continue
+# pk.dump(authors_text, open(
+#     '../../data/HetGNNdata/authors_text4atlas.pkl', 'wb'))
+# for k,v in tqdm(cluster_authors.items()):
+#     # 构建词组
+#     cluster_authors_text[k] = ''
+#     for author in v:
+#         # 对应的paper集合
+#         paper_set = author_paper[author]
+#         for paper in paper_set:
+#             try:
+#                 cluster_authors_text[k] += ' '+paper_titleAbstract[paper]
+#             except:
+#                 continue
 
 # for k,v in tqdm(cluster_authors.items()):
 #     # 构建词组
@@ -117,67 +137,67 @@ for k,v in tqdm(cluster_authors.items()):
 #     print('len(cluster_authors_text[k]', len(cluster_authors_text[k]))
 
 
-# def get_stopwords_list(stop_file_path):
-#     """load stop words """
+def get_stopwords_list(stop_file_path):
+    """load stop words """
 
-#     with open(stop_file_path, 'r', encoding="utf-8") as f:
-#         stopwords = f.readlines()
-#         stop_set = set(m.strip() for m in stopwords)
-#         return list(frozenset(stop_set))
-
-
-# def sort_coo(coo_matrix):
-#     """Sort a dict with highest score"""
-#     tuples = zip(coo_matrix.col, coo_matrix.data)
-#     return sorted(tuples, key=lambda x: (x[1], x[0]), reverse=True)
+    with open(stop_file_path, 'r', encoding="utf-8") as f:
+        stopwords = f.readlines()
+        stop_set = set(m.strip() for m in stopwords)
+        return list(frozenset(stop_set))
 
 
-# def get_keywords(vectorizer, feature_names, doc):
-#     """Return top k keywords from a doc using TF-IDF method"""
-
-#     #generate tf-idf for the given document
-#     tf_idf_vector = vectorizer.transform([doc])
-
-#     #sort the tf-idf vectors by descending order of scores
-#     sorted_items = sort_coo(tf_idf_vector.tocoo())
-
-#     #extract only TOP_K_KEYWORDS
-#     keywords = extract_topn_from_vector(
-#         feature_names, sorted_items, TOP_K_KEYWORDS)
-
-#     return list(keywords.keys())
+def sort_coo(coo_matrix):
+    """Sort a dict with highest score"""
+    tuples = zip(coo_matrix.col, coo_matrix.data)
+    return sorted(tuples, key=lambda x: (x[1], x[0]), reverse=True)
 
 
-# def extract_topn_from_vector(feature_names, sorted_items, topn=2):
-#     """get the feature names and tf-idf score of top n items"""
+def get_keywords(vectorizer, feature_names, doc):
+    """Return top k keywords from a doc using TF-IDF method"""
 
-#     #use only topn items from vector
-#     sorted_items = sorted_items[:topn]
+    #generate tf-idf for the given document
+    tf_idf_vector = vectorizer.transform([doc])
 
-#     score_vals = []
-#     feature_vals = []
+    #sort the tf-idf vectors by descending order of scores
+    sorted_items = sort_coo(tf_idf_vector.tocoo())
 
-#     # word index and corresponding tf-idf score
-#     for idx, score in sorted_items:
+    #extract only TOP_K_KEYWORDS
+    keywords = extract_topn_from_vector(
+        feature_names, sorted_items, TOP_K_KEYWORDS)
 
-#         #keep track of feature name and its corresponding score
-#         score_vals.append(round(score, 3))
-#         feature_vals.append(feature_names[idx])
-
-#     #create a tuples of feature, score
-#     results = {}
-#     for idx in range(len(feature_vals)):
-#         results[feature_vals[idx]] = score_vals[idx]
-
-#     return results
-
-# stopwords=get_stopwords_list(STOPWORD_PATH)
-# vectorizer = TfidfVectorizer(
-#     stop_words=stopwords, smooth_idf=True, use_idf=True)
-# vectorizer.fit_transform([cluster_authors_text[0],cluster_authors_text[1],cluster_authors_text[2],cluster_authors_text[3],cluster_authors_text[4]])
-# feature_names = vectorizer.get_feature_names()
+    return list(keywords.keys())
 
 
+def extract_topn_from_vector(feature_names, sorted_items, topn=2):
+    """get the feature names and tf-idf score of top n items"""
+
+    #use only topn items from vector
+    sorted_items = sorted_items[:topn]
+
+    score_vals = []
+    feature_vals = []
+
+    # word index and corresponding tf-idf score
+    for idx, score in sorted_items:
+
+        #keep track of feature name and its corresponding score
+        score_vals.append(round(score, 3))
+        feature_vals.append(feature_names[idx])
+
+    #create a tuples of feature, score
+    results = {}
+    for idx in range(len(feature_vals)):
+        results[feature_vals[idx]] = score_vals[idx]
+
+    return results
+
+stopwords=get_stopwords_list(STOPWORD_PATH)
+vectorizer = TfidfVectorizer(
+    stop_words=stopwords, smooth_idf=True, use_idf=True, max_df=0.5, min_df=1,ngram_range=(1, 3))
+vectorizer.fit_transform([k for k in authors_text.values()])
+feature_names = vectorizer.get_feature_names()
+
+for k in
 # print('cluster_authors_text[0]',get_keywords(vectorizer, feature_names, cluster_authors_text[0]))
 
 # print('cluster_authors_text[1]',get_keywords(vectorizer, feature_names, cluster_authors_text[1]))

@@ -2,17 +2,18 @@
 import pickle as pk
 from tqdm import tqdm
 Pcount_trans_PID = pk.load(open('../../data/HetGNNdata/Pcount_trans_PID.pkl', 'rb'))
-Acount_trans_AID = pk.load(open('../../data/tHetGNNdata/Acount_trans_AID.pkl', 'rb'))
+Acount_trans_AID = pk.load(open('../../data/HetGNNdata/Acount_trans_AID.pkl', 'rb'))
 Bcount_trans_BID = pk.load(open('../../data/HetGNNdata/Bcount_trans_BID.pkl', 'rb'))
 Dcount_trans_DID = pk.load(open('../../data/HetGNNdata/Dcount_trans_DID.pkl', 'rb'))
 Mcount_trans_MID = pk.load(open('../../data/HetGNNdata/Mcount_trans_MID.pkl', 'rb'))
 
-f = open("../../data/HetGNNdata/98_node_embedding_datasetMethod.txt", "r")
-fa = open("../../data/HetGNNdata/0423author_node_embedding.txt", "w")
-fp = open("../../data/HetGNNdata/0423paper_node_embedding.txt", "w")
-fb = open("../../data/HetGNNdata/0423entity_node_embedding.txt", "w")
-fd = open("../../data/HetGNNdata/0423dataset_node_embedding.txt", "w")
-fm = open("../../data/HetGNNdata/0423method_node_embedding.txt", "w")
+f = open("../../data/HetGNNdata/all_node_embedding_datasetMethod.txt", "r", encoding='utf-8')
+fa = open("../../data/HetGNNdata/0423author_node_embedding.txt", "w", encoding='utf-8')
+fp = open("../../data/HetGNNdata/0423paper_node_embedding.txt", "w", encoding='utf-8')
+fb = open("../../data/HetGNNdata/0423entity_node_embedding.txt", "w", encoding='utf-8')
+fd = open("../../data/HetGNNdata/0423dataset_node_embedding.txt", "w", encoding='utf-8')
+fm = open("../../data/HetGNNdata/0423method_node_embedding.txt",
+          "w", encoding='utf-8')
 
 for line in tqdm(f):
     line = line.strip().split(' ')

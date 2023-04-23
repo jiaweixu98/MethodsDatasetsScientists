@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
 from tqdm import tqdm
-from sklearn.manifold import TSNE
 import pickle as pk
 # data read
 author_emd = {}
@@ -36,6 +35,12 @@ for line in tqdm(fMethod):
     method_emd[line[0]] = np.array(temp_ebd)
 fMethod.close()
 
+
+# for k,v in author_emd.items():
+#     print(k,v)
+#     print(type(k), type(v))
+#     break
+
 # combine them
 dataset_author_method_keys = list(dataset_emd.keys()) + list(author_emd.keys()) + list(method_emd.keys())
 dataset_author_method_list = list(dataset_emd.values()) + list(author_emd.values()) + list(method_emd.values())
@@ -61,10 +66,10 @@ for i in author_emd.keys():
 for i in method_emd.keys():
     method_cluster[i] = dataset_author_method_kmeans_label[i]
 # tsne
-dataset_author_method_embedded = TSNE(n_components=2, learning_rate='auto',init='random', perplexity=1, verbose=1).fit_transform(dataset_author_method_array)
-dataset_author_method_ebd = {}
-for i in range(len(dataset_author_method_keys)):
-    dataset_author_method_ebd[dataset_author_method_keys[i]] = dataset_author_method_embedded[i]
+# dataset_author_method_embedded = TSNE(n_components=2, learning_rate='auto',init='random', perplexity=1, verbose=1).fit_transform(dataset_author_method_array)
+# dataset_author_method_ebd = {}
+# for i in range(len(dataset_author_method_keys)):
+#     dataset_author_method_ebd[dataset_author_method_keys[i]] = dataset_author_method_embedded[i]
 
 dataset_position = {}
 author_position = {}

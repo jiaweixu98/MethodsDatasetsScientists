@@ -1,0 +1,14 @@
+Scientists Cluster 0 
+['patent blue', 'HSA', 'Technetium99m', 'Indocyanine Green', 'Tc', 'IR-780', 'CPNPs', 'SNs', 'Tc99m', 'SLNB', 'Resovist', 'Ti', 'folic acid', 'EPB-3', 'MMM', 'Tc-99', 'TNBs', 'PHSA', 'DM', 'early breast cancer', 'Rituximab', 'TAT', 'pts', 'iron', 'LOX', 'EPI', 'AuNC', 'BSA', 'allergic reactions', 'ICGA', 'radioisotope', '99(m) technetium', 'node-negative breast cancer', 'sentinel lymph node', 'EGFr', 'skin necrosis', 'albumin', 'AuNR', 'Fe(3)O(4)', 'oxyHb', 'silica', 'Fe3+', 'indigo carmine', 'CBSA', 'chicken', 'Cy5', 'PCEP', 'CEUS', 'CDDP', 'BAS']
+
+Scientists Cluster 1 
+['anastrozole', 'lymphedema', 'genistein', 'Ser', 'ctDNA', 'PD-L1', 'SU5416', 'Pro187Ser', 'Val', 'participants', 'fatigue', 'cfDNA', 'LE', 'gabapentin', 'HR', 'TOR', 'C677T', 'COMT', 'Ser326Cys', 'NRF2', 'MD', 'Val16Ala', 'Ala', 'endometriosis', 'BCS', 'Val158Met', 'overweight', 'PKM2', 'Hsp70', 'taxane', 'Pro', 'immune cells', 'insomnia', 'IBC', 'CIPN', 'mastectomy', 'EBC', 'nausea', 'gynecomastia', 'NQO1 Pro187Ser', 'NQO1', 'Arg399Gln', 'Arg194Trp', 'PD', 'BCa', 'A1298C', 'hormone receptor', 'vitamin D', 'depression', 'LI']
+
+Scientists Cluster 2 
+['RKIP', 'COX-2', 'JMJD3', 'MMP-7', 'HS3ST2', 'AP-1', 'MMP-11', 'CD147', 'NF-κB', 'MHP-1', 'FGF18', 'CD24', 'MMP-14', 'Naa10p', 'IL-17', 'EREG', 'p38', 'TAGLN2', 'Sam68', 'Twist', 'S100A7', 'MMP-3', 'TIMP1', 'uPA', 'Snail', 'KDM2A', 'AF1Q', 'HMGN5', 'collagen', 'Ets-1', 'JNK', 'ATP', 'MMP3', 'ZKSCAN3', 'RECK', 'RANTES', 'RABEX-5', 'TIMP', 'ALCAM', '"MMP-1', 'SNCG', 'NGAL', 'Pit-1', 'IL-8', 'N-cadherin', 'SCARA5', 'HPSE', 'SHH', 'PEA3', 'VEGF-C']
+
+Scientists Cluster 3 
+['miR-375', 'LINC00472', 'hub genes', 'cinobufotalin', 'LINC00052', 'Adr', 'hsa', 'circRNAs', 'RPRD1A', 'Ambra1', 'PABC', '2ME2', 'MST1R', 'DEG', 'UniGene', 'microarray', 'MCM3', 'CBR3-AS1', 'BMP-2', 'ASPH', 'Actichip', 'novel', 'miR-454-3p', 'NFs', 'TDLU', 'RAD54B', '5C', 'lncRNA', 'MKL1', 'ADAM33', 'NUF2', 'YARS', 'SOD2', 'long', 'p27', 'FOS', 'BCSCs', 'candidate genes', 'miR-1470', 'tubulin', 'overlapping genes', 'TDLUs', 'BATF2 mRNA', 'A2M-AS1', 'CN', 'BM', 'gene set', 'YAP', 'DM', 'piRNAs']
+
+Scientists Cluster 4 
+['MPD', 'ACKR1', 'EMPD', 'AhR', 'PSCA', 'CTCs', 'TOP2A', 'EpCAM', 'CHRNA5', 'PARP1', 'CLDN6', 'MUC4', 'PRL', 'FOXA1', 'ERbeta2', 'v3-integrin', 'laminin-1', 'NRF1', 'MYB', 'GH', 'RPRD1A', 'TFRC', 'AMGA', 'polyamines', 'DMDD', 'fructose', 'Derlin-1', '"fructose-1', 'CuWO4', 'HET', 'G557R', 'Achn', 'breast carcinoma cells', 'EMPCs', 'PIDs', 'IL-1β', 'phospho-p65', 'IGF-1', 'IDO', 'ICNST', 'CD44v9', 'CD44s', 'PD', 'SAF-B', 'HER2+', 'YARS', 'Au', 'moesin', 'CTC', 'GalMBP']
