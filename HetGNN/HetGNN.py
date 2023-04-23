@@ -1,6 +1,8 @@
 # nohup python -u HetGNN.py --train_test_label 2 > HetGNN_train_test_label2.log 2>&1 &
 # nohup python -u HetGNN.py > HetGNN_with_dataSetMethod.log 2>&1 &
 # nohup python -u HetGNN.py --checkpoint "../../data/model_save/HetGNN_with_datasetMethod2.pt" > HetGNN_with_dataSetSecTrain.log 2>&1 &
+# nohup python -u HetGNN.py --checkpoint "../../data/model_save/HetGNN_with_datasetMethod91.pt"  --output 'check output' > HetGNN_with_dataSetSecTrain.log 2>&1 &
+# nohup python -u HetGNN.py --checkpoint "../../data/model_save/HetGNN_with_datasetMethod99.pt" > HetGNN_with_dataSetSecTrain.log 2>&1 &
 import torch
 import torch.optim as optim
 import data_generator
@@ -75,7 +77,7 @@ class model_class(object):
 			self.model.load_state_dict(torch.load(self.args.checkpoint))
 		if self.args.output == 'check output':
 			triple_index = 25
-			a_out, p_out, v_out = self.model([], triple_index, 'checkoutput')
+			a_out, p_out, v_out = self.model([], triple_index, 'checkoutputFinal')
 			print('check output')
 			return 0
 		self.model.train()

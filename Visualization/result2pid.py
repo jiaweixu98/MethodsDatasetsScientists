@@ -1,18 +1,18 @@
 # nohup python -u result2pid.py > result2pid.log 2>&1 &
 import pickle as pk
 from tqdm import tqdm
-Pcount_trans_PID = pk.load(open('../../../data/subsetHetGNNdata/Pcount_trans_PID.pkl', 'rb'))
-Acount_trans_AID = pk.load(open('../../../data/subsetHetGNNdata/Acount_trans_AID.pkl', 'rb'))
-Bcount_trans_BID = pk.load(open('../../../data/subsetHetGNNdata/Bcount_trans_BID.pkl', 'rb'))
-Dcount_trans_DID = pk.load(open('../../../data/subsetHetGNNdata/Dcount_trans_DID.pkl', 'rb'))
-Mcount_trans_MID = pk.load(open('../../../data/subsetHetGNNdata/Mcount_trans_MID.pkl', 'rb'))
+Pcount_trans_PID = pk.load(open('../../data/HetGNNdata/Pcount_trans_PID.pkl', 'rb'))
+Acount_trans_AID = pk.load(open('../../data/tHetGNNdata/Acount_trans_AID.pkl', 'rb'))
+Bcount_trans_BID = pk.load(open('../../data/HetGNNdata/Bcount_trans_BID.pkl', 'rb'))
+Dcount_trans_DID = pk.load(open('../../data/HetGNNdata/Dcount_trans_DID.pkl', 'rb'))
+Mcount_trans_MID = pk.load(open('../../data/HetGNNdata/Mcount_trans_MID.pkl', 'rb'))
 
-f = open("../../../data/subsetHetGNNdata/98_node_embedding_datasetMethod.txt", "r")
-fa = open("../../../data/subsetHetGNNdata/0422author_node_embedding.txt", "w")
-fp = open("../../../data/subsetHetGNNdata/0422paper_node_embedding.txt", "w")
-fb = open("../../../data/subsetHetGNNdata/0422entity_node_embedding.txt", "w")
-fd = open("../../../data/subsetHetGNNdata/0422dataset_node_embedding.txt", "w")
-fm = open("../../../data/subsetHetGNNdata/0422method_node_embedding.txt", "w")
+f = open("../../data/HetGNNdata/98_node_embedding_datasetMethod.txt", "r")
+fa = open("../../data/HetGNNdata/0423author_node_embedding.txt", "w")
+fp = open("../../data/HetGNNdata/0423paper_node_embedding.txt", "w")
+fb = open("../../data/HetGNNdata/0423entity_node_embedding.txt", "w")
+fd = open("../../data/HetGNNdata/0423dataset_node_embedding.txt", "w")
+fm = open("../../data/HetGNNdata/0423method_node_embedding.txt", "w")
 
 for line in tqdm(f):
     line = line.strip().split(' ')
