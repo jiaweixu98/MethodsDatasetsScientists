@@ -15,9 +15,9 @@ import io
 buffer = io.StringIO()
 
 # 读取数据
-dataset = pd.read_csv('../data/subsetHetGNNdata/dataset.csv', index_col=0)
-author = pd.read_csv('../data/subsetHetGNNdata/author.csv', index_col=0)
-method = pd.read_csv('../data/subsetHetGNNdata/method.csv', index_col=0)
+dataset = pd.read_csv('../data/HetGNNdata/dataset.csv', index_col=0)
+author = pd.read_csv('../data/HetGNNdata/author.csv', index_col=0)
+method = pd.read_csv('../data/HetGNNdata/method.csv', index_col=0)
 B2AIauthor = author.loc[author['isB2AI'] == 1]
 
 # GreatGPT = ['Bioentities: Cancer Signaling Molecules<br>Keywords: Therapeutic Mechanisms', 'Bioentities: Health & Disease Risk Factors<br>Keywords: Epidemiology & Research Methods',
@@ -25,12 +25,12 @@ B2AIauthor = author.loc[author['isB2AI'] == 1]
 # 'Bioentities: Breast Cancer Treatments<br>Keywords: Cancer Treatment & Management',
 # 'Bioentities: Tumor Microenvironment Metastasis Molecules<br>Keywords: Tumor Metastasis & Matrix Biology']
 
-GreatGPT = ['Talents: Sentinel Lymph Node Biopsy for Breast Cancer', 'Talents: Breast Cancer Diagnosis and Treatment Studies',
-            'Talents: MMPs and Breast Cancer Invasion and Metastasis',
-            'Talents: Breast Cancer and Fertility Preservation',
-            'Talents: Breast Cancer and Lifestyle Factors']
+GreatGPT = ['Talents: Therapies for Breast Cancer Fatigue', 'Talents: Molecular Pathways of Breast Cancer',
+            'Talents: Therapeutic Targets',
+            'Talents: Therapeutic Agents and Compounds',
+            'Talents: Breast Cancer Diagnostics and Biomarkers']
 
-ClusterPosition = [[-55, 30], [-40, -30], [15, 40], [55, -30],   [-10, 10], ]
+ClusterPosition = [[2, 3], [-3, 2], [5, 1], [-4, -2],   [3, -2], ]
 # Clusteranlge = [0,-45,0,45,-60]
 # 开始画图，构建一个Figure()
 figSwD = go.Figure()
@@ -45,7 +45,7 @@ for i in range(5):
                             mode='markers',
         hovertemplate='<b>Author ID<b>: %{customdata[0]}<br><b>Author Name<b>: %{customdata[1]}<br><b>Cluster ID<b>: %{customdata[3]}<br><b>Career Age<b>: %{customdata[4]}<br><b>#Cited<b>: %{customdata[5]}<br><b>isB2AI<b>: %{customdata[6]}<br><br><b>Author Main Affiliation:<br><b> %{customdata[2]}<extra></extra>',
         # <extra></extra> 是为了隐藏第二个框框，不加这行代码就很丑
-                              marker=dict(size=3),# 设置了较小的值，代表一般作者的大小
+                              marker=dict(size=2),# 设置了较小的值，代表一般作者的大小
                             # this is the name of the trace
                             name=GreatGPT[i],
                             ))
@@ -63,7 +63,7 @@ figSwD.add_trace(go.Scattergl(x=dataset['X'], y=dataset['Y'],
 
 # 此处是method的trace
 figSwD.add_trace(go.Scattergl(x=method['X'], y=method['Y'],
-                              marker=dict(size=10, color = '#7f7f7f'),
+                              marker=dict(size=10, color='black'),
                               # cross dot
                               marker_symbol = 203,
     customdata=np.stack((method.index, method['Name']), axis=-1),
@@ -73,13 +73,13 @@ figSwD.add_trace(go.Scattergl(x=method['X'], y=method['Y'],
    
 ))
 
-# B2AIauthor，breast cancer area只有六个人
+# B2AIauthor，breast cancer area只有27个人
 figSwD.add_trace(go.Scattergl(x=B2AIauthor['X'], y=B2AIauthor['Y'],
                               customdata=np.stack((B2AIauthor.index, B2AIauthor['Name'], B2AIauthor['MainAffi'].apply(lambda t: str(t)).apply(lambda t: "<br>".join(textwrap.wrap(t, 30))
                                                                                                                                         ), B2AIauthor['clusterID'], B2AIauthor['CareerAge'], B2AIauthor['CitedNum'],  B2AIauthor['isB2AI']), axis=-1),
                               mode='markers',
                               hovertemplate='<b>Author ID<b>: %{customdata[0]}<br><b>Author Name<b>: %{customdata[1]}<br><b>Cluster ID<b>: %{customdata[3]}<br><b>Career Age<b>: %{customdata[4]}<br><b>#Cited<b>: %{customdata[5]}<br><b>isB2AI<b>: %{customdata[6]}<br><br><b>Author Main Affiliation:<br><b> %{customdata[2]}<extra></extra>',
-                              marker=dict(size=30, color='#e377c2'),
+                              marker=dict(size=30),
                               marker_symbol=22,
                               # this is the name of the trace
                               name='<b>'+'Bridge2AI Talent in Breast Cancer' + '<b>',
@@ -109,14 +109,14 @@ for i in range(5):
 figSwD.update_scenes(camera_center=dict(x=0.5,y=0,z=0),)
 figSwD.update_layout(
     title='Breast Cancer Area: Scientists with Datasets and Methods. <br> <br> <sup>Hover over a node to see <b> details</b>.  Use the mouse wheel or the ‘+’ and ‘-’ buttons on the top right of the canvas to <b>zoom in and out </b>.</sup>',
-    xaxis_range=[-75,125],
-    yaxis_range=[-60,80],
+    xaxis_range=[-8,6],
+    yaxis_range=[-3,5],
     plot_bgcolor='rgba(229 , 236, 264, 1)',
     # paper_bgcolor='#fff',
     legend=dict(itemsizing='constant',title_font_family="Times New Roman",
                               font=dict(size= 12),
-                              yanchor="top",  xanchor="right",x=0.99,y=0.98,
-                              bgcolor = 'rgba(255 , 255, 255, 0.9)'),
+                              yanchor="top",  xanchor="left",x=0.01,y=0.98,
+                              bgcolor = 'rgba(255 , 255, 255, 0.8)'),
     dragmode='pan',
     hoverlabel_align = 'left',
     hoverlabel=dict(

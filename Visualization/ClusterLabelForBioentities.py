@@ -3,7 +3,7 @@ import pandas as pd
 import pickle as pk
 from tqdm import tqdm
 from collections import Counter
-author = pd.read_csv('../../data/HetGNNdata/authors4atlas.csv', index_col=0)
+author = pd.read_csv('../../data/HetGNNdata/author.csv', index_col=0)
 cluster_authors = {}
 for i in range(5):
     cluster_authors[i] = list(map(str,list(author.loc[author['clusterID'] == i].index)))
